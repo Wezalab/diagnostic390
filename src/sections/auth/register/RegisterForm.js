@@ -58,6 +58,23 @@ export default function RegisterForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        <TextField
+          name="password"
+          label="Confirmer le mot de passe"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </Stack>
 
       <LoadingButton sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
