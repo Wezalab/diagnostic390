@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/iconify';
 import { login } from '../../../redux/loginAction';
 
-import {store} from '../../../redux/Store';
+import { store } from '../../../redux/Store';
 
 import { fetchDoctors } from '../../../redux/doctorsReducer';
 import { fetchPatients } from '../../../redux/patientsReducer';
@@ -17,7 +17,7 @@ export default function LoginForm() {
   const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
- 
+
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState(''); // admin1@wecare.com
@@ -25,7 +25,7 @@ export default function LoginForm() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    
+
     store.dispatch(fetchDoctors());
     store.dispatch(fetchPatients());
 
@@ -36,7 +36,7 @@ export default function LoginForm() {
     <>
       <Stack spacing={3}>
         {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
-        {isLoading && <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}><CircularProgress /></Box>}
+        {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
 
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -66,15 +66,17 @@ export default function LoginForm() {
       </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-      Se connecter
+        Se connecter
       </LoadingButton>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Link variant="subtitle2" underline="hover">
-        Créer un compte
+      <Typography variant="body" sx={{ }}>Voulez-vous Créer un compte?</Typography>
+
+        <Link href="/register" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+          Créer un compte
         </Link>
       </Stack>
-      
+
     </>
   );
 }
