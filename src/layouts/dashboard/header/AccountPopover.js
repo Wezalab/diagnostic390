@@ -3,13 +3,16 @@ import { useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../../redux/authReducer';
 
 export default function AccountPopover() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+const { user } = useSelector((state) => state.auth);
+console.log(user.user.user);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -45,7 +48,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src="/assets/admin.png" alt="photoURL" />
+        <Avatar src={user.user.user.profile_picture} alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -69,10 +72,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            Admin
+            {user.user.user.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            admin1@wecare.com
+            {user.user.user.email}
           </Typography>
         </Box>
 
@@ -85,7 +88,7 @@ export default function AccountPopover() {
           handleLogout();
         }
           } sx={{ m: 1 }}>
-          Logout
+          Déconnexion
         </MenuItem>
       </Popover>
     </>

@@ -16,8 +16,8 @@ function countItems(doctorsArray) {
 
 export default function DashboardAppPage() {
 
-  const { doctorList } = useSelector((state) => state.doctors);
-  const { patientList } = useSelector((state) => state.patients);
+  const { user } = useSelector((state) => state.auth);
+  // const { patientList } = useSelector((state) => state.patients);
 
   useEffect(() => {
     // Fetch doctor and patient lists when component mounts
@@ -33,8 +33,11 @@ export default function DashboardAppPage() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 3 }}>
-          Bonjour, Bienvenue encore!
+        <Typography variant="h4" sx={{ mb: 1 }}>
+          Mon Tableau de board
+        </Typography>
+        <Typography variant="subtitle2" sx={{ mb: 3 }}>
+          Bienvenue {user.user.user.name}
         </Typography>
 
         {/* <Grid container spacing={3}>
