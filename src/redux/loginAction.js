@@ -6,7 +6,7 @@ export const login = (email, password) => async (dispatch) => {
   try {
     dispatch(loginStart());
 
-    const response = await axios.post('https://wecare-api.herokuapp.com/api/v1/admin/auth/login', {
+    const response = await axios.post('https://diagnostic-swyu.onrender.com/auth/login', {
       email,
       password,
     });

@@ -10,14 +10,14 @@ import { login } from '../../../redux/loginAction';
 
 import { store } from '../../../redux/Store';
 
-import { fetchDoctors } from '../../../redux/doctorsReducer';
-import { fetchPatients } from '../../../redux/patientsReducer';
+// import { fetchDoctors } from '../../../redux/doctorsReducer';
+// import { fetchPatients } from '../../../redux/patientsReducer';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
-
+  const [ localError, setLocalError ] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState(''); // admin1@wecare.com
@@ -26,8 +26,17 @@ export default function LoginForm() {
   const handleClick = (e) => {
     e.preventDefault();
 
-    store.dispatch(fetchDoctors());
-    store.dispatch(fetchPatients());
+    if (!email || !password) {
+      // Check if email or password is empty
+      // Set an error message
+      setLocalError("L'e-mail ou le mot de passe ne peut pas être vide")
+
+      return;
+    }
+
+    setLocalError('')
+    // store.dispatch(fetchDoctors());
+    // store.dispatch(fetchPatients());
 
     dispatch(login(email, password));
   };
@@ -36,6 +45,7 @@ export default function LoginForm() {
     <>
       <Stack spacing={3}>
         {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
+        {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
         {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
 
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />

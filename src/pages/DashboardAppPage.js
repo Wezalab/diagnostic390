@@ -34,10 +34,10 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 3 }}>
-          Hi, Welcome back
+          Bonjour, Bienvenue encore!
         </Typography>
 
-        <Grid container spacing={3}>
+        {/* <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Doctors" total={countItems(doctorList)} icon={'ant-design:user-outlined'} />
           </Grid>
@@ -46,7 +46,8 @@ export default function DashboardAppPage() {
             <AppWidgetSummary title="Patients" total={countItems(patientList)} color="error" icon={'ant-design:user-outlined'} />
           </Grid>
 
-        </Grid>
+        </Grid> */}
+        
       </Container>
     </>
   );
