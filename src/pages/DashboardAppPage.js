@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 // @mui
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography, Box, Button, Paper } from '@mui/material';
 import { AppWidgetEntreprise } from '../sections/@dashboard/entreprise';
 
 import { store } from '../redux/Store';
@@ -35,14 +35,14 @@ export default function DashboardAppPage() {
         <Typography variant="h4" sx={{ mb: 1 }}>
           Mon Tableau de board
         </Typography>
-        <Typography variant="subtitle2" sx={{ mb: 3 }}>
+        <Typography sx={{ mb: 3 }}>
           Bienvenue {user.user.user.name}
         </Typography>
         {
 
         }
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 
           {
             myEntreprises && myEntreprises.map((value, key) => {
@@ -52,6 +52,33 @@ export default function DashboardAppPage() {
                 </Grid>
               )
             })
+          }
+          {
+            myEntreprises.length===0 && <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            minHeight="50vh"
+          >
+  
+              <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
+  
+              <Typography variant="h5" gutterBottom>
+              Vous n'avez enregistré aucune entreprise!
+              </Typography>
+              <Typography>Pour enregistrer votre entreprise, cliquez sur le bouton en bas et commencez
+
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                // onClick={() => navigate('/login', { replace: true })}
+                sx={{ marginTop: 2 }}
+              >
+                Enregistrer votre entreprise
+              </Button>
+          </Box>
           }
 
         </Grid>
