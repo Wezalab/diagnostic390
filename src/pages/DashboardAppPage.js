@@ -23,9 +23,8 @@ export default function DashboardAppPage() {
   console.log(myEntreprises);
 
   useEffect(() => {
-    // Fetch doctor and patient lists when component mounts
     store.dispatch(fetchEntreprises());
-  }, [store.dispatch]);
+  }, []);
 
   return (
     <>
@@ -40,20 +39,17 @@ export default function DashboardAppPage() {
         <Typography sx={{ mb: 3 }}>
           Bienvenue {user.user.user.name}
         </Typography>
-        {
-
-        }
 
         <Grid container spacing={3} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 
           {
-            myEntreprises && myEntreprises.map((value, key) => {
-              return (
+            myEntreprises && myEntreprises.map((value, key) => 
+               (
                 <Grid key={key} item xs={12} sm={6}>
                   <AppWidgetEntreprise  myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
                 </Grid>
               )
-            })
+            )
           }
           {
             myEntreprises.length===0 && <Box

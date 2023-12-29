@@ -15,7 +15,6 @@ import {
   MenuItem,
   FormHelperText,
   Paper,
-  Icon,
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';

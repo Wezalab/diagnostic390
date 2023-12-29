@@ -31,6 +31,7 @@ AppWidgetEntreprise.propTypes = {
 };
 
 export default function AppWidgetEntreprise({ title, total, icon, color = 'primary', sx, myEntreprises, ...other }) {
+  console.log(myEntreprises);
   return (
     <Card
       sx={{
