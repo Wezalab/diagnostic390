@@ -3,12 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 // @mui
 import { Grid, Container, Typography } from '@mui/material';
-import {
-  AppWidgetSummary,
-} from '../sections/@dashboard/app';
+import { AppWidgetEntreprise } from '../sections/@dashboard/entreprise';
+
 import { store } from '../redux/Store';
-import { fetchDoctors } from '../redux/doctorsReducer';
-import { fetchPatients } from '../redux/patientsReducer';
+import { fetchEntreprises } from '../redux/entrepriseReducer';
 
 function countItems(doctorsArray) {
   return doctorsArray.length
@@ -17,13 +15,14 @@ function countItems(doctorsArray) {
 export default function DashboardAppPage() {
 
   const { user } = useSelector((state) => state.auth);
-  // const { patientList } = useSelector((state) => state.patients);
+  const { entrepriseList } = useSelector((state) => state.entreprise);
+
+  const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  console.log(myEntreprises);
 
   useEffect(() => {
     // Fetch doctor and patient lists when component mounts
-    store.dispatch(fetchDoctors());
-    store.dispatch(fetchPatients());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    store.dispatch(fetchEntreprises());
   }, [store.dispatch]);
 
   return (
@@ -39,6 +38,23 @@ export default function DashboardAppPage() {
         <Typography variant="subtitle2" sx={{ mb: 3 }}>
           Bienvenue {user.user.user.name}
         </Typography>
+        {
+
+        }
+
+        <Grid container spacing={3}>
+
+          {
+            myEntreprises && myEntreprises.map((value, key) => {
+              return (
+                <Grid key={key} item xs={12} sm={6}>
+                  <AppWidgetEntreprise  myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
+                </Grid>
+              )
+            })
+          }
+
+        </Grid>
 
         {/* <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
@@ -50,7 +66,7 @@ export default function DashboardAppPage() {
           </Grid>
 
         </Grid> */}
-        
+
       </Container>
     </>
   );
