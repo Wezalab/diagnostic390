@@ -1,10 +1,18 @@
 {
   "name": "diagnostic360",
-  "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/Wezalab/diagnostic390.git",
   "author": "guillainbisimwa <guillainbisimwa@hotmail.fr>",
   "license": "MIT",
+  "version": "1.0.0",
+  "private": false,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .js,.jsx ./src"
+  },
   "eslintConfig": {
     "extends": [
       "react-app"
@@ -28,6 +36,7 @@
     ]
   },
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
