@@ -1,36 +1,29 @@
 import { useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Typography, CircularProgress, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import Iconify from '../../../components/iconify';
-import { login } from '../../../redux/loginAction';
-
-import { store } from '../../../redux/Store';
-
-import { fetchDoctors } from '../../../redux/doctorsReducer';
-import { fetchPatients } from '../../../redux/patientsReducer';
 
 export default function RegisterForm() {
-  const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
-
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [sex, setAge] = useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   const handleClick = (e) => {
     e.preventDefault();
-
-    // store.dispatch(fetchDoctors());
-    // store.dispatch(fetchPatients());
-
-    // dispatch(login(email, password));
   };
 
   return (
@@ -41,7 +34,20 @@ export default function RegisterForm() {
 
         <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} />
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
-
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={sex}
+            label="Sexe"
+            onChange={handleChange}
+          >
+            <MenuItem value="M">Masculin</MenuItem>
+            <MenuItem value="F">Feminin</MenuItem>
+            <MenuItem value="AUTRE">Autre</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           name="password"
           label="Mot de passe"
