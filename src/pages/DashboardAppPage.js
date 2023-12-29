@@ -2,7 +2,9 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 // @mui
-import { Grid, Container, Typography, Box, Button, Paper } from '@mui/material';
+import { Grid, Container, Typography, Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import { AppWidgetEntreprise } from '../sections/@dashboard/entreprise';
 
 import { store } from '../redux/Store';
@@ -13,7 +15,7 @@ function countItems(doctorsArray) {
 }
 
 export default function DashboardAppPage() {
-
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { entrepriseList } = useSelector((state) => state.entreprise);
 
@@ -28,7 +30,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | We care </title>
+        <title> Dashboard | Diagnostic360 </title>
       </Helmet>
 
       <Container maxWidth="xl">
@@ -73,7 +75,7 @@ export default function DashboardAppPage() {
               <Button
                 variant="contained"
                 color="primary"
-                // onClick={() => navigate('/login', { replace: true })}
+                onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
                 sx={{ marginTop: 2 }}
               >
                 Enregistrer votre entreprise
