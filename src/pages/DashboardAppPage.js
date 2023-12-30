@@ -40,12 +40,12 @@ export default function DashboardAppPage() {
           Bienvenue {user.user.user.name}
         </Typography>
 
-        <Grid container spacing={3} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <Grid container spacing={3} sx={{display: 'flex', flexDirection: 'column', }}>
 
           {
             myEntreprises && myEntreprises.map((value, key) => 
                (
-                <Grid key={key} item xs={12} sm={6}>
+                <Grid key={key} item xs={12} sm={8}>
                   <AppWidgetEntreprise  myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
                 </Grid>
               )
