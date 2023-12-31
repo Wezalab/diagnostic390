@@ -220,7 +220,7 @@ export default function RegisterForm() {
             />
           </Stack>
 
-          <LoadingButton sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+          <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
             S'enregistrer
           </LoadingButton>
 
