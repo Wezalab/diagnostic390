@@ -1,17 +1,12 @@
 // @mui
 import PropTypes from 'prop-types';
-import { alpha, styled } from '@mui/material/styles';
-import { Avatar, Box, Button, Card, CardActions, CardContent, Container, CssBaseline, Grid, Paper, Typography } from '@mui/material';
+import {  styled } from '@mui/material/styles';
+import {  Box, Button, Card, CardActions, CardContent, Container, CssBaseline, Grid, Typography } from '@mui/material';
 // utils
 // components
 import Iconify from '../../../components/iconify';
 
 AppWidgetEntreprise.propTypes = {
-  color: PropTypes.string,
-  icon: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
-  sx: PropTypes.object,
   myEntreprises: PropTypes.object.isRequired,
 };
 
@@ -96,15 +91,13 @@ const StyledCardActionEdit = styled(Button)({
   },
 });
 
-export default function AppWidgetEntreprise({ title, total, icon, color = 'primary', sx, myEntreprises, ...other }) {
+export default function AppWidgetEntreprise({ myEntreprises}) {
   console.log(myEntreprises);
 
   const cardsData = [
     {
       imageUrl: 'https://getmdl.io/assets/demos/welcome_card.jpg',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus iusto sit, aperiam officia laborum labore voluptatibus deleniti ea atque. Nostrum odio temporibus nisi inventore, velit hic in quas quos quo?',
-    },
+    }
   ];
 
   return (
@@ -161,6 +154,5 @@ export default function AppWidgetEntreprise({ title, total, icon, color = 'prima
         ))}
       </Grid>
     </Container>
-    
   );
 }

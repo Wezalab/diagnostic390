@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useEffect } from 'react';
 // @mui
-import { Grid, Container, Typography, Box, Button } from '@mui/material';
+import { Grid, Container, Typography, Box, Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { AppWidgetEntreprise } from '../sections/@dashboard/entreprise';
@@ -17,7 +17,7 @@ function countItems(doctorsArray) {
 export default function DashboardAppPage() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { entrepriseList } = useSelector((state) => state.entreprise);
+  const { entrepriseList, isLoadingEntreprise } = useSelector((state) => state.entreprise);
 
   const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
   console.log(myEntreprises);
@@ -40,58 +40,53 @@ export default function DashboardAppPage() {
           Bienvenue {user.user.user.name}
         </Typography>
 
-        <Grid container spacing={3} sx={{display: 'flex', flexDirection: 'column', }}>
+        {
 
-          {
-            myEntreprises && myEntreprises.map((value, key) => 
-               (
-                <Grid key={key} item xs={12} sm={12}>
-                  <AppWidgetEntreprise  myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
-                </Grid>
-              )
-            )
+          isLoadingEntreprise ? 
+          <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
+          <CircularProgress sx={{alignSelf:'center'}} /> </Box> :
+
+            <Grid container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
+
+              {
+                myEntreprises && myEntreprises.map((value, key) =>
+                (
+                  <Grid key={key} item xs={12} sm={12}>
+                    <AppWidgetEntreprise myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
+                  </Grid>
+                )
+                )
+              }
+              {
+                myEntreprises.length === 0 && <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  minHeight="50vh"
+                >
+
+                  <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
+
+                  <Typography variant="h5" gutterBottom>
+                    Vous n'avez enregistré aucune entreprise!
+                  </Typography>
+                  <Typography>Pour enregistrer votre entreprise, cliquez sur le bouton en bas et commencez
+
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
+                    sx={{ marginTop: 2 }}
+                  >
+                    Enregistrer votre entreprise
+                  </Button>
+                </Box>
+              }
+
+            </Grid>
           }
-          {
-            myEntreprises.length===0 && <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            minHeight="50vh"
-          >
-  
-              <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
-  
-              <Typography variant="h5" gutterBottom>
-              Vous n'avez enregistré aucune entreprise!
-              </Typography>
-              <Typography>Pour enregistrer votre entreprise, cliquez sur le bouton en bas et commencez
-
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
-                sx={{ marginTop: 2 }}
-              >
-                Enregistrer votre entreprise
-              </Button>
-          </Box>
-          }
-
-        </Grid>
-
-        {/* <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Doctors" total={countItems(doctorList)} icon={'ant-design:user-outlined'} />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Patients" total={countItems(patientList)} color="error" icon={'ant-design:user-outlined'} />
-          </Grid>
-
-        </Grid> */}
-
       </Container>
     </>
   );
