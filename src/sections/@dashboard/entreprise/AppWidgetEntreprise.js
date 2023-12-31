@@ -2,6 +2,8 @@
 import PropTypes from 'prop-types';
 import {  styled } from '@mui/material/styles';
 import {  Box, Button, Card, CardActions, CardContent, Container, CssBaseline, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 // utils
 // components
 import Iconify from '../../../components/iconify';
@@ -93,6 +95,7 @@ const StyledCardActionEdit = styled(Button)({
 
 export default function AppWidgetEntreprise({ myEntreprises}) {
   console.log(myEntreprises);
+  const navigate = useNavigate();
 
   const cardsData = [
     {
@@ -120,20 +123,20 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
                 <Typography variant="body2">{myEntreprises.full_address}</Typography>
               </Box>
               <Grid container spacing={2} mt={1} justifyContent="space-between" >
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                   <Typography variant="h4">60%</Typography>
                   <Typography variant="body2">Identité de l'Entreprise</Typography>
                 </Grid>
 
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                   <Typography variant="h4">N/A</Typography>
                   <Typography variant="body2">Opportunité du Marché</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                   <Typography variant="h4">N/A</Typography>
                   <Typography variant="body2">Équipe et Leadership</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                   <Typography variant="h4">N/A</Typography>
                   <Typography variant="body2">Viabilité Financière</Typography>
                 </Grid>
@@ -142,11 +145,12 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
 
             </CardContent>
             <CardActions>
-              <StyledCardActionReadMore>
+            
+              <StyledCardActionReadMore onClick={()=>  navigate('/view-venture', { replace: true }) }>
                 visualiser
               </StyledCardActionReadMore>
 
-              <StyledCardActionEdit>
+              <StyledCardActionEdit onClick={()=>  navigate('/edit-venture', { replace: true }) }>
                 Modifier
               </StyledCardActionEdit>
             </CardActions>

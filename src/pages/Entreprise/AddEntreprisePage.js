@@ -330,7 +330,7 @@ export default function AddEntreprisePage() {
 
                 {errorCreateEntreprise && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorCreateEntreprise}</Typography>}
 
-                <LoadingButton loading={!isLoadingCreateEntreprise} disabled={!isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                <LoadingButton loading={isLoadingCreateEntreprise} disabled={isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                   Publier et visualiser l'application
                 </LoadingButton>
               </Stack>
