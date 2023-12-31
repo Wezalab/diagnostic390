@@ -10,6 +10,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 
 import RegisterPage from './pages/registerPage';
 import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
+import ViewVenture from './pages/Entreprise/ViewVenture';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -22,6 +23,8 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'add-entreprise', element: <AddEntreprisePage /> },
+        { path: 'view-venture', element: <ViewVenture /> },
+        
         
       ],
     },

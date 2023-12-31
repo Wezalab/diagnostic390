@@ -146,11 +146,11 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
             </CardContent>
             <CardActions>
             
-              <StyledCardActionReadMore onClick={()=>  navigate('/view-venture', { replace: true }) }>
+              <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-venture', { replace: true }) }>
                 visualiser
               </StyledCardActionReadMore>
 
-              <StyledCardActionEdit onClick={()=>  navigate('/edit-venture', { replace: true }) }>
+              <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true }) }>
                 Modifier
               </StyledCardActionEdit>
             </CardActions>
