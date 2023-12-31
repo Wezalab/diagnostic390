@@ -29,6 +29,8 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import { createEntreprise } from '../../redux/entrepriseReducer';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -37,9 +39,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function AddEntreprisePage() {
   const defaultDate = '2000-01-01';
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const { isLoadingCreateEntreprise } = useSelector((state) => state.entreprise);
+  const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
   const [entrepriseName, setEntrepriseName] = useState('');
   const [entrepriseDescription, setEntrepriseDescription] = useState('');
@@ -102,14 +105,14 @@ export default function AddEntreprisePage() {
           // "pitch_deck_url": "https://wezalab.com/pitch_deck.pdf",
           // "website": "https://wezalab.com",
           "owner": user.user.user.userId, // Replace with an actual user ID from the list
-          "secteur_activite_details": sectorsOfActivity
+          "secteur_activite_details": sectorsOfActivity.map((item) => item.title)
         }
         // console.log("newvalue", newValue);
 
         dispatch(createEntreprise(newValue))
           .then(() => {
-            // Dispatch login action after successful registration
-            // dispatch(login(email, password));
+            navigate('/dashboard', { replace: true });
+
           })
           .catch((error) => {
             console.error('Registration error:', error);
@@ -321,6 +324,8 @@ export default function AddEntreprisePage() {
                     <TextField {...params} label="Quel sont vos secteurs d'activité?" placeholder="Ajouter un secteur" />
                   )}
                 />
+
+                {errorCreateEntreprise && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorCreateEntreprise}</Typography>}
 
                 <LoadingButton loading={!!isLoadingCreateEntreprise} disabled={!!isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                   Publier et visualiser l'application
