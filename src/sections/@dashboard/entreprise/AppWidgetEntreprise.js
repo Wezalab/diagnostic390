@@ -60,7 +60,7 @@ export default function AppWidgetEntreprise({ title, total, icon, color = 'prima
       <Typography variant="h3">{total}</Typography>
 
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        {title}
+        {myEntreprises.company_name}
       </Typography>
     </Card>
   );
