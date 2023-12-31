@@ -51,8 +51,6 @@ export default function RegisterForm() {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-
-
       // Validate and set error messages
       if (!name.trim()) {
         setNameError('Le nom ne peut pas être vide');

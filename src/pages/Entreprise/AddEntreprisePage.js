@@ -28,12 +28,14 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function AddEntreprisePage() {
   const defaultDate = '2000-01-01';
+  const dispatch = useDispatch();
 
   const [entrepriseName, setEntrepriseName] = useState('');
   const [entrepriseDescription, setEntrepriseDescription] = useState('');
@@ -47,6 +49,10 @@ export default function AddEntreprisePage() {
   const [clientLocation, setClientLocation] = useState([]);
   const [sectorsOfActivity, setSectorsOfActivity] = useState([]);
 
+  // Error
+  const [entrepriseError, setEntrepriseError] = useState('');
+
+
   const optionsSector = sectors.map((option) => {
     const firstLetter = option.title[0].toUpperCase();
     return {
@@ -55,23 +61,52 @@ export default function AddEntreprisePage() {
     };
   });
 
-  const handleClick = () => {
-    const formData = {
-      entrepriseName,
-      entrepriseDescription,
-      creationDate,
-      entrepriseMission,
-      entrepriseValue,
-      entrepriseAddress,
-      secteurActivite,
-      entrepriseStage,
-      typeOfClients,
-      clientLocation,
-      sectorsOfActivity,
-    };
+  const handleClick = (e) => {
+    e.preventDefault();
+    try {
+      // Validate and set error messages
+      if (!entrepriseName.trim()) {
+        setEntrepriseError("Le nom de l'entreprise ne peut pas être vide");
+      } else {
+        setEntrepriseError('');
+      }
 
-    console.log("formData", formData);
-  } 
+      // If there are no errors, proceed with registration
+      if (!entrepriseError) {
+
+        const formData = {
+          entrepriseName,
+          entrepriseDescription,
+          creationDate,
+          entrepriseMission,
+          entrepriseValue,
+          entrepriseAddress,
+          secteurActivite,
+          entrepriseStage,
+          typeOfClients,
+          clientLocation,
+          sectorsOfActivity,
+        };
+        console.log("formData", formData);
+
+        // dispatch((name, email, phone, sex, password))
+        //   .then(() => {
+        //     // Dispatch login action after successful registration
+        //     // dispatch(login(email, password));
+        //   })
+        //   .catch((error) => {
+        //     console.error('Registration error:', error);
+        //   });
+
+
+      }
+
+
+    } catch(error) {
+      console.log("errorRegister", error);
+      console.log(error);
+    }
+  }
 
 
   return (
@@ -124,6 +159,7 @@ export default function AddEntreprisePage() {
                   placeholder="Nom de l'Entreprise"
                   value={entrepriseName}
                   onChange={(e) => setEntrepriseName(e.target.value)}
+                  error={!!entrepriseError} helperText={entrepriseError}
                 />
 
                 <TextField
@@ -142,7 +178,7 @@ export default function AddEntreprisePage() {
                   placeholder="2/2/2000"
                   defaultValue={defaultDate}
                   type="date"
-                  value={creationDate?creationDate:null}
+                  value={creationDate ? creationDate : null}
                   onChange={(e) => setCreationDate(e.target.value)}
                 />
 
@@ -236,7 +272,7 @@ export default function AddEntreprisePage() {
                 <FormGroup>
                   <FormLabel component="legend">Où sont basés vos clients ?</FormLabel>
                   <FormControlLabel
-                    control={<Checkbox  />}
+                    control={<Checkbox />}
                     label="Clientèle urbaine"
                     onChange={() => setClientLocation([...clientLocation, 'Clientèle urbaine'])}
                   />

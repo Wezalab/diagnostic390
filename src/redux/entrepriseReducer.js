@@ -16,12 +16,27 @@ export const fetchEntreprises = createAsyncThunk(
   }
 );
 
+// Create an async thunk to create a new Entreprise object
+export const createEntreprise = createAsyncThunk('entreprise/create', async (EntrepriseData) => {
+  try {
+    const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/projects/`, EntrepriseData);
+    return response.data;
+  } catch (error) {
+    console.log("Error =========??????", error);
+
+    throw error;
+  }
+});
+
 const entreprisesSlice = createSlice({
   name: "entreprises",
   initialState: {
     entrepriseList: [],
     isLoadingEntreprise: false,
     errorEntreprise: null,
+
+    isLoadingCreateEntreprise: false,
+    errorCreateEntreprise: null,
   },
   reducers: {},
   // In the extraReducers field, we define how the state should change when the asynchronous
@@ -40,6 +55,20 @@ const entreprisesSlice = createSlice({
       .addCase(fetchEntreprises.rejected, (state, action) => {
         state.isLoadingEntreprise = false;
         state.errorEntreprise = action.errorEntreprise.message;
+      });
+
+    // Handle the createEntreprise action
+    builder
+      .addCase(createEntreprise.pending, (state) => {
+        state.isLoadingCreateEntreprise = 'loading';
+      })
+      .addCase(createEntreprise.fulfilled, (state, action) => {
+        state.isLoadingCreateEntreprise = 'succeeded';
+        state.entrepriseList.push(action.payload);
+      })
+      .addCase(createEntreprise.rejected, (state, action) => {
+        state.isLoadingCreateEntreprise = 'failed';
+        state.errorCreateEntreprise = action.error.message;
       });
   },
 });
