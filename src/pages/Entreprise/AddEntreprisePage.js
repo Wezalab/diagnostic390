@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 // @mui
 import {
@@ -11,6 +12,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Grid,
   Paper,
   Radio,
   RadioGroup,
@@ -24,6 +26,29 @@ import {
 
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+import parse from 'autosuggest-highlight/parse';
+import { debounce } from '@mui/material/utils';
+
+// This key was created specifically for the demo in mui.com.
+// You need to create a new one for your application.
+const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
+
+function loadScript(src, position, id) {
+  if (!position) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.setAttribute('async', '');
+  script.setAttribute('id', id);
+  script.src = src;
+  position.appendChild(script);
+}
+
+const autocompleteService = { current: null };
+
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -38,6 +63,70 @@ export default function AddEntreprisePage() {
       ...option,
     };
   });
+
+  // Location
+
+  const [location, setLocation] = useState(null);
+  const [inputLocation, setInputLocation] = useState('');
+  const [optionsLocation, setOptionsLocation] = useState([]);
+  const loaded = useRef(false);
+
+  if (typeof window !== 'undefined' && !loaded.current) {
+    if (!document.querySelector('#google-maps')) {
+      loadScript(
+        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+        document.querySelector('head'),
+        'google-maps',
+      );
+    }
+
+    loaded.current = true;
+  }
+
+  const fetch = useMemo(
+    () =>
+      debounce((request, callback) => {
+        autocompleteService.current.getPlacePredictions(request, callback);
+      }, 400),
+    [],
+  );
+
+  useEffect(() => {
+    let active = true;
+
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current =
+        new window.google.maps.places.AutocompleteService();
+    }
+    if (!autocompleteService.current) {
+      return undefined;
+    }
+
+    if (inputLocation === '') {
+      setOptionsLocation(location ? [location] : []);
+      return undefined;
+    }
+
+    fetch({ input: inputLocation }, (results) => {
+      if (active) {
+        let newOptions = [];
+
+        if (location) {
+          newOptions = [location];
+        }
+
+        if (results) {
+          newOptions = [...newOptions, ...results];
+        }
+
+        setOptionsLocation(newOptions);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [location, inputLocation, fetch]);
 
 
   return (
@@ -120,11 +209,69 @@ export default function AddEntreprisePage() {
                 multiline
               />
 
-              <TextField
+              {/* <TextField
                 id="outlined-required"
                 label="Addresse de l'Entreprise"
                 placeholder="Addresse de l'Entreprise"
-              />
+              /> */}
+
+<Autocomplete
+      id="google-map-demo"
+      sx={{ width: 300 }}
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? option : option.description
+      }
+      filterOptions={(x) => x}
+      options={optionsLocation}
+      autoComplete
+      includeInputInList
+      filterSelectedOptions
+      value={location}
+      noOptionsText="No locations"
+      onChange={(event, newValue) => {
+        setOptionsLocation(newValue ? [newValue, ...optionsLocation] : optionsLocation);
+        setLocation(newValue);
+      }}
+      onInputChange={(event, newInputValue) => {
+        setInputLocation(newInputValue);
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label="Add a location" fullWidth />
+      )}
+      renderOption={(props, option) => {
+        const matches =
+          option.structured_formatting.main_text_matched_substrings || [];
+
+        const parts = parse(
+          option.structured_formatting.main_text,
+          matches.map((match) => [match.offset, match.offset + match.length]),
+        );
+
+        return (
+          <li {...props}>
+            <Grid container alignItems="center">
+              <Grid item sx={{ display: 'flex', width: 44 }}>
+                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+              </Grid>
+              <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                {parts.map((part, index) => (
+                  <Box
+                    key={index}
+                    component="span"
+                    sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                  >
+                    {part.text}
+                  </Box>
+                ))}
+                <Typography variant="body2" color="text.secondary">
+                  {option.structured_formatting.secondary_text}
+                </Typography>
+              </Grid>
+            </Grid>
+          </li>
+        );
+      }}
+    />
 
               <FormGroup>
                 <FormLabel component="legend">Secteur d'activité</FormLabel>
