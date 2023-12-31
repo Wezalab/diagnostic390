@@ -36,7 +36,7 @@ const entreprisesSlice = createSlice({
     isLoadingEntreprise: false,
     errorEntreprise: null,
 
-    isLoadingCreateEntreprise: '',
+    isLoadingCreateEntreprise: false,
     errorCreateEntreprise: null,
   },
   reducers: {},
@@ -55,20 +55,20 @@ const entreprisesSlice = createSlice({
       })
       .addCase(fetchEntreprises.rejected, (state, action) => {
         state.isLoadingEntreprise = false;
-        state.errorEntreprise = action.errorEntreprise.message;
+        state.errorEntreprise = action.error.message;
       });
 
     // Handle the createEntreprise action
     builder
       .addCase(createEntreprise.pending, (state) => {
-        state.isLoadingCreateEntreprise = 'loading';
+        state.isLoadingCreateEntreprise = true;
       })
       .addCase(createEntreprise.fulfilled, (state, action) => {
-        state.isLoadingCreateEntreprise = 'succeeded';
+        state.isLoadingCreateEntreprise = false;
         state.entrepriseList.push(action.payload);
       })
       .addCase(createEntreprise.rejected, (state, action) => {
-        state.isLoadingCreateEntreprise = 'failed';
+        state.isLoadingCreateEntreprise = false;
         state.errorCreateEntreprise = action.error.message;
       });
   },

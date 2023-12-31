@@ -111,8 +111,10 @@ export default function AddEntreprisePage() {
 
         dispatch(createEntreprise(newValue))
           .then(() => {
-            navigate('/dashboard', { replace: true });
-
+            console.log("data", errorCreateEntreprise);
+            if(!errorCreateEntreprise){
+              navigate('/dashboard', { replace: true });
+            }
           })
           .catch((error) => {
             console.error('Registration error:', error);
@@ -192,9 +194,9 @@ export default function AddEntreprisePage() {
                   id="outlined-required"
                   label="Date de création de l'Entreprise"
                   placeholder="2/2/2000"
-                  defaultValue={defaultDate}
+                  // defaultValue={defaultDate}
                   type="date"
-                  value={creationDate ? creationDate : null}
+                  value={creationDate ? creationDate : defaultDate}
                   onChange={(e) => setCreationDate(e.target.value)}
                 />
 
@@ -209,7 +211,7 @@ export default function AddEntreprisePage() {
 
                 <TextField
                   id="outlined-required"
-                  label="Valeur de l'Entreprise"
+                  label="Valeur de l'entreprise"
                   placeholder="Valeur de l'Entreprise"
                   multiline
                   value={entrepriseValue}
@@ -218,7 +220,7 @@ export default function AddEntreprisePage() {
 
                 <TextField
                   id="outlined-required"
-                  label="Addresse de l'Entreprise"
+                  label="Addresse de l'entreprise"
                   placeholder="Addresse de l'Entreprise"
                   value={entrepriseAddress}
                   onChange={(e) => setEntrepriseAddress(e.target.value)}
@@ -302,6 +304,7 @@ export default function AddEntreprisePage() {
                 <Autocomplete
                   multiple
                   limitTags={2}
+                  // options={optionsSector}
                   options={optionsSector.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                   groupBy={(option) => option.firstLetter}
                   id="checkboxes-tags-demo"
@@ -327,10 +330,9 @@ export default function AddEntreprisePage() {
 
                 {errorCreateEntreprise && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorCreateEntreprise}</Typography>}
 
-                <LoadingButton loading={!!isLoadingCreateEntreprise} disabled={!!isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                <LoadingButton loading={!isLoadingCreateEntreprise} disabled={!isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                   Publier et visualiser l'application
                 </LoadingButton>
-
               </Stack>
             </Paper>
           </Box>
