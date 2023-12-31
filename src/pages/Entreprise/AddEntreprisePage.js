@@ -1,3 +1,5 @@
+/* eslint no-unneeded-ternary: "error" */
+
 import { Helmet } from 'react-helmet-async';
 
 // @mui
@@ -25,14 +27,27 @@ import {
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton } from '@mui/lab';
+import { useState } from 'react';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function AddEntreprisePage() {
-  const defaultDate = '2000-02-02';
+  const defaultDate = '2000-01-01';
 
-  const options = sectors.map((option) => {
+  const [entrepriseName, setEntrepriseName] = useState('');
+  const [entrepriseDescription, setEntrepriseDescription] = useState('');
+  const [creationDate, setCreationDate] = useState('');
+  const [entrepriseMission, setEntrepriseMission] = useState('');
+  const [entrepriseValue, setEntrepriseValue] = useState('');
+  const [entrepriseAddress, setEntrepriseAddress] = useState('');
+  const [secteurActivite, setSecteurActivite] = useState([]);
+  const [entrepriseStage, setEntrepriseStage] = useState('');
+  const [typeOfClients, setTypeOfClients] = useState([]);
+  const [clientLocation, setClientLocation] = useState([]);
+  const [sectorsOfActivity, setSectorsOfActivity] = useState([]);
+
+  const optionsSector = sectors.map((option) => {
     const firstLetter = option.title[0].toUpperCase();
     return {
       firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
@@ -41,8 +56,22 @@ export default function AddEntreprisePage() {
   });
 
   const handleClick = () => {
+    const formData = {
+      entrepriseName,
+      entrepriseDescription,
+      creationDate,
+      entrepriseMission,
+      entrepriseValue,
+      entrepriseAddress,
+      secteurActivite,
+      entrepriseStage,
+      typeOfClients,
+      clientLocation,
+      sectorsOfActivity,
+    };
 
-  }
+    console.log("formData", formData);
+  } 
 
 
   return (
@@ -52,9 +81,8 @@ export default function AddEntreprisePage() {
       </Helmet>
 
       <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
-        {/* sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} */}
 
-        <Box sx={{ width: '70%' }} >
+        <Box >
           <Alert severity="warning">Êtes-vous sûr de vouloir ajouter un nouveau profil d'entreprise?
             Si vous souhaitez apporter des modifications à votre profil existant, veuillez accéder à votre profil d'entreprise et modifier les détails.</Alert>
           <Typography variant="h4" sx={{ my: 3 }}>
@@ -94,6 +122,8 @@ export default function AddEntreprisePage() {
                   id="outlined-required"
                   label="Nom de l'Entreprise"
                   placeholder="Nom de l'Entreprise"
+                  value={entrepriseName}
+                  onChange={(e) => setEntrepriseName(e.target.value)}
                 />
 
                 <TextField
@@ -101,8 +131,9 @@ export default function AddEntreprisePage() {
                   label="Description de l'Entreprise"
                   placeholder="Description de l'Entreprise"
                   multiline
+                  value={entrepriseDescription}
+                  onChange={(e) => setEntrepriseDescription(e.target.value)}
                 />
-
 
                 <TextField
                   shrink
@@ -111,68 +142,119 @@ export default function AddEntreprisePage() {
                   placeholder="2/2/2000"
                   defaultValue={defaultDate}
                   type="date"
+                  value={creationDate?creationDate:null}
+                  onChange={(e) => setCreationDate(e.target.value)}
                 />
+
                 <TextField
                   id="outlined-required"
                   label="Mission de l'Entreprise"
                   placeholder="Mission de l'Entreprise"
                   multiline
+                  value={entrepriseMission}
+                  onChange={(e) => setEntrepriseMission(e.target.value)}
                 />
+
                 <TextField
                   id="outlined-required"
                   label="Valeur de l'Entreprise"
                   placeholder="Valeur de l'Entreprise"
                   multiline
+                  value={entrepriseValue}
+                  onChange={(e) => setEntrepriseValue(e.target.value)}
                 />
 
                 <TextField
                   id="outlined-required"
                   label="Addresse de l'Entreprise"
                   placeholder="Addresse de l'Entreprise"
+                  value={entrepriseAddress}
+                  onChange={(e) => setEntrepriseAddress(e.target.value)}
                 />
 
                 <FormGroup>
                   <FormLabel component="legend">Secteur d'activité</FormLabel>
-
-                  <FormControlLabel control={<Checkbox defaultChecked />} label="AGRO-TRANSFORMATION" />
-                  <FormControlLabel control={<Checkbox />} label="SERVICE" />
-                  <FormControlLabel control={<Checkbox />} label="AUTRE" />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="AGRO-TRANSFORMATION"
+                    onChange={() => setSecteurActivite([...secteurActivite, 'AGRO-TRANSFORMATION'])}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="SERVICE"
+                    onChange={() => setSecteurActivite([...secteurActivite, 'SERVICE'])}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="AUTRE"
+                    onChange={() => setSecteurActivite([...secteurActivite, 'AUTRE'])}
+                  />
                 </FormGroup>
 
                 <FormControl>
                   <FormLabel id="radio-buttons">A quel stage etes-vous?</FormLabel>
                   <RadioGroup
                     aria-labelledby="radio-buttons"
-                    defaultValue="Idée/Concept"
                     name="radio-buttons-group"
+                    value={entrepriseStage}
+                    onChange={(e) => setEntrepriseStage(e.target.value)}
                   >
                     <FormControlLabel value="Idée/Concept" control={<Radio />} label="Idée/Concept" />
                     <FormControlLabel value="Startup" control={<Radio />} label="Startup" />
-                    <FormControlLabel value="Stade de croissance" control={<Radio />} label="Stade de croissance" />
-                    <FormControlLabel value="Stade de maturité" control={<Radio />} label="Stade de maturité" />
+                    <FormControlLabel
+                      value="Stade de croissance"
+                      control={<Radio />}
+                      label="Stade de croissance"
+                    />
+                    <FormControlLabel
+                      value="Stade de maturité"
+                      control={<Radio />}
+                      label="Stade de maturité"
+                    />
                   </RadioGroup>
                 </FormControl>
 
                 <FormGroup>
                   <FormLabel component="legend">Quel type de clients servez-vous ?</FormLabel>
-                  <FormControlLabel control={<Checkbox defaultChecked />} label="B2B" />
-                  <FormControlLabel control={<Checkbox />} label="B2C" />
-                  <FormControlLabel control={<Checkbox />} label="B2G" />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="B2B"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'B2B'])}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="B2C"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'B2C'])}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="B2G"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'B2G'])}
+                  />
                 </FormGroup>
 
                 <FormGroup>
                   <FormLabel component="legend">Où sont basés vos clients ?</FormLabel>
-                  <FormControlLabel control={<Checkbox defaultChecked />} label="Clientèle urbaine" />
-                  <FormControlLabel control={<Checkbox />} label=" Clientèle rurale" />
+                  <FormControlLabel
+                    control={<Checkbox  />}
+                    label="Clientèle urbaine"
+                    onChange={() => setClientLocation([...clientLocation, 'Clientèle urbaine'])}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label=" Clientèle rurale"
+                    onChange={() => setClientLocation([...clientLocation, 'Clientèle rurale'])}
+                  />
                 </FormGroup>
 
                 <Autocomplete
                   multiple
                   limitTags={2}
-                  options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                  options={optionsSector.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                   groupBy={(option) => option.firstLetter}
                   id="checkboxes-tags-demo"
                   disableCloseOnSelect
+                  value={sectorsOfActivity}
                   getOptionLabel={(option) => option.title}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
@@ -185,6 +267,7 @@ export default function AddEntreprisePage() {
                       {option.title}
                     </li>
                   )}
+                  onChange={(e, value) => setSectorsOfActivity(value)}
                   renderInput={(params) => (
                     <TextField {...params} label="Quel sont vos secteurs d'activité?" placeholder="Ajouter un secteur" />
                   )}
