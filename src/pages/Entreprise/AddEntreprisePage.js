@@ -28,7 +28,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createEntreprise } from '../../redux/entrepriseReducer';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -36,6 +37,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function AddEntreprisePage() {
   const defaultDate = '2000-01-01';
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+  const { isLoadingCreateEntreprise } = useSelector((state) => state.entreprise);
 
   const [entrepriseName, setEntrepriseName] = useState('');
   const [entrepriseDescription, setEntrepriseDescription] = useState('');
@@ -51,7 +55,6 @@ export default function AddEntreprisePage() {
 
   // Error
   const [entrepriseError, setEntrepriseError] = useState('');
-
 
   const optionsSector = sectors.map((option) => {
     const firstLetter = option.title[0].toUpperCase();
@@ -71,38 +74,48 @@ export default function AddEntreprisePage() {
         setEntrepriseError('');
       }
 
+      if(!entrepriseName.trim()){
+        return
+      }
+
+      console.log("entrepriseError", entrepriseError);
+
       // If there are no errors, proceed with registration
       if (!entrepriseError) {
 
-        const formData = {
-          entrepriseName,
-          entrepriseDescription,
-          creationDate,
-          entrepriseMission,
-          entrepriseValue,
-          entrepriseAddress,
-          secteurActivite,
-          entrepriseStage,
-          typeOfClients,
-          clientLocation,
-          sectorsOfActivity,
-        };
-        console.log("formData", formData);
+        const newValue = {
+          "company_name": entrepriseName,
+          "description": entrepriseDescription,
+          "founding_date": creationDate,
+          "mission": entrepriseMission,
+          "valeur": entrepriseValue,
+          "stage": entrepriseStage,
+          // "objectifs": "Project Objectives",
+          // "smart_ip": "Smart IP",
+          // "objectif_social": "Social Objective",
+          // "phone": "0991234567",
+          "full_address": entrepriseAddress,
+          "secteur": secteurActivite,
+          "type_of_customers": typeOfClients,
+          "customer_base": clientLocation,
+          // "pitch_text": "Project Pitch Text",
+          // "pitch_deck_url": "https://wezalab.com/pitch_deck.pdf",
+          // "website": "https://wezalab.com",
+          "owner": user.user.user.userId, // Replace with an actual user ID from the list
+          "secteur_activite_details": sectorsOfActivity
+        }
+        // console.log("newvalue", newValue);
 
-        // dispatch((name, email, phone, sex, password))
-        //   .then(() => {
-        //     // Dispatch login action after successful registration
-        //     // dispatch(login(email, password));
-        //   })
-        //   .catch((error) => {
-        //     console.error('Registration error:', error);
-        //   });
-
-
+        dispatch(createEntreprise(newValue))
+          .then(() => {
+            // Dispatch login action after successful registration
+            // dispatch(login(email, password));
+          })
+          .catch((error) => {
+            console.error('Registration error:', error);
+          });
       }
-
-
-    } catch(error) {
+    } catch (error) {
       console.log("errorRegister", error);
       console.log(error);
     }
@@ -172,7 +185,7 @@ export default function AddEntreprisePage() {
                 />
 
                 <TextField
-                  shrink
+                  // shrink
                   id="outlined-required"
                   label="Date de création de l'Entreprise"
                   placeholder="2/2/2000"
@@ -309,7 +322,7 @@ export default function AddEntreprisePage() {
                   )}
                 />
 
-                <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                <LoadingButton loading={!!isLoadingCreateEntreprise} disabled={!!isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                   Publier et visualiser l'application
                 </LoadingButton>
 

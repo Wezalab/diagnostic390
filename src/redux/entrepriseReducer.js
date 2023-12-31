@@ -18,6 +18,7 @@ export const fetchEntreprises = createAsyncThunk(
 
 // Create an async thunk to create a new Entreprise object
 export const createEntreprise = createAsyncThunk('entreprise/create', async (EntrepriseData) => {
+  console.log("----------------------",EntrepriseData);
   try {
     const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/projects/`, EntrepriseData);
     return response.data;
@@ -35,7 +36,7 @@ const entreprisesSlice = createSlice({
     isLoadingEntreprise: false,
     errorEntreprise: null,
 
-    isLoadingCreateEntreprise: false,
+    isLoadingCreateEntreprise: '',
     errorCreateEntreprise: null,
   },
   reducers: {},
