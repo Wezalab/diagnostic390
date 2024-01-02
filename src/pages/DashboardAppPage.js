@@ -31,10 +31,10 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-          Mon Tableau de board
+        Concours de Plans d’Affaires - COPA
         </Typography>
         <Typography sx={{ mb: 3 }}>
-          Bienvenue {user.user.user.name}
+          Bienvenue {user? user?.user?.user?.name: ""}
         </Typography>
 
         {

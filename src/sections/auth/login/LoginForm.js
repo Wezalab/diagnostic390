@@ -86,6 +86,9 @@ export default function LoginForm() {
           Créer un compte
         </Link>
       </Stack>
+      <Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+          Retour a l'accueil
+      </Link>
 
     </>
   );

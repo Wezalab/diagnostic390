@@ -13,12 +13,13 @@ import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
 
 export default function Router() {
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      // element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },

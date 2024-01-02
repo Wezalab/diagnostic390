@@ -12,7 +12,6 @@ export default function AccountPopover() {
   const dispatch = useDispatch();
 
 const { user } = useSelector((state) => state.auth);
-console.log(user.user.user);
 
   const handleLogout = () => {
     dispatch(logoutUser());
