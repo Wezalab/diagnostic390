@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import {
   Container, Typography, Card, IconButton, CardActions, CardContent, CardHeader,
-  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar
+  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField
 } from '@mui/material';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -11,23 +11,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import EditIcon from '@mui/icons-material/Edit';
-import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 import SwipeableViews from 'react-swipeable-views';
 import { useLocation } from "react-router-dom";
 
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function TabPanel(props) {
@@ -79,16 +72,27 @@ export default function ViewVenture() {
   const [ openEntrepriseMission, setOpenEntrepriseMission ] = useState(false);
   const [ openValeur, setOpenValeur ] = useState(false);
   const [ openfulladdress, setOpenfulladdress ] = useState(false);
-  const [ opensecteur, setOpensecteur ] = useState(false);
-  const [ openstage, setOpenstage ] = useState(false);
-  const [ opentypeOfClients, setOpentypeOfClients ] = useState(false);
+  const [ openSecteur, setOpenSecteur ] = useState(false);
+  const [ openStage, setOpenStage ] = useState(false);
+  const [ opentypeOfClients, setOpenTypeOfClients ] = useState(false);
   const [ openclientLocation, setOpenclientLocation ] = useState(false);
-  const [ opensecteuractivitedetails, setOpensecteuractivitedetails ] = useState(false);
+  const [ openSecteuractivitedetails, setOpenSecteuractivitedetails ] = useState(false);
 
-  const [open, setOpen] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [newStage, setNewStage] = useState(myEntreprise.stage); // Assuming myEntreprise is available
 
-  const handleClick = () => {
-    setOpen(!open);
+  const handleEditClick = () => {
+    setEditing(true);
+  };
+
+  const handleCancelClick = () => {
+    setEditing(false);
+    setNewStage(myEntreprise.stage); // Reset to original value
+  };
+
+  const handleSaveClick = () => {
+    // Perform the save logic with the newStage value
+    setEditing(false);
   };
 
   const handleClickCompanyname = () => {
@@ -113,19 +117,19 @@ export default function ViewVenture() {
    setOpenfulladdress(!openfulladdress);
   }
   const handleClicksecteur = () => {
-   setOpensecteur(!opensecteur);
+   setOpenSecteur(!openSecteur);
   }
-  const handleClickstage = () => {
-   setOpenstage(!openstage);
-  }
+  const handleClickStage = () => {
+    setOpenStage(!openStage);
+  };
   const handleClicktypeOfClients = () => {
-   setOpentypeOfClients(!opentypeOfClients);
+   setOpenTypeOfClients(!opentypeOfClients);
   }
   const handleClickclientLocation = () => {
    setOpenclientLocation(!openclientLocation);
   }
   const handleClicksecteuractivitedetails = () => {
-   setOpensecteuractivitedetails(!opensecteuractivitedetails);
+   setOpenSecteuractivitedetails(!openSecteuractivitedetails);
   }
 
 
@@ -172,12 +176,12 @@ export default function ViewVenture() {
             subheader={myEntreprise.mini_bio}
 
           />
-          {/* <CardMedia
+          <CardMedia
             component="img"
             height="194"
             image="../../../assets/empty.jpg"
             alt="Paella dish"
-          /> */}
+          />
           <CardContent>
             <Typography variant="body2" color="text.secondary">
               {myEntreprise.project_description}
@@ -196,9 +200,12 @@ export default function ViewVenture() {
                   aria-label="full width tabs example"
                 >
                   <Tab label="Identité de l'entreprise" {...a11yProps(0)} />
+                  <Tab label="Equipe" {...a11yProps(1)} />
+                  <Tab label="Finances" {...a11yProps(1)} />
                   <Tab label="Business model" {...a11yProps(1)} />
-                  <Tab label="Culture d'entreprise" {...a11yProps(2)} />
-                  <Tab label="Business PLAN & Prévision financière" {...a11yProps(3)} />
+                  {/* <Tab label="Culture d'entreprise" {...a11yProps(2)} /> */}
+                  <Tab label="Business Plan " {...a11yProps(3)} />
+                  <Tab label="Prévisions financières" {...a11yProps(3)} />
                 </Tabs>
               </AppBar>
               <SwipeableViews
@@ -208,10 +215,6 @@ export default function ViewVenture() {
               >
                 <TabPanel value={value} index={0} dir={theme.direction}>
                   <Box sx={{ display: 'flex', }} >
-                    {/* <Box sm={4} ><Typography>Name</Typography></Box>
-                    <Box sm={4} ><Typography>Name</Typography></Box>
-                    <Box sm={4} ><Typography>Name</Typography></Box> */}
-
                     <List
                       sx={{ width: '100%', bgcolor: 'background.paper' }}
                       component="nav"
@@ -232,7 +235,7 @@ export default function ViewVenture() {
                         {openCompanyname ? <ExpandLess onClick={handleClickCompanyname} /> : <ExpandMore onClick={handleClickCompanyname} />}
                       </ListItemButton>
                       <Collapse in={openCompanyname} timeout="auto" unmountOnExit sx={{padding: 2}} >
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -244,7 +247,7 @@ export default function ViewVenture() {
                         {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}
                       </ListItemButton>
                       <Collapse in={openMinibio} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -256,7 +259,7 @@ export default function ViewVenture() {
                         {openProjectdescription ? <ExpandLess onClick={handleClickProjectdescription} /> : <ExpandMore onClick={handleClickProjectdescription} />}
                       </ListItemButton>
                       <Collapse in={openProjectdescription} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -268,7 +271,7 @@ export default function ViewVenture() {
                         {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}
                       </ListItemButton>
                       <Collapse in={openFoundingdate} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
 
@@ -281,7 +284,7 @@ export default function ViewVenture() {
                         {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}
                       </ListItemButton>
                       <Collapse in={openEntrepriseMission} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -292,7 +295,7 @@ export default function ViewVenture() {
                         {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}
                       </ListItemButton>
                       <Collapse in={openValeur} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
 
@@ -305,7 +308,7 @@ export default function ViewVenture() {
                         {openfulladdress ? <ExpandLess onClick={handleClickfulladdress} /> : <ExpandMore onClick={handleClickfulladdress} />}
                       </ListItemButton>
                       <Collapse in={openfulladdress} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
 
@@ -315,23 +318,51 @@ export default function ViewVenture() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {opensecteur ? <ExpandLess onClick={handleClicksecteur} /> : <ExpandMore onClick={handleClicksecteur} />}
+                        {openSecteur ? <ExpandLess onClick={handleClicksecteur} /> : <ExpandMore onClick={handleClicksecteur} />}
                       </ListItemButton>
-                      <Collapse in={opensecteur} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                      <Collapse in={openSecteur} timeout="auto" unmountOnExit sx={{padding: 2}}>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
 
-                      <ListItemButton>
+                      {/* <ListItemButton>
                         <ListItemText primary="A quel stage etes-vous?" secondary={myEntreprise.stage} />
                         
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openstage ? <ExpandLess onClick={handleClickstage} /> : <ExpandMore onClick={handleClickstage} />}
-                      </ListItemButton>
-                      <Collapse in={openstage} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}
+                      </ListItemButton> */}
+
+<ListItemButton>
+      {editing ? (
+        <>
+          <TextField
+            label="New Stage"
+            value={newStage}
+            onChange={(e) => setNewStage(e.target.value)}
+          />
+          <Button onClick={handleSaveClick}>Save</Button>
+          <Button onClick={handleCancelClick}>Cancel</Button>
+        </>
+      ) : (
+        <>
+          <ListItemText primary="A quel stage etes-vous?" secondary={myEntreprise.stage} />
+          <ListItemIcon>
+            {openStage ? (
+              <CloseIcon onClick={handleClickStage} />
+            ) : (
+              <EditIcon onClick={handleEditClick} />
+            )}
+          </ListItemIcon>
+          {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}
+        </>
+      )}
+    </ListItemButton>
+
+
+                      <Collapse in={openStage} timeout="auto" unmountOnExit sx={{padding: 2}}>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
 
@@ -344,7 +375,7 @@ export default function ViewVenture() {
                         {opentypeOfClients ? <ExpandLess onClick={handleClicktypeOfClients} /> : <ExpandMore onClick={handleClicktypeOfClients} />}
                       </ListItemButton>
                       <Collapse in={opentypeOfClients} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -356,7 +387,7 @@ export default function ViewVenture() {
                         {openclientLocation ? <ExpandLess onClick={handleClickclientLocation} /> : <ExpandMore onClick={handleClickclientLocation} />}
                       </ListItemButton>
                       <Collapse in={openclientLocation} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
 
                       <ListItemButton>
@@ -365,14 +396,16 @@ export default function ViewVenture() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {opensecteuractivitedetails ? <ExpandLess onClick={handleClicksecteuractivitedetails} /> : <ExpandMore onClick={handleClicksecteuractivitedetails} />}
+                        {openSecteuractivitedetails ? <ExpandLess onClick={handleClicksecteuractivitedetails} /> : <ExpandMore onClick={handleClicksecteuractivitedetails} />}
                       </ListItemButton>
-                      <Collapse in={opensecteuractivitedetails} timeout="auto" unmountOnExit sx={{padding: 2}}>
-                        <Typography>EXPEND</Typography>
+                      <Collapse in={openSecteuractivitedetails} timeout="auto" unmountOnExit sx={{padding: 2}}>
+                        <Typography sx={{color:"red"}}>Coaching score</Typography>
                       </Collapse>
                     </List>
                   </Box>
                 </TabPanel>
+              
+
                 <TabPanel value={value} index={1} dir={theme.direction}>
                   Business model
                 </TabPanel>

@@ -15,7 +15,8 @@ export default function DashboardAppPage() {
   const { user } = useSelector((state) => state.auth);
   const { entrepriseList, isLoadingEntreprise } = useSelector((state) => state.entreprise);
 
-  const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  // const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  const myEntreprises = entrepriseList
   console.log(myEntreprises);
 
   useEffect(() => {
@@ -42,12 +43,12 @@ export default function DashboardAppPage() {
           <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
           <CircularProgress sx={{alignSelf:'center'}} /> </Box> :
 
-            <Grid container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
+            <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
 
               {
                 myEntreprises && myEntreprises.map((value, key) =>
                 (
-                  <Grid key={key} item xs={12}>
+                  <Grid key={key} item xs={6}>
                     <AppWidgetEntreprise myEntreprises={value} />
                   </Grid>
                 )
