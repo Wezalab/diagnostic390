@@ -50,6 +50,7 @@ export default function RegisterForm() {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    console.log("ok", name, nameError);
     try {
       // Validate and set error messages
       if (!name.trim()) {
@@ -91,8 +92,8 @@ export default function RegisterForm() {
       }
 
       // If there are no errors, proceed with registration
-      if (!nameError && !emailError && !passwordError && !confirmPasswordError && !phoneError && !sexError) {
-
+      // if (!nameError && !emailError && !passwordError && !confirmPasswordError && !phoneError && !sexError) {
+      if (name && email && password && confirmPassword && phone && sex) {
         // Dispatch registration action here
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
@@ -103,9 +104,8 @@ export default function RegisterForm() {
         // }
 
         dispatch(register(name, email, phone, sex, password))
-          .then(() => {
-            // Dispatch login action after successful registration
-            // dispatch(login(email, password));
+          .then((data) => {
+            console.log("data", data);
           })
           .catch((error) => {
             console.error('Registration error:', error);
@@ -196,6 +196,7 @@ export default function RegisterForm() {
               onChange={(e) => setPassword(e.target.value)}
               error={!!passwordError}
               helperText={passwordError}
+              defaultValue="AUTRE"
             />
 
             <TextField

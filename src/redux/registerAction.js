@@ -22,7 +22,7 @@ export const register = (name, email, phone, sex, password) => async (dispatch) 
     dispatch(registerSuccess(response.data));
 
   } catch (error) {
-    console.log(error);
+    console.log("-----====",error.response.data.message);
     dispatch(registerFailure(error.response.data.message));
   }
 };
