@@ -93,14 +93,14 @@ export default function AddEntreprisePage() {
       console.log("entrepriseError", entrepriseError);
 
       // If there are no errors, proceed with registration
-      if (!entrepriseError) {
+      if (!entrepriseError && !miniBioError ) {
 
         const newValue = {
           "company_name": entrepriseName,
           "mini_bio": miniBio,
-          "description": entrepriseDescription,
+          "project_description": entrepriseDescription,
           "founding_date": creationDate,
-          "mission": entrepriseMission,
+          "project_mission": entrepriseMission,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
           // "objectifs": "Project Objectives",
@@ -120,8 +120,9 @@ export default function AddEntreprisePage() {
         // console.log("newvalue", newValue);
 
         dispatch(createEntreprise(newValue))
-          .then(() => {
-            console.log("data", errorCreateEntreprise);
+          .then((data) => {
+            console.log("data", errorCreateEntreprise, data);
+            
             if(!errorCreateEntreprise){
               navigate('/dashboard', { replace: true });
             }
@@ -302,8 +303,20 @@ export default function AddEntreprisePage() {
                   />
                   <FormControlLabel
                     control={<Checkbox />}
-                    label="B2G"
-                    onChange={() => setTypeOfClients([...typeOfClients, 'B2G'])}
+                    label="B2B2B"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'B2B2B'])}
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="B2B2C"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'B2B2C'])}
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="C2C"
+                    onChange={() => setTypeOfClients([...typeOfClients, 'C2C'])}
                   />
                 </FormGroup>
 
@@ -311,13 +324,13 @@ export default function AddEntreprisePage() {
                   <FormLabel component="legend">Où sont basés vos clients ?</FormLabel>
                   <FormControlLabel
                     control={<Checkbox />}
-                    label="Clientèle urbaine"
-                    onChange={() => setClientLocation([...clientLocation, 'Clientèle urbaine'])}
+                    label="Clientèle Urbaine"
+                    onChange={() => setClientLocation([...clientLocation, 'Clientèle Urbaine'])}
                   />
                   <FormControlLabel
                     control={<Checkbox />}
-                    label=" Clientèle rurale"
-                    onChange={() => setClientLocation([...clientLocation, 'Clientèle rurale'])}
+                    label=" Clientèle Rurale"
+                    onChange={() => setClientLocation([...clientLocation, 'Clientèle Rurale'])}
                   />
                 </FormGroup>
 

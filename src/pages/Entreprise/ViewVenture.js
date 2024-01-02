@@ -3,20 +3,18 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import {
   Container, Typography, Card, IconButton, CardActions, CardContent, CardHeader,
-  Avatar, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar
+  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar
 } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
-
+import { useLocation } from "react-router-dom";
 
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
 
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,6 +51,10 @@ function a11yProps(index) {
 
 export default function ViewVenture() {
 
+  const location = useLocation();
+  const myEntreprise = location.state;
+  console.log("myEntreprise", myEntreprise);
+
   const [value, setValue] = useState(0);
   const theme = useTheme();
 
@@ -72,7 +74,7 @@ export default function ViewVenture() {
 
       <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
 
-      <Breadcrumbs aria-label="breadcrumb" sx={{alignSelf:'flex-start', marginBottom: 2}}  >
+      <Breadcrumbs aria-label="breadcrumb" sx={{ alignSelf:'flex-start', marginBottom: 2 }}  >
         <Link underline="hover" color="inherit" href="/">
           Dashboard
         </Link>
@@ -81,29 +83,33 @@ export default function ViewVenture() {
         <Card >
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                R
-              </Avatar>
+              // <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              //   R
+              // </Avatar>
+              <Box>
+              <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100}} />
+              
+              <Typography variant="caption" >Changer la photo</Typography>
+              </Box>
             }
             action={
               <IconButton aria-label="settings">
                 <MoreVertIcon />
               </IconButton>
             }
-            title="Shrimp and Chorizo Paella"
-            subheader="September 14, 2016"
+            title={myEntreprise.company_name}
+            subheader={myEntreprise.mini_bio}
+            
           />
           {/* <CardMedia
-        component="img"
-        height="194"
-        image="/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      /> */}
+            component="img"
+            height="194"
+            image="../../../assets/empty.jpg"
+            alt="Paella dish"
+          /> */}
           <CardContent>
             <Typography variant="body2" color="text.secondary">
-              This impressive paella is a perfect party dish and a fun meal to cook
-              together with your guests. Add 1 cup of frozen peas along with the mussels,
-              if you like.
+             {myEntreprise.project_description}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
