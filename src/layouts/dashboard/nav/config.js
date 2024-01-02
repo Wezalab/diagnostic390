@@ -7,17 +7,17 @@ const icon = (name) => <SvgColor src={`/assets/${name}.svg`} sx={{ width: 1, hei
 
 const navConfig = [
   {
-    title: 'dashboard',
+    title: 'Accueil',
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
   },
   {
-    title: 'doctor',
+    title: 'Profile',
     path: '/dashboard/doctor',
     icon: icon('ic_analytics'),
   },
   {
-    title: 'patient',
+    title: 'Rapport',
     path: '/dashboard/patient',
     icon: icon('ic_analytics'),
   },

@@ -9,6 +9,7 @@ import Iconify from '../../../components/iconify';
 import { login } from '../../../redux/loginAction';
 
 import { store } from '../../../redux/Store';
+import { fetchEntreprises } from '../../../redux/entrepriseReducer';
 
 // import { fetchDoctors } from '../../../redux/doctorsReducer';
 // import { fetchPatients } from '../../../redux/patientsReducer';
@@ -35,8 +36,7 @@ export default function LoginForm() {
     }
 
     setLocalError('')
-    // store.dispatch(fetchDoctors());
-    // store.dispatch(fetchPatients());
+    store.dispatch(fetchEntreprises());
 
     dispatch(login(email, password));
   };
@@ -70,12 +70,12 @@ export default function LoginForm() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
-        <Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+        <Link href="#" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
           Mot de passe oublié?
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Se connecter
       </LoadingButton>
 

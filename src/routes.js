@@ -5,14 +5,12 @@ import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 // //
 import LoginPage from './pages/LoginPage';
-import DoctorPage from './pages/DoctorPage';
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
-import DoctorProfile from './pages/DoctorProfile';
 
-import PatientPage from './pages/PatientPage';
-import PatientProfile from './pages/PatientProfile';
 import RegisterPage from './pages/registerPage';
+import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
+import ViewVenture from './pages/Entreprise/ViewVenture';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -24,10 +22,10 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'doctor', element: <DoctorPage /> },
-        { path: 'doctor-profile', element: <DoctorProfile /> },
-        { path: 'patient', element: <PatientPage /> },
-        { path: 'patient-profile', element: <PatientProfile /> },
+        { path: 'add-entreprise', element: <AddEntreprisePage /> },
+        { path: 'view-venture', element: <ViewVenture /> },
+        
+        
       ],
     },
     {

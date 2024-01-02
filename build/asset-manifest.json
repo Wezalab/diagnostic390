@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.js": "/static/js/main.bbc798b6.js",
+    "static/js/496.4158154d.chunk.js": "/static/js/496.4158154d.chunk.js",
+    "index.html": "/index.html",
+    "static/media/ic_flag_en.svg": "/static/media/ic_flag_en.9a67c937df5590b9817e9e99f8965b2a.svg",
+    "static/media/ic_flag_fr.svg": "/static/media/ic_flag_fr.35afd52c95dd5a61c04af9204e3dbeb6.svg",
+    "main.bbc798b6.js.map": "/static/js/main.bbc798b6.js.map",
+    "496.4158154d.chunk.js.map": "/static/js/496.4158154d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bbc798b6.js"
+  ]
+}
