@@ -12,12 +12,17 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Profile',
+    title: 'Plans d’Affaires',
+    path: '/dashboard/plan',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Entreprise',
     path: '/dashboard/doctor',
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Rapport',
+    title: 'Evaluation',
     path: '/dashboard/patient',
     icon: icon('ic_analytics'),
   },

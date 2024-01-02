@@ -11,6 +11,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/registerPage';
 import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
+import PlanPage from './pages/plan/PlanPage';
 
 export default function Router() {
   // const { user } = useSelector((state) => state.auth);
@@ -25,6 +26,7 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'add-entreprise', element: <AddEntreprisePage /> },
         { path: 'view-venture', element: <ViewVenture /> },
+        { path: 'plan', element: <PlanPage /> },
         
         
       ],
