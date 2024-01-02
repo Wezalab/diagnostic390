@@ -10,10 +10,6 @@ import { AppWidgetEntreprise } from '../sections/@dashboard/entreprise';
 import { store } from '../redux/Store';
 import { fetchEntreprises } from '../redux/entrepriseReducer';
 
-function countItems(doctorsArray) {
-  return doctorsArray.length
-}
-
 export default function DashboardAppPage() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -51,8 +47,8 @@ export default function DashboardAppPage() {
               {
                 myEntreprises && myEntreprises.map((value, key) =>
                 (
-                  <Grid key={key} item xs={12} sm={12}>
-                    <AppWidgetEntreprise myEntreprises={value} title="Entreprise" total={countItems(entrepriseList)} icon={'ant-design:user-outlined'} />
+                  <Grid key={key} item xs={12}>
+                    <AppWidgetEntreprise myEntreprises={value} />
                   </Grid>
                 )
                 )

@@ -45,6 +45,7 @@ export default function AddEntreprisePage() {
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
   const [entrepriseName, setEntrepriseName] = useState('');
+  const [miniBio, setMiniBio] = useState('');
   const [entrepriseDescription, setEntrepriseDescription] = useState('');
   const [creationDate, setCreationDate] = useState('');
   const [entrepriseMission, setEntrepriseMission] = useState('');
@@ -58,6 +59,8 @@ export default function AddEntreprisePage() {
 
   // Error
   const [entrepriseError, setEntrepriseError] = useState('');
+  const [miniBioError, setMiniBioError] = useState('');
+
 
   const optionsSector = sectors.map((option) => {
     const firstLetter = option.title[0].toUpperCase();
@@ -77,7 +80,13 @@ export default function AddEntreprisePage() {
         setEntrepriseError('');
       }
 
-      if(!entrepriseName.trim()){
+      if (!miniBio.trim()) {
+        setMiniBioError("Le details de l'entreprise ne peut pas être vide");
+      } else {
+        setMiniBioError('');
+      }
+
+      if(!entrepriseName.trim() || !miniBio.trim()){
         return
       }
 
@@ -88,6 +97,7 @@ export default function AddEntreprisePage() {
 
         const newValue = {
           "company_name": entrepriseName,
+          "mini_bio": miniBio,
           "description": entrepriseDescription,
           "founding_date": creationDate,
           "mission": entrepriseMission,
@@ -178,6 +188,16 @@ export default function AddEntreprisePage() {
                   value={entrepriseName}
                   onChange={(e) => setEntrepriseName(e.target.value)}
                   error={!!entrepriseError} helperText={entrepriseError}
+                />
+
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Detail simple de l'Entreprise"
+                  placeholder="Detail simple de l'Entreprise"
+                  value={miniBio}
+                  onChange={(e) => setMiniBio(e.target.value)}
+                  error={!!miniBioError} helperText={miniBioError}
                 />
 
                 <TextField

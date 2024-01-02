@@ -117,7 +117,7 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
                   <Typography sx={{ p: 1 }} variant="h6">{myEntreprises.company_name}</Typography>
                 </Card>
               </StyledCardTitle>
-              <StyledCardDesc>{myEntreprises.description}</StyledCardDesc>
+              <StyledCardDesc>{myEntreprises.mini_bio}</StyledCardDesc>
               <Box sx={{display:'flex', flexDirection:'row'}}>
               <Iconify icon='mdi:location' width={20} height={20} />
                 <Typography variant="body2">{myEntreprises.full_address}</Typography>
