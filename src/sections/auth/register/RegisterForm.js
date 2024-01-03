@@ -623,12 +623,12 @@ export default function RegisterForm() {
                           S'enregistrer
                         </LoadingButton>
 
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+                        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
                           <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
                           <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
                             Se connecter
                           </Link>
-                        </Stack>
+                        </Stack> */}
 
                       </Box>}
                   </Box>
@@ -895,6 +895,7 @@ export default function RegisterForm() {
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
+                variant="outlined"
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
@@ -904,10 +905,14 @@ export default function RegisterForm() {
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
 
-              <Button onClick={handleNext}>
+              <Button onClick={handleNext} variant="outlined" disabled={ activeStep && !registeredUser}  >
                 {activeStep === steps.length - 1 ? 'Fin' : 'Suivant'}
               </Button>
             </Box>
+
+            <Link href="/dashboard/app" style={{ display:'block', cursor: 'pointer', textAlign:"center", color: 'red' }} variant="subtitle2" underline="hover">
+          Retour à l'accueil
+      </Link>
           </>
         )}
       </Box>
