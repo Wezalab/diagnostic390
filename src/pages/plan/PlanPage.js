@@ -41,12 +41,12 @@ export default function PlanPage() {
       <Container >
         <Box  sx={{ display:'flex', flexDirection:'row', justifyContent:"space-between", marginBottom:5  }} >
           <Typography variant="h4" sx={{ mb: 1 }}>
-          Plan d’Affaire
+          Plan d’Affaires
           </Typography>
           
           {
             user?<LoadingButton size="large" variant="contained" onClick={handleClick}>
-            Ajouter un plan d’Affaire
+            Ajouter un plan d’Affaires
           </LoadingButton>: null
           }
           
@@ -88,7 +88,7 @@ export default function PlanPage() {
                   </Typography>
                   {
                     user? <>
-                    <Typography>Pour enregistrer votre plan d’affaire, cliquez sur le bouton en bas et commencez
+                    <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez
                   </Typography>
                   <Button
                     variant="contained"
@@ -96,10 +96,10 @@ export default function PlanPage() {
                     onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
                     sx={{ marginTop: 2 }}
                   >
-                    Enregistrer votre plan d’affaire
+                    Enregistrer votre plan d’affaires
                   </Button></>:
                   <>
-                  <Typography>Pour enregistrer votre plan d’affaire, veuillez vous identifier 
+                  <Typography>Pour enregistrer votre plan d’affaires, veuillez vous identifier 
                   </Typography>
                   <Button
                     variant="contained"
