@@ -16,6 +16,9 @@ import {
   FormHelperText,
   Paper,
   Button,
+  Stepper,
+  Step,
+  StepLabel,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,6 +46,56 @@ export default function RegisterForm() {
   const [sexError, setSexError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const steps = ['Creér votre profile', 'Creér et ajouter votre entreprise'];
+
+  // stepper
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
+
+  // const isStepOptional = (step) => {
+  //   return step === 1;
+  // };
+
+  const isStepSkipped = (step) => {
+    return skipped.has(step);
+  };
+
+  const handleNext = () => {
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  // const handleSkip = () => {
+  //   if (!isStepOptional(activeStep)) {
+  //     // You probably want to guard against something like this,
+  //     // it should never occur unless someone's actively trying to break something.
+  //     throw new Error("You can't skip a step that isn't optional.");
+  //   }
+
+  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //   setSkipped((prevSkipped) => {
+  //     const newSkipped = new Set(prevSkipped.values());
+  //     newSkipped.add(activeStep);
+  //     return newSkipped;
+  //   });
+  // };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+
 
   const handleChange = (event) => {
     setSex(event.target.value);
@@ -123,7 +176,138 @@ export default function RegisterForm() {
 
   return (
     <>
-      {
+
+      <Box sx={{ width: '100%' }}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            // if (isStepOptional(index)) {
+            //   labelProps.optional = (
+            //     <Typography variant="caption">Optional</Typography>
+            //   );
+            // }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {activeStep === steps.length ? (
+          <>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              All steps completed - you&apos;re finished
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
+            {
+              activeStep === 0 ? <Box sx={{ mt: 2, mb: 1 }} >
+
+                <Stack spacing={3}>
+                  {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
+                  {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
+
+                  <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
+                  <TextField type="email" name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
+                  <TextField type="tel" name="phone" label="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} error={!!phoneError} helperText={phoneError} />
+                  <FormControl fullWidth error={!!sexError}>
+                    <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={sex}
+                      label="Sexe"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="M">Masculin</MenuItem>
+                      <MenuItem value="F">Féminin</MenuItem>
+                      <MenuItem value="AUTRE">Autre</MenuItem>
+                    </Select>
+                    {!!sexError && <FormHelperText>Le sexe ne peut pas être vide</FormHelperText>}
+                  </FormControl>
+                  <TextField
+                    name="password"
+                    label="Mot de passe"
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    error={!!passwordError}
+                    helperText={passwordError}
+                    defaultValue="AUTRE"
+                  />
+
+                  <TextField
+                    name="confirmPassword"
+                    label="Confirmer le mot de passe"
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    error={!!confirmPasswordError}
+                    helperText={confirmPasswordError}
+                  />
+                </Stack>
+
+                <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                  S'enregistrer
+                </LoadingButton>
+
+                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+                  <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
+                  <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+                    Se connecter
+                  </Link>
+                </Stack>
+
+              </Box> : null
+            }
+
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Retour
+              </Button>
+              <Box sx={{ flex: '1 1 auto' }} />
+
+              <Button onClick={handleNext}>
+                {activeStep === steps.length - 1 ? 'Fin' : 'Suivant'}
+              </Button>
+            </Box>
+          </>
+        )}
+      </Box>
+      {/* {
         registeredUser && <Box
           display="flex"
           flexDirection="column"
@@ -231,7 +415,7 @@ export default function RegisterForm() {
           </Stack>
 
         </Box>
-      }
+      } */}
     </>
   );
 }

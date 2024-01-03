@@ -111,7 +111,6 @@ export default function PlanPage() {
                   </Button>
                   </>
                   }
-                  
                 </Box>
               }
 
