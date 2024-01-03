@@ -1,3 +1,5 @@
+/* eslint no-unneeded-ternary: "error" */
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled, alpha } from '@mui/material/styles';
@@ -24,18 +26,30 @@ import {
   Container,
   Grid,
   Card,
+  Alert,
+  Autocomplete,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
+import { createEntreprise } from '../../../redux/entrepriseReducer';
 import { register } from '../../../redux/registerAction';
 
 import Iconify from '../../../components/iconify';
 
 export default function RegisterForm() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const defaultDate = '2000-01-01';
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
+  const { user } = useSelector((state) => state.auth);
+  const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
+
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
@@ -54,6 +68,24 @@ export default function RegisterForm() {
   // Categorie
   const [catSelector, setCatSelector] = useState(0);
   const [catError, setCatError] = useState("");
+
+  // Add entreprise
+  const [entrepriseName, setEntrepriseName] = useState('');
+  const [miniBio, setMiniBio] = useState('');
+  const [entrepriseDescription, setEntrepriseDescription] = useState('');
+  const [creationDate, setCreationDate] = useState('');
+  const [entrepriseMission, setEntrepriseMission] = useState('');
+  const [entrepriseValue, setEntrepriseValue] = useState('');
+  const [entrepriseAddress, setEntrepriseAddress] = useState('');
+  const [secteurActivite, setSecteurActivite] = useState([]);
+  const [entrepriseStage, setEntrepriseStage] = useState('');
+  const [typeOfClients, setTypeOfClients] = useState([]);
+  const [clientLocation, setClientLocation] = useState([]);
+  const [sectorsOfActivity, setSectorsOfActivity] = useState([]);
+
+  // Error
+  const [entrepriseError, setEntrepriseError] = useState('');
+  const [miniBioError, setMiniBioError] = useState('');
 
   const StyledIcon = styled('div')(({ theme }) => ({
     margin: 'auto',
@@ -76,13 +108,13 @@ export default function RegisterForm() {
   // const isStepSkipped = (step) => skipped.has(step);
 
   const handleNext = () => {
-    if (catSelector===0) {
+    if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
-    }else {
+    } else {
       setCatError("");
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-    
+
   };
 
   const handleBack = () => {
@@ -165,6 +197,73 @@ export default function RegisterForm() {
     }
   };
 
+  const handleClickEntreprise = (e) => {
+    e.preventDefault();
+    try {
+      // Validate and set error messages
+      if (!entrepriseName.trim()) {
+        setEntrepriseError("Le nom de l'entreprise ne peut pas être vide");
+      } else {
+        setEntrepriseError('');
+      }
+
+      if (!miniBio.trim()) {
+        setMiniBioError("Le details de l'entreprise ne peut pas être vide");
+      } else {
+        setMiniBioError('');
+      }
+
+      if(!entrepriseName.trim() || !miniBio.trim()){
+        return
+      }
+
+      console.log("entrepriseError", entrepriseError);
+
+      // If there are no errors, proceed with registration
+      if (!entrepriseError && !miniBioError ) {
+
+        const newValue = {
+          "company_name": entrepriseName,
+          "mini_bio": miniBio,
+          "project_description": entrepriseDescription,
+          "founding_date": creationDate,
+          "project_mission": entrepriseMission,
+          "valeur": entrepriseValue,
+          "stage": entrepriseStage,
+          // "objectifs": "Project Objectives",
+          // "smart_ip": "Smart IP",
+          // "objectif_social": "Social Objective",
+          // "phone": "0991234567",
+          "full_address": entrepriseAddress,
+          "secteur": secteurActivite,
+          "type_of_customers": typeOfClients,
+          "customer_base": clientLocation,
+          // "pitch_text": "Project Pitch Text",
+          // "pitch_deck_url": "https://wezalab.com/pitch_deck.pdf",
+          // "website": "https://wezalab.com",
+          "owner": user.user.user.userId, // Replace with an actual user ID from the list
+          "secteur_activite_details": sectorsOfActivity.map((item) => item.title)
+        }
+        // console.log("newvalue", newValue);
+
+        dispatch(createEntreprise(newValue))
+          .then((data) => {
+            console.log("data", errorCreateEntreprise, data);
+            
+            if(!errorCreateEntreprise){
+              navigate('/dashboard', { replace: true });
+            }
+          })
+          .catch((error) => {
+            console.error('Registration error:', error);
+          });
+      }
+    } catch (error) {
+      console.log("errorRegister", error);
+      console.log(error);
+    }
+  }
+
   return (
     <Container sx={{ width: '100%' }} >
 
@@ -198,136 +297,136 @@ export default function RegisterForm() {
           <>
             {
               activeStep === 0 ?
-              <>
-                <Typography variant="button"  sx={{display:'block', textAlign:'center', paddingTop: 2}}>{catError}</Typography>
-              
-                <Grid container spacing={2} mt={1} mb={2} justifyContent="space-between" >
-                 
-                  <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector===1? 1: 0.5 }}>
-                    <Card
-                      onClick={()=> setCatSelector(1)}
-                      sx={{
-                        py: 5,
-                        boxShadow: catSelector===1? 0 : 5,
-                        border: catSelector===1?'1px solid red': '0 solid red',
-                        textAlign: 'center',
-                        color: (theme) => theme.palette.primary.darker,
-                        bgcolor: (theme) => theme.palette.primary.lighter,
-                      }}
+                <>
+                  <Typography variant="button" sx={{ display: 'block', textAlign: 'center', paddingTop: 2 }}>Selectionner une categorie</Typography>
 
-                    >
+                  <Grid container spacing={2} mt={1} mb={2} justifyContent="space-between" >
+
+                    <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 1 ? 1 : 0.5 }}>
+                      <Card
+                        onClick={() => setCatSelector(1)}
+                        sx={{
+                          py: 5,
+                          boxShadow: catSelector === 1 ? 0 : 5,
+                          border: catSelector === 1 ? '1px solid red' : '0 solid red',
+                          textAlign: 'center',
+                          color: (theme) => theme.palette.primary.darker,
+                          bgcolor: (theme) => theme.palette.primary.lighter,
+                        }}
+
+                      >
                         <StyledIcon
+                          sx={{
+                            color: (theme) => theme.palette.primary.dark,
+                            backgroundImage: (theme) =>
+                              `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0)} 0%, ${alpha(
+                                theme.palette.primary.dark,
+                                0.24
+                              )} 100%)`,
+                          }}
+                        >
+                          <Iconify icon="eva:search-fill" sx={{ color: '#000', width: 24, height: 24 }} />
+
+                        </StyledIcon>
+                        <Typography variant="body2">Jeune entrepreneur</Typography>
+                      </Card>
+                    </Grid>
+
+                    <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 2 ? 1 : 0.5 }}>
+                      <Card
+                        onClick={() => setCatSelector(2)}
                         sx={{
-                          color: (theme) => theme.palette.primary.dark,
-                          backgroundImage: (theme) =>
-                            `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0)} 0%, ${alpha(
-                              theme.palette.primary.dark,
-                              0.24
-                            )} 100%)`,
+                          py: 5,
+                          textAlign: 'center',
+                          boxShadow: catSelector === 2 ? 0 : 5,
+                          border: catSelector === 2 ? '1px solid red' : '0 solid red',
+                          color: (theme) => theme.palette.error.darker,
+                          bgcolor: (theme) => theme.palette.error.lighter,
                         }}
+
                       >
-                        <Iconify icon="eva:search-fill" sx={{ color: '#000', width:24, height:24}} />
-                        
-                      </StyledIcon>
-                      <Typography variant="body2">Jeune entrepreneur</Typography>
-                    </Card>
-                  </Grid>
+                        <StyledIcon
+                          sx={{
+                            color: (theme) => theme.palette.error.dark,
+                            backgroundImage: (theme) =>
+                              `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
+                                theme.palette.error.dark,
+                                0.24
+                              )} 100%)`,
+                          }}
+                        >
+                          <Iconify icon="eva:search-fill" sx={{ color: '#000', width: 24, height: 24 }} />
 
-                  <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector===2? 1: 0.5 }}>
-                    <Card
-                     onClick={()=> setCatSelector(2)}
-                      sx={{
-                        py: 5,
-                        textAlign: 'center',
-                        boxShadow: catSelector===2? 0 : 5,
-                        border: catSelector===2?'1px solid red': '0 solid red',
-                        color: (theme) => theme.palette.error.darker,
-                        bgcolor: (theme) => theme.palette.error.lighter,
-                      }}
+                        </StyledIcon>
+                        <Typography variant="body2">une PME etablie</Typography>
+                      </Card>
+                    </Grid>
 
-                    >
-                      <StyledIcon
+                    <Grid item xs={12} sm={3} sx={{
+                      cursor: 'pointer', opacity: catSelector === 3 ? 1 : 0.5,
+
+
+                    }}>
+                      <Card
+                        onClick={() => setCatSelector(3)}
                         sx={{
-                          color: (theme) => theme.palette.error.dark,
-                          backgroundImage: (theme) =>
-                            `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
-                              theme.palette.error.dark,
-                              0.24
-                            )} 100%)`,
+                          py: 5,
+                          boxShadow: catSelector === 3 ? 0 : 5,
+                          border: catSelector === 3 ? '1px solid red' : '0 solid red',
+                          textAlign: 'center',
+                          color: (theme) => theme.palette.success.darker,
+                          bgcolor: (theme) => theme.palette.success.lighter,
                         }}
+
                       >
-                        <Iconify icon="eva:search-fill" sx={{ color: '#000', width:24, height:24}} />
-                        
-                      </StyledIcon>
-                      <Typography variant="body2">une PME etablie</Typography>
-                    </Card>
-                  </Grid>
+                        <StyledIcon
+                          sx={{
+                            color: (theme) => theme.palette.success.dark,
+                            backgroundImage: (theme) =>
+                              `linear-gradient(135deg, ${alpha(theme.palette.success.dark, 0)} 0%, ${alpha(
+                                theme.palette.success.dark,
+                                0.24
+                              )} 100%)`,
+                          }}
+                        >
+                          <Iconify icon="eva:search-fill" sx={{ color: '#000', width: 24, height: 24 }} />
 
-                  <Grid item xs={12} sm={3} sx={{
-                    cursor: 'pointer', opacity: catSelector===3? 1: 0.5,
+                        </StyledIcon>
+                        <Typography variant="body2">Femme entrepreneure</Typography>
+                      </Card>
+                    </Grid>
 
-
-                  }}>
-                    <Card
-                     onClick={()=> setCatSelector(3)}
-                      sx={{
-                        py: 5,
-                        boxShadow: catSelector===3? 0 : 5,
-                        border: catSelector===3?'1px solid red': '0 solid red',
-                        textAlign: 'center',
-                        color: (theme) => theme.palette.success.darker,
-                        bgcolor: (theme) => theme.palette.success.lighter,
-                      }}
-
-                    >
-                     <StyledIcon
+                    <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 4 ? 1 : 0.5 }}>
+                      <Card
+                        onClick={() => setCatSelector(4)}
                         sx={{
-                          color: (theme) => theme.palette.success.dark,
-                          backgroundImage: (theme) =>
-                            `linear-gradient(135deg, ${alpha(theme.palette.success.dark, 0)} 0%, ${alpha(
-                              theme.palette.success.dark,
-                              0.24
-                            )} 100%)`,
+                          py: 5,
+                          boxShadow: catSelector === 4 ? 0 : 5,
+                          border: catSelector === 4 ? '1px solid red' : '0 solid red',
+                          textAlign: 'center',
+                          color: (theme) => theme.palette.warning.darker,
+                          bgcolor: (theme) => theme.palette.warning.lighter,
                         }}
-                      >
-                        <Iconify icon="eva:search-fill" sx={{ color: '#000', width:24, height:24}} />
-                        
-                      </StyledIcon>
-                      <Typography variant="body2">Femme entrepreneure</Typography>
-                    </Card>
-                  </Grid>
 
-                  <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector===4? 1: 0.5 }}>
-                    <Card
-                     onClick={()=> setCatSelector(4)}
-                      sx={{
-                        py: 5,
-                        boxShadow: catSelector===4? 0 : 5,
-                        border: catSelector===4?'1px solid red': '0 solid red',
-                        textAlign: 'center',
-                        color: (theme) => theme.palette.warning.darker,
-                        bgcolor: (theme) => theme.palette.warning.lighter,
-                      }}
-
-                    >
-                     <StyledIcon
-                        sx={{
-                          color: (theme) => theme.palette.warning.dark,
-                          backgroundImage: (theme) =>
-                            `linear-gradient(135deg, ${alpha(theme.palette.warning.dark, 0)} 0%, ${alpha(
-                              theme.palette.warning.dark,
-                              0.24
-                            )} 100%)`,
-                        }}
                       >
-                        <Iconify icon="eva:search-fill" sx={{ color: '#000', width:24, height:24}} />
-                        
-                      </StyledIcon>
-                      <Typography variant="body2">PSDE (Prestataire)</Typography>
-                    </Card>
+                        <StyledIcon
+                          sx={{
+                            color: (theme) => theme.palette.warning.dark,
+                            backgroundImage: (theme) =>
+                              `linear-gradient(135deg, ${alpha(theme.palette.warning.dark, 0)} 0%, ${alpha(
+                                theme.palette.warning.dark,
+                                0.24
+                              )} 100%)`,
+                          }}
+                        >
+                          <Iconify icon="eva:search-fill" sx={{ color: '#000', width: 24, height: 24 }} />
+
+                        </StyledIcon>
+                        <Typography variant="body2">PSDE (Prestataire)</Typography>
+                      </Card>
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Typography variant="button" color="red" sx={{display:'block', textAlign:'center'}}>{catError}</Typography>
+                  <Typography variant="button" color="red" sx={{ display: 'block', textAlign: 'center' }}>{catError}</Typography>
                 </>
                 :
                 activeStep === 1 ?
@@ -442,7 +541,224 @@ export default function RegisterForm() {
                       </Box>}
                   </Box>
 
-                  : activeStep === 2 ? <Typography>OK</Typography> : null
+                  : activeStep === 2 ?
+
+                    // ADD ENTREPRISE
+                    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
+
+                      <Box mt={3} >
+                       
+
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                        >
+                          <Paper elevation={3} sx={{ padding: 2, display: 'flex', flexDirection: 'column', }}>
+                          <Typography variant="h6" >
+                          Enregistrer votre entreprise
+                        </Typography>
+                            <Typography variant="caption" sx={{ mb: 2 }}>
+                              Créer un profil d'entreprise est simple et ne prend que 5 minutes.
+                              Fournissez des informations de base sur votre entreprise et
+                              enrichissez le profil avec des informations supplémentaires après la publication de la page.
+                            </Typography>
+
+                            <Stack spacing={3}>
+
+                              <TextField
+                                required
+                                id="outlined-required"
+                                label="Nom de l'Entreprise"
+                                placeholder="Nom de l'Entreprise"
+                                value={entrepriseName}
+                                onChange={(e) => setEntrepriseName(e.target.value)}
+                                error={!!entrepriseError} helperText={entrepriseError}
+                              />
+
+                              <TextField
+                                required
+                                id="outlined-required"
+                                label="Detail simple de l'Entreprise"
+                                placeholder="Detail simple de l'Entreprise"
+                                value={miniBio}
+                                onChange={(e) => setMiniBio(e.target.value)}
+                                error={!!miniBioError} helperText={miniBioError}
+                              />
+
+                              <TextField
+                                id="outlined-required"
+                                label="Description de l'Entreprise"
+                                placeholder="Description de l'Entreprise"
+                                multiline
+                                value={entrepriseDescription}
+                                onChange={(e) => setEntrepriseDescription(e.target.value)}
+                              />
+
+                              <TextField
+                                // shrink
+                                id="outlined-required"
+                                label="Date de création de l'Entreprise"
+                                placeholder="2/2/2000"
+                                // defaultValue={defaultDate}
+                                type="date"
+                                value={creationDate ? creationDate : defaultDate}
+                                onChange={(e) => setCreationDate(e.target.value)}
+                              />
+
+                              <TextField
+                                id="outlined-required"
+                                label="Mission de l'Entreprise"
+                                placeholder="Mission de l'Entreprise"
+                                multiline
+                                value={entrepriseMission}
+                                onChange={(e) => setEntrepriseMission(e.target.value)}
+                              />
+
+                              <TextField
+                                id="outlined-required"
+                                label="Valeur de l'entreprise"
+                                placeholder="Valeur de l'Entreprise"
+                                multiline
+                                value={entrepriseValue}
+                                onChange={(e) => setEntrepriseValue(e.target.value)}
+                              />
+
+                              <TextField
+                                id="outlined-required"
+                                label="Addresse de l'entreprise"
+                                placeholder="Addresse de l'Entreprise"
+                                value={entrepriseAddress}
+                                onChange={(e) => setEntrepriseAddress(e.target.value)}
+                              />
+
+                              <FormGroup>
+                                <FormLabel component="legend">Secteur d'activité</FormLabel>
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="AGRO-TRANSFORMATION"
+                                  onChange={() => setSecteurActivite([...secteurActivite, 'AGRO-TRANSFORMATION'])}
+                                />
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="SERVICE"
+                                  onChange={() => setSecteurActivite([...secteurActivite, 'SERVICE'])}
+                                />
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="AUTRE"
+                                  onChange={() => setSecteurActivite([...secteurActivite, 'AUTRE'])}
+                                />
+                              </FormGroup>
+
+                              <FormControl>
+                                <FormLabel id="radio-buttons">A quel stage etes-vous?</FormLabel>
+                                <RadioGroup
+                                  aria-labelledby="radio-buttons"
+                                  name="radio-buttons-group"
+                                  value={entrepriseStage}
+                                  onChange={(e) => setEntrepriseStage(e.target.value)}
+                                >
+                                  <FormControlLabel value="Idée/Concept" control={<Radio />} label="Idée/Concept" />
+                                  <FormControlLabel value="Startup" control={<Radio />} label="Startup" />
+                                  <FormControlLabel
+                                    value="Stade de croissance"
+                                    control={<Radio />}
+                                    label="Stade de croissance"
+                                  />
+                                  <FormControlLabel
+                                    value="Stade de maturité"
+                                    control={<Radio />}
+                                    label="Stade de maturité"
+                                  />
+                                </RadioGroup>
+                              </FormControl>
+
+                              <FormGroup>
+                                <FormLabel component="legend">Quel type de clients servez-vous ?</FormLabel>
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="B2B"
+                                  onChange={() => setTypeOfClients([...typeOfClients, 'B2B'])}
+                                />
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="B2C"
+                                  onChange={() => setTypeOfClients([...typeOfClients, 'B2C'])}
+                                />
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="B2B2B"
+                                  onChange={() => setTypeOfClients([...typeOfClients, 'B2B2B'])}
+                                />
+
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="B2B2C"
+                                  onChange={() => setTypeOfClients([...typeOfClients, 'B2B2C'])}
+                                />
+
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="C2C"
+                                  onChange={() => setTypeOfClients([...typeOfClients, 'C2C'])}
+                                />
+                              </FormGroup>
+
+                              <FormGroup>
+                                <FormLabel component="legend">Où sont basés vos clients ?</FormLabel>
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label="Clientèle Urbaine"
+                                  onChange={() => setClientLocation([...clientLocation, 'Clientèle Urbaine'])}
+                                />
+                                <FormControlLabel
+                                  control={<Checkbox />}
+                                  label=" Clientèle Rurale"
+                                  onChange={() => setClientLocation([...clientLocation, 'Clientèle Rurale'])}
+                                />
+                              </FormGroup>
+
+                              {/* <Autocomplete
+                                multiple
+                                limitTags={2}
+                                // options={optionsSector}
+                                options={optionsSector.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                                groupBy={(option) => option.firstLetter}
+                                id="checkboxes-tags-demo"
+                                disableCloseOnSelect
+                                value={sectorsOfActivity}
+                                getOptionLabel={(option) => option.title}
+                                renderOption={(props, option, { selected }) => (
+                                  <li {...props}>
+                                    <Checkbox
+                                      icon={icon}
+                                      checkedIcon={checkedIcon}
+                                      style={{ marginRight: 8 }}
+                                      checked={selected}
+                                    />
+                                    {option.title}
+                                  </li>
+                                )}
+                                onChange={(e, value) => setSectorsOfActivity(value)}
+                                renderInput={(params) => (
+                                  <TextField {...params} label="Quel sont vos secteurs d'activité?" placeholder="Ajouter un secteur" />
+                                )}
+                              /> */}
+
+                              {errorCreateEntreprise && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorCreateEntreprise}</Typography>}
+
+                              <LoadingButton loading={isLoadingCreateEntreprise} disabled={isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClickEntreprise}>
+                                Publier et visualiser l'application
+                              </LoadingButton>
+                            </Stack>
+                          </Paper>
+                        </Box>
+
+                      </Box>
+                    </Container>
+
+
+                    : null
             }
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
