@@ -112,6 +112,7 @@ export default function RegisterForm() {
   const [entrepriseDescription, setEntrepriseDescription] = useState('');
   const [creationDate, setCreationDate] = useState('');
   const [entrepriseMission, setEntrepriseMission] = useState('');
+  const [entrepriseVision, setEntrepriseVision] = useState('');
   const [entrepriseValue, setEntrepriseValue] = useState('');
   const [entrepriseAddress, setEntrepriseAddress] = useState('');
   const [secteurActivite, setSecteurActivite] = useState([]);
@@ -284,6 +285,7 @@ export default function RegisterForm() {
           "project_description": entrepriseDescription,
           "founding_date": creationDate,
           "project_mission": entrepriseMission,
+          "project_vision": entrepriseVision,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
           // "objectifs": "Project Objectives",
@@ -702,6 +704,15 @@ export default function RegisterForm() {
                                 multiline
                                 value={entrepriseMission}
                                 onChange={(e) => setEntrepriseMission(e.target.value)}
+                              />
+
+                              <TextField
+                                id="outlined-required"
+                                label="Vision de l'Entreprise"
+                                placeholder="Vision de l'Entreprise"
+                                multiline
+                                value={entrepriseVision}
+                                onChange={(e) => setEntrepriseVision(e.target.value)}
                               />
 
                               <TextField
