@@ -143,28 +143,28 @@ export default function RegisterForm() {
 
   // Autocomplete
 
-const handleChangeList = (event) => {
-  const {
-    target: { value },
-  } = event;
-  setSectorsOfActivity(
-    // On autofill we get a stringified value.
-    typeof value === 'string' ? value.split(',') : value,
-  );
-};
+  const handleChangeList = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSectorsOfActivity(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
 
-// Stepper
+  // Stepper
   const handleNext = () => {
 
     // if(catSelector===3 || catSelector===4){
     //   setSteps([...steps.filter((val, key)=> val !== 'Entreprise')])
     //   setCatError("");
     //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      
+
     // }
     // else 
-   if (catSelector === 0) {
+    if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
     } else {
       setCatError("");
@@ -177,9 +177,9 @@ const handleChangeList = (event) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  // const handleReset = () => {
+  //   setActiveStep(0);
+  // };
 
   const handleChange = (event) => {
     setSex(event.target.value);
@@ -269,14 +269,14 @@ const handleChangeList = (event) => {
         setMiniBioError('');
       }
 
-      if(!entrepriseName.trim() || !miniBio.trim()){
+      if (!entrepriseName.trim() || !miniBio.trim()) {
         return
       }
 
       console.log("entrepriseError", entrepriseError);
 
       // If there are no errors, proceed with registration
-      if (!entrepriseError && !miniBioError ) {
+      if (!entrepriseError && !miniBioError) {
 
         const newValue = {
           "company_name": entrepriseName,
@@ -305,8 +305,8 @@ const handleChangeList = (event) => {
         dispatch(createEntreprise(newValue))
           .then((data) => {
             console.log("data", errorCreateEntreprise, data);
-            
-            if(!errorCreateEntreprise){
+
+            if (!errorCreateEntreprise) {
               navigate('/dashboard', { replace: true });
             }
           })
@@ -341,13 +341,35 @@ const handleChangeList = (event) => {
         </Stepper>
         {activeStep === steps.length ? (
           <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            // minHeight="100vh"
+            mt={4}
+            >
+              <Paper elevation={3} sx={{ padding: 3, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+                <img src='../../../assets/verified.gif' alt="Success Gif" style={{ width: '15%', marginBottom: 2, alignSelf: 'center' }} />
+
+                <Typography variant="h5" gutterBottom>Compte créé avec succès!
+                </Typography>
+                <Typography>Un email a été envoyé à votre adresse pour confirmation.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={()=> {
+                      navigate('/login', { replace: true });
+                  }}
+                  sx={{ marginTop: 2 }}
+                >
+                  Se connecter
+                </Button>
+              </Paper>
             </Box>
+
           </>
         ) : (
           <>
@@ -432,7 +454,7 @@ const handleChangeList = (event) => {
                       <Card
                         onClick={() => {
                           setCatSelector(3);
-                          setSteps([...steps.filter((val)=> val !== 'Entreprise')])
+                          setSteps([...steps.filter((val) => val !== 'Entreprise')])
                         }}
                         sx={{
                           py: 5,
@@ -463,9 +485,9 @@ const handleChangeList = (event) => {
 
                     <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 4 ? 1 : 0.5 }}>
                       <Card
-                        onClick={() =>{
+                        onClick={() => {
                           setCatSelector(4);
-                          setSteps([...steps.filter((val)=> val !== 'Entreprise')])
+                          setSteps([...steps.filter((val) => val !== 'Entreprise')])
                         }}
                         sx={{
                           py: 5,
@@ -615,16 +637,16 @@ const handleChangeList = (event) => {
                     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
 
                       <Box mt={3} >
-                       
+
 
                         <Box
                           display="flex"
                           flexDirection="column"
                         >
                           <Paper elevation={3} sx={{ padding: 2, display: 'flex', flexDirection: 'column', }}>
-                          <Typography variant="h6" >
-                          Enregistrer votre entreprise
-                        </Typography>
+                            <Typography variant="h6" >
+                              Enregistrer votre entreprise
+                            </Typography>
                             <Typography variant="caption" sx={{ mb: 2 }}>
                               Créer un profil d'entreprise est simple et ne prend que 5 minutes.
                               Fournissez des informations de base sur votre entreprise et
@@ -787,35 +809,35 @@ const handleChangeList = (event) => {
                               </FormGroup>
 
                               <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Quels sont vos secteurs d'activité?</InputLabel>
-        <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          multiple
-          sx={{width:"100%"}}
-          value={sectorsOfActivity}
-          onChange={handleChangeList}
-          input={<OutlinedInput id="select-multiple-chip" label="Quels sont vos secteurs d'activité?" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, sectorsOfActivity, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+                                <InputLabel id="demo-multiple-chip-label">Quels sont vos secteurs d'activité?</InputLabel>
+                                <Select
+                                  labelId="demo-multiple-chip-label"
+                                  id="demo-multiple-chip"
+                                  multiple
+                                  sx={{ width: "100%" }}
+                                  value={sectorsOfActivity}
+                                  onChange={handleChangeList}
+                                  input={<OutlinedInput id="select-multiple-chip" label="Quels sont vos secteurs d'activité?" />}
+                                  renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                      {selected.map((value) => (
+                                        <Chip key={value} label={value} />
+                                      ))}
+                                    </Box>
+                                  )}
+                                  MenuProps={MenuProps}
+                                >
+                                  {names.map((name) => (
+                                    <MenuItem
+                                      key={name}
+                                      value={name}
+                                      style={getStyles(name, sectorsOfActivity, theme)}
+                                    >
+                                      {name}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
 
                               {/* <Autocomplete
                                 multiple
