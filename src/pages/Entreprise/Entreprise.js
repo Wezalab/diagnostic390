@@ -97,13 +97,13 @@ export default function Entreprise() {
 
 
   const [editingEntrepriseMission , setEditingEntrepriseMission ] = useState(false);
-  const [newEntrepriseMission , setNewEntrepriseMission ] = useState(myEntreprise.EntrepriseMission ); // Assuming myEntreprise is available
+  const [newEntrepriseMission , setNewEntrepriseMission ] = useState(myEntreprise.project_mission ); // Assuming myEntreprise is available
 
   const [editingEntrepriseVision , setEditingEntrepriseVision ] = useState(false);
-  const [newEntrepriseVision , setNewEntrepriseVision ] = useState(myEntreprise.EntrepriseVision ); // Assuming myEntreprise is available
+  const [newEntrepriseVision , setNewEntrepriseVision ] = useState(myEntreprise.project_mission ); // Assuming myEntreprise is available
 
   const [editingValeur , setEditingValeur ] = useState(false);
-  const [newValeur , setNewValeur ] = useState(myEntreprise.Valeur ); // Assuming myEntreprise is available
+  const [newValeur , setNewValeur ] = useState(myEntreprise.valeur ); // Assuming myEntreprise is available
 
 
   const [editingFullAddress , setEditingFullAddress ] = useState(false);
@@ -563,49 +563,140 @@ export default function Entreprise() {
                       </Collapse>
 
                       <ListItemButton>
-                        <ListItemText primary="Date de création de l'Entreprise" secondary={myEntreprise.founding_date} />
-
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}
+                        {editingFoundingdate ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField
+                            type="date"
+                            sx={{ width:'65%'}}
+                              label="Nouvelle date de création de l'Entreprise"
+                              value={newFoundingdate}
+                              onChange={(e) => setNewFoundingdate(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickFoundingdate}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelFoundingdate}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Date de création de l'Entreprise" secondary={newFoundingdate} />
+                            <ListItemIcon>
+                              {openFoundingdate ? (
+                                <CloseIcon onClick={handleClickFoundingdate} />
+                              ) : (
+                                <EditIcon onClick={handleEditFoundingdate} />
+                              )}
+                            </ListItemIcon>
+                            {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}
+                          </>
+                        )}
                       </ListItemButton>
+
                       <Collapse in={openFoundingdate} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
-
                       <ListItemButton>
-                        <ListItemText primary="Mission de l'Entreprise" secondary={myEntreprise.project_mission} />
-
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}
+                        {editingEntrepriseMission ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField
+                            multiline
+                            sx={{ width:'65%'}}
+                              label="Nouvelle Mission de l'Entreprise"
+                              value={newEntrepriseMission}
+                              onChange={(e) => setNewEntrepriseMission(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickEntrepriseMission}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelEntrepriseMission}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Mission de l'Entreprise" secondary={newEntrepriseMission} />
+                            <ListItemIcon>
+                              {openEntrepriseMission ? (
+                                <CloseIcon onClick={handleClickEntrepriseMission} />
+                              ) : (
+                                <EditIcon onClick={handleEditEntrepriseMission} />
+                              )}
+                            </ListItemIcon>
+                            {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}
+                          </>
+                        )}
                       </ListItemButton>
+
                       <Collapse in={openEntrepriseMission} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
-                      <ListItemButton>
-                        <ListItemText primary="Vision de l'Entreprise" secondary={myEntreprise.project_vision} />
 
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}
+                      <ListItemButton>
+                        {editingEntrepriseVision ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField
+                            multiline
+                            sx={{ width:'65%'}}
+                              label="Nouvelle Vision de l'Entreprise"
+                              value={newEntrepriseVision}
+                              onChange={(e) => setNewEntrepriseVision(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickEntrepriseVision}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelEntrepriseVision}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Vision de l'Entreprise" secondary={newEntrepriseVision} />
+                            <ListItemIcon>
+                              {openEntrepriseVision ? (
+                                <CloseIcon onClick={handleClickEntrepriseVision} />
+                              ) : (
+                                <EditIcon onClick={handleEditEntrepriseVision} />
+                              )}
+                            </ListItemIcon>
+                            {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}
+                          </>
+                        )}
                       </ListItemButton>
+
                       <Collapse in={openEntrepriseVision} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
+                    
+
                       <ListItemButton>
-                        <ListItemText primary="Valeur de l'entreprise" secondary={myEntreprise.valeur} />
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}
+                        {editingValeur ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField
+                            multiline
+                            sx={{ width:'65%'}}
+                              label="Nouvelle Valeur de l'entreprise"
+                              value={newValeur}
+                              onChange={(e) => setNewValeur(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickValeur}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelValeur}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Valeur de l'entreprise" secondary={newValeur} />
+                            <ListItemIcon>
+                              {openValeur ? (
+                                <CloseIcon onClick={handleClickValeur} />
+                              ) : (
+                                <EditIcon onClick={handleEditValeur} />
+                              )}
+                            </ListItemIcon>
+                            {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}
+                          </>
+                        )}
                       </ListItemButton>
+                       
                       <Collapse in={openValeur} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
