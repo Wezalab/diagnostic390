@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import {
   Container, Typography, Card, IconButton, CardActions, CardContent, CardHeader,
-  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField
+  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField, Stack, Grid
 } from '@mui/material';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -84,7 +84,7 @@ export default function Entreprise() {
   // Etat fin 3 derniere annee
 
   const [editingCompanyName , setEditingCompanyName ] = useState(false);
-  const [newCompanyName , setNewCompanyName ] = useState(myEntreprise.CompanyName ); // Assuming myEntreprise is available
+  const [newCompanyName , setNewCompanyName ] = useState(myEntreprise.company_name); // Assuming myEntreprise is available
 
   const [editingMinibio , setEditingMinibio ] = useState(false);
   const [newMinibio , setNewMinibio ] = useState(myEntreprise.Minibio ); // Assuming myEntreprise is available
@@ -132,7 +132,7 @@ export default function Entreprise() {
 
   const handleCancelCompanyName = () => {
     setEditingCompanyName(false);
-    setNewCompanyName(myEntreprise.CompanyName); // Reset to original value
+    setNewCompanyName(myEntreprise.company_name); // Reset to original value
   };
 
   const handleSaveClickCompanyName = () => {
@@ -268,8 +268,6 @@ export default function Entreprise() {
     setEditingEntrepriseVision(false);
   };
 
-
-
   const handleEditTypeOfClients = () => {
     setEditingTypeOfClients(true);
   };
@@ -284,7 +282,6 @@ export default function Entreprise() {
     setEditingTypeOfClients(false);
   };
 
-
   const handleEditClientLocation = () => {
     setEditingClientLocation(true);
   };
@@ -298,7 +295,6 @@ export default function Entreprise() {
     // Perform the save logic with the newClientLocation value
     setEditingClientLocation(false);
   };
-
 
   const handleEditSecteurActiviteDetails = () => {
     setEditingSecteurActiviteDetails(true);
@@ -463,17 +459,42 @@ export default function Entreprise() {
                     // }
                     >
 
-                      <ListItemButton>
-                        <ListItemText primary="Nom de l'Entreprise" secondary={myEntreprise.company_name} />
 
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />}
+                      <ListItemButton>
+                        {editingCompanyName ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField 
+                            sx={{ width:'65%'}}
+                              label="Nouveau mom de l'entreprise"
+                              value={newCompanyName}
+                              onChange={(e) => setNewCompanyName(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickCompanyName}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelCompanyName}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Nom de l'Entreprise" secondary={newCompanyName} />
+                            <ListItemIcon>
+                              {openCompanyName ? (
+                                <CloseIcon onClick={handleClickCompanyName} />
+                              ) : (
+                                <EditIcon onClick={handleEditCompanyName} />
+                              )}
+                            </ListItemIcon>
+                            {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />}
+                          </>
+                        )}
                       </ListItemButton>
-                      <Collapse in={openCompanyName} timeout="auto" unmountOnExit sx={{ padding: 2 }} >
+
+
+                      <Collapse in={openCompanyName} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
+
+                     
 
                       <ListItemButton>
                         <ListItemText primary="Detail simple de l'Entreprise" secondary={myEntreprise.mini_bio} />
