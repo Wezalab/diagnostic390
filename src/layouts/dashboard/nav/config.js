@@ -18,7 +18,7 @@ const navConfig = [
   },
   {
     title: 'Entreprise',
-    path: '/dashboard/doctor',
+    path: '/dashboard/entreprise',
     icon: icon('ic_analytics'),
   },
   {

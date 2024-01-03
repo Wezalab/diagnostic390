@@ -26,7 +26,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Diagnostic360 </title>
+        <title> Dashboard | Business360 </title>
       </Helmet>
 
       <Container maxWidth="xl">

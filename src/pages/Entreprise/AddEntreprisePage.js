@@ -141,7 +141,7 @@ export default function AddEntreprisePage() {
   return (
     <>
       <Helmet>
-        <title> TRANSFORME | Diagnostic360 </title>
+        <title> TRANSFORME | Business360 </title>
       </Helmet>
 
       <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >

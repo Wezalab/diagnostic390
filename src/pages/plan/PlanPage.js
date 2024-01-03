@@ -35,7 +35,7 @@ export default function PlanPage() {
   return (
     <>
       <Helmet>
-        <title> TRANSFORME | Diagnostic360 </title>
+        <title> TRANSFORME | Business360 </title>
       </Helmet>
 
       <Container >
