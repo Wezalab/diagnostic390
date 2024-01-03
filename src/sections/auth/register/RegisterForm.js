@@ -20,7 +20,7 @@ import {
   Step,
   StepLabel,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 import { LoadingButton } from '@mui/lab';
 import { register } from '../../../redux/registerAction';
@@ -29,7 +29,6 @@ import Iconify from '../../../components/iconify';
 
 export default function RegisterForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
 
@@ -51,33 +50,21 @@ export default function RegisterForm() {
 
   // stepper
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
+  // const [skipped, setSkipped] = useState(new Set());
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
+  // const isStepSkipped = (step) => skipped.has(step);
+  
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
 
   const handleReset = () => {
     setActiveStep(0);
   };
-
-
 
   const handleChange = (event) => {
     setSex(event.target.value);
@@ -156,13 +143,13 @@ export default function RegisterForm() {
 
       <Box sx={{ width: '100%' }}>
         <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
+          {steps.map((label) => {
             const stepProps = {};
             const labelProps = {};
 
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
+            // if (isStepSkipped(index)) {
+            //   stepProps.completed = false;
+            // }
             return (
               <Step key={label} {...stepProps}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
