@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, useTheme } from '@mui/material/styles';
 
 import {
   Link,
@@ -26,15 +26,16 @@ import {
   Container,
   Grid,
   Card,
-  Alert,
-  Autocomplete,
   Checkbox,
   FormControlLabel,
   FormGroup,
   FormLabel,
   Radio,
   RadioGroup,
+  OutlinedInput,
+  Chip,
 } from '@mui/material';
+
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import { createEntreprise } from '../../../redux/entrepriseReducer';
@@ -42,10 +43,46 @@ import { register } from '../../../redux/registerAction';
 
 import Iconify from '../../../components/iconify';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  'Infrastructures et Aménagements',
+  'Agriculture',
+  'Elevage',
+  'Ressources naturelles renouvelables',
+  'Tourisme et hôtellerie',
+  'Secteur industriel',
+  'Gestion des produits et déchets divers',
+  'Secteur minier',
+  'Hydrocarbures et énergie fossile',
+];
+
+function getStyles(name, secteurName, theme) {
+  return {
+    fontWeight:
+      secteurName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+
   const defaultDate = '2000-01-01';
+
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
   const { user } = useSelector((state) => state.auth);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
@@ -103,10 +140,21 @@ export default function RegisterForm() {
 
   // stepper
   const [activeStep, setActiveStep] = useState(0);
-  // const [skipped, setSkipped] = useState(new Set());
 
-  // const isStepSkipped = (step) => skipped.has(step);
+  // Autocomplete
 
+const handleChangeList = (event) => {
+  const {
+    target: { value },
+  } = event;
+  setSectorsOfActivity(
+    // On autofill we get a stringified value.
+    typeof value === 'string' ? value.split(',') : value,
+  );
+};
+
+
+// Stepper
   const handleNext = () => {
     if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
@@ -718,6 +766,37 @@ export default function RegisterForm() {
                                 />
                               </FormGroup>
 
+                              <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-chip-label">Quels sont vos secteurs d'activité?</InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          sx={{width:"100%"}}
+          value={sectorsOfActivity}
+          onChange={handleChangeList}
+          input={<OutlinedInput id="select-multiple-chip" label="Quels sont vos secteurs d'activité?" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, sectorsOfActivity, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
                               {/* <Autocomplete
                                 multiple
                                 limitTags={2}
@@ -748,7 +827,7 @@ export default function RegisterForm() {
                               {errorCreateEntreprise && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorCreateEntreprise}</Typography>}
 
                               <LoadingButton loading={isLoadingCreateEntreprise} disabled={isLoadingCreateEntreprise} fullWidth size="large" type="submit" variant="contained" onClick={handleClickEntreprise}>
-                                Publier et visualiser l'application
+                                Publier et visualiser
                               </LoadingButton>
                             </Stack>
                           </Paper>
