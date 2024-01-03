@@ -12,6 +12,7 @@ import RegisterPage from './pages/registerPage';
 import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
 import PlanPage from './pages/plan/PlanPage';
+import Entreprise from './pages/Entreprise/Entreprise';
 
 export default function Router() {
   // const { user } = useSelector((state) => state.auth);
@@ -27,6 +28,7 @@ export default function Router() {
         { path: 'add-entreprise', element: <AddEntreprisePage /> },
         { path: 'view-venture', element: <ViewVenture /> },
         { path: 'plan', element: <PlanPage /> },
+        { path: 'entreprise', element: <Entreprise /> },
         
         
       ],
