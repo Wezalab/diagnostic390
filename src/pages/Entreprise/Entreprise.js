@@ -87,10 +87,10 @@ export default function Entreprise() {
   const [newCompanyName , setNewCompanyName ] = useState(myEntreprise.company_name); // Assuming myEntreprise is available
 
   const [editingMinibio , setEditingMinibio ] = useState(false);
-  const [newMinibio , setNewMinibio ] = useState(myEntreprise.Minibio ); // Assuming myEntreprise is available
+  const [newMinibio , setNewMinibio ] = useState(myEntreprise.mini_bio ); // Assuming myEntreprise is available
 
   const [editingProjectDescription , setEditingProjectDescription ] = useState(false);
-  const [newProjectDescription , setNewProjectDescription ] = useState(myEntreprise.ProjectDescription ); // Assuming myEntreprise is available
+  const [newProjectDescription , setNewProjectDescription ] = useState(myEntreprise.project_description ); // Assuming myEntreprise is available
 
   const [editingFoundingdate , setEditingFoundingdate ] = useState(false);
   const [newFoundingdate , setNewFoundingdate ] = useState(myEntreprise.Foundingdate ); // Assuming myEntreprise is available
@@ -146,7 +146,7 @@ export default function Entreprise() {
 
   const handleCancelMinibio = () => {
     setEditingMinibio(false);
-    setNewMinibio(myEntreprise.Minibio); // Reset to original value
+    setNewMinibio(myEntreprise.mini_bio); // Reset to original value
   };
 
   const handleSaveClickMinibio = () => {
@@ -162,7 +162,7 @@ export default function Entreprise() {
 
   const handleCancelProjectDescription = () => {
     setEditingProjectDescription(false);
-    setNewProjectDescription(myEntreprise.ProjectDescription); // Reset to original value
+    setNewProjectDescription(myEntreprise.project_description); // Reset to original value
   };
 
   const handleSaveClickProjectDescription = () => {
@@ -494,28 +494,70 @@ export default function Entreprise() {
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
-                     
-
                       <ListItemButton>
-                        <ListItemText primary="Detail simple de l'Entreprise" secondary={myEntreprise.mini_bio} />
-
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}
+                        {editingMinibio ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField 
+                            sx={{ width:'65%'}}
+                              label="Nouveau detail simple de l'Entreprise"
+                              value={newMinibio}
+                              onChange={(e) => setNewMinibio(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickMinibio}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelMinibio}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Detail simple de l'Entreprise" secondary={newMinibio} />
+                            <ListItemIcon>
+                              {openMinibio ? (
+                                <CloseIcon onClick={handleClickMinibio} />
+                              ) : (
+                                <EditIcon onClick={handleEditMinibio} />
+                              )}
+                            </ListItemIcon>
+                            {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}
+                          </>
+                        )}
                       </ListItemButton>
                       <Collapse in={openMinibio} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
-                      <ListItemButton>
-                        <ListItemText primary="Description de l'Entreprise" secondary={myEntreprise.project_description} />
 
-                        <ListItemIcon>
-                          <EditIcon />
-                        </ListItemIcon>
-                        {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}
+                      <ListItemButton>
+                        {editingProjectDescription ? (
+                          <Stack sx={{ width:'100%',alignItems:'center', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                            <TextField
+                            multiline
+                            sx={{ width:'65%'}}
+                              label="Nouvelle description de l'Entreprise"
+                              value={newProjectDescription}
+                              onChange={(e) => setNewProjectDescription(e.target.value)}
+                            />
+                            <Box >
+                            <Button sx={{marginRight: 1}} variant='outlined' color="success" onClick={handleSaveClickProjectDescription}>Valider</Button>
+                            <Button variant='outlined' color='error' onClick={handleCancelProjectDescription}>Annuler</Button>
+                            </Box>
+                          </Stack>
+                        ) : (
+                          <>
+                            <ListItemText primary="Description de l'Entreprise" secondary={newProjectDescription} />
+                            <ListItemIcon>
+                              {openProjectDescription ? (
+                                <CloseIcon onClick={handleClickProjectDescription} />
+                              ) : (
+                                <EditIcon onClick={handleEditProjectDescription} />
+                              )}
+                            </ListItemIcon>
+                            {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}
+                          </>
+                        )}
                       </ListItemButton>
+
+
                       <Collapse in={openProjectDescription} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
