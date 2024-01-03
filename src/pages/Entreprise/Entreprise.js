@@ -5,7 +5,6 @@ import {
   Container, Typography, Card, IconButton, CardActions, CardContent, CardHeader,
   CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField
 } from '@mui/material';
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -17,7 +16,6 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
 import SwipeableViews from 'react-swipeable-views';
-import { useLocation } from "react-router-dom";
 
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -59,7 +57,6 @@ function a11yProps(index) {
 
 export default function Entreprise() {
 
-  const location = useLocation();
   const { entrepriseList } = useSelector((state) => state.entreprise);
 
   const myEntreprise = entrepriseList[0];
@@ -73,6 +70,7 @@ export default function Entreprise() {
   const [openProjectdescription, setOpenProjectdescription] = useState(false);
   const [openFoundingdate, setOpenFoundingdate] = useState(false);
   const [openEntrepriseMission, setOpenEntrepriseMission] = useState(false);
+  const [openEntrepriseVision, setOpenEntrepriseVision] = useState(false);
   const [openValeur, setOpenValeur] = useState(false);
   const [openfulladdress, setOpenfulladdress] = useState(false);
   const [openSecteur, setOpenSecteur] = useState(false);
@@ -112,6 +110,9 @@ export default function Entreprise() {
   }
   const handleClickEntrepriseMission = () => {
     setOpenEntrepriseMission(!openEntrepriseMission);
+  }
+  const handleClickEntrepriseVision = () => {
+    setOpenEntrepriseVision(!openEntrepriseVision);
   }
   const handleClickValeur = () => {
     setOpenValeur(!openValeur);
@@ -284,6 +285,18 @@ export default function Entreprise() {
                         {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}
                       </ListItemButton>
                       <Collapse in={openEntrepriseMission} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
+                        <Typography sx={{ color: "red" }}>Coaching score</Typography>
+                      </Collapse>
+
+                      <ListItemButton>
+                        <ListItemText primary="Vision de l'Entreprise" secondary={myEntreprise.entrepriseVision} />
+
+                        <ListItemIcon>
+                          <EditIcon />
+                        </ListItemIcon>
+                        {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}
+                      </ListItemButton>
+                      <Collapse in={openEntrepriseVision} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
