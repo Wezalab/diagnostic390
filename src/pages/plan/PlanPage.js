@@ -10,22 +10,23 @@ import { LoadingButton } from '@mui/lab';
 
 
 import { useSelector } from 'react-redux';
-// import { AppWidgetEntreprise } from '../../sections/@dashboard/entreprise';
 import { store } from '../../redux/Store';
-import { fetchEntreprises } from '../../redux/entrepriseReducer';
+import { fetchBusinessPlans } from '../../redux/businessPlanReducer';
+import AppWidgetBusinessPlan from '../../sections/@dashboard/businessPlan/AppWidgetBusinessPlan';
 
 
 export default function PlanPage() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { entrepriseList, isLoadingEntreprise } = useSelector((state) => state.entreprise);
+  const { businessPlanList, isLoadingBusinessPlan } = useSelector((state) => state.businessPlan);
 
-  // const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
-  const myEntreprises = entrepriseList
-  console.log(myEntreprises);
+
+  const myBusinessPlan = businessPlanList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  // const myBusinessPlan = businessPlanList
+  console.log(myBusinessPlan);
 
   useEffect(() => {
-    store.dispatch(fetchEntreprises());
+    store.dispatch(fetchBusinessPlans());
   }, []);
 
   const handleClick = ()=> {
@@ -56,23 +57,23 @@ export default function PlanPage() {
 
         {
 
-          isLoadingEntreprise ? 
+          isLoadingBusinessPlan ? 
           <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
           <CircularProgress sx={{alignSelf:'center'}} /> </Box> :
 
             <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
 
-              {/* {
-                myEntreprises && myEntreprises.map((value, key) =>
+              {
+                myBusinessPlan && myBusinessPlan.map((value, key) =>
                 (
                   <Grid key={key} item xs={6}>
-                    <AppWidgetEntreprise myEntreprises={value} />
+                    <AppWidgetBusinessPlan myBusinessPlans={value} />
                   </Grid>
                 )
                 )
-              } */}
+              }
               {
-                myEntreprises.length !== 0 && <Box
+                myBusinessPlan.length !== 0 && <Box
                   display="flex"
                   width='100%'
                   flexDirection="column"

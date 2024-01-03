@@ -62,29 +62,260 @@ export default function Entreprise() {
   const myEntreprise = entrepriseList[0];
   console.log("myEntreprise", myEntreprise);
 
-  const [value, setValue] = useState(0);
+  const [value, setValueTab] = useState(0);
   const theme = useTheme();
 
-  const [openCompanyname, setOpenCompanyname] = useState(false);
+  const [openCompanyName, setOpenCompanyName] = useState(false);
   const [openMinibio, setOpenMinibio] = useState(false);
-  const [openProjectdescription, setOpenProjectdescription] = useState(false);
+  const [openProjectDescription, setOpenProjectDescription] = useState(false);
   const [openFoundingdate, setOpenFoundingdate] = useState(false);
   const [openEntrepriseMission, setOpenEntrepriseMission] = useState(false);
   const [openEntrepriseVision, setOpenEntrepriseVision] = useState(false);
   const [openValeur, setOpenValeur] = useState(false);
-  const [openfulladdress, setOpenfulladdress] = useState(false);
+  const [openfullAddress, setOpenfullAddress] = useState(false);
   const [openSecteur, setOpenSecteur] = useState(false);
   const [openStage, setOpenStage] = useState(false);
   const [opentypeOfClients, setOpenTypeOfClients] = useState(false);
-  const [openclientLocation, setOpenclientLocation] = useState(false);
-  const [openSecteuractivitedetails, setOpenSecteuractivitedetails] = useState(false);
+  const [openClientLocation, setOpenClientLocation] = useState(false);
+  const [openSecteurActiviteDetails, setOpenSecteurActiviteDetails] = useState(false);
 
   // Team
   // Document ? RCCM, ID NAT, 
   // Etat fin 3 derniere annee
 
+  const [editingCompanyName , setEditingCompanyName ] = useState(false);
+  const [newCompanyName , setNewCompanyName ] = useState(myEntreprise.CompanyName ); // Assuming myEntreprise is available
+
+  const [editingMinibio , setEditingMinibio ] = useState(false);
+  const [newMinibio , setNewMinibio ] = useState(myEntreprise.Minibio ); // Assuming myEntreprise is available
+
+  const [editingProjectDescription , setEditingProjectDescription ] = useState(false);
+  const [newProjectDescription , setNewProjectDescription ] = useState(myEntreprise.ProjectDescription ); // Assuming myEntreprise is available
+
+  const [editingFoundingdate , setEditingFoundingdate ] = useState(false);
+  const [newFoundingdate , setNewFoundingdate ] = useState(myEntreprise.Foundingdate ); // Assuming myEntreprise is available
+
+
+  const [editingEntrepriseMission , setEditingEntrepriseMission ] = useState(false);
+  const [newEntrepriseMission , setNewEntrepriseMission ] = useState(myEntreprise.EntrepriseMission ); // Assuming myEntreprise is available
+
+  const [editingEntrepriseVision , setEditingEntrepriseVision ] = useState(false);
+  const [newEntrepriseVision , setNewEntrepriseVision ] = useState(myEntreprise.EntrepriseVision ); // Assuming myEntreprise is available
+
+  const [editingValeur , setEditingValeur ] = useState(false);
+  const [newValeur , setNewValeur ] = useState(myEntreprise.Valeur ); // Assuming myEntreprise is available
+
+
+  const [editingFullAddress , setEditingFullAddress ] = useState(false);
+  const [newFullAddress , setNewFullAddress ] = useState(myEntreprise.FullAddress ); // Assuming myEntreprise is available
+
+  const [editingSecteur , setEditingSecteur ] = useState(false);
+  const [newSecteur , setNewSecteur ] = useState(myEntreprise.Secteur ); // Assuming myEntreprise is available
+
+
+  const [editingTypeOfClients , setEditingTypeOfClients ] = useState(false);
+  const [newTypeOfClients , setNewTypeOfClients ] = useState(myEntreprise.TypeOfClients ); // Assuming myEntreprise is available
+
+  const [editingClientLocation , setEditingClientLocation ] = useState(false);
+  const [newClientLocation , setNewClientLocation ] = useState(myEntreprise.ClientLocation ); // Assuming myEntreprise is available
+
+  const [editingSecteurActiviteDetails , setEditingSecteurActiviteDetails ] = useState(false);
+  const [newSecteurActiviteDetails , setNewSecteurActiviteDetails ] = useState(myEntreprise.SecteurActiviteDetails ); // Assuming myEntreprise is available
+
   const [editingStage, setEditingStage] = useState(false);
   const [newStage, setNewStage] = useState(myEntreprise.stage); // Assuming myEntreprise is available
+
+
+  const handleEditCompanyName = () => {
+    setEditingCompanyName(true);
+  };
+
+  const handleCancelCompanyName = () => {
+    setEditingCompanyName(false);
+    setNewCompanyName(myEntreprise.CompanyName); // Reset to original value
+  };
+
+  const handleSaveClickCompanyName = () => {
+    // Perform the save logic with the newCompanyName value
+    setEditingCompanyName(false);
+  };
+
+  const handleEditMinibio = () => {
+    setEditingMinibio(true);
+  };
+
+  const handleCancelMinibio = () => {
+    setEditingMinibio(false);
+    setNewMinibio(myEntreprise.Minibio); // Reset to original value
+  };
+
+  const handleSaveClickMinibio = () => {
+    // Perform the save logic with the newMinibio value
+    setEditingMinibio(false);
+  };
+
+
+
+  const handleEditProjectDescription = () => {
+    setEditingProjectDescription(true);
+  };
+
+  const handleCancelProjectDescription = () => {
+    setEditingProjectDescription(false);
+    setNewProjectDescription(myEntreprise.ProjectDescription); // Reset to original value
+  };
+
+  const handleSaveClickProjectDescription = () => {
+    // Perform the save logic with the newProjectDescription value
+    setEditingProjectDescription(false);
+  };
+
+
+
+  const handleEditFoundingdate = () => {
+    setEditingFoundingdate(true);
+  };
+
+  const handleCancelFoundingdate = () => {
+    setEditingFoundingdate(false);
+    setNewFoundingdate(myEntreprise.Foundingdate); // Reset to original value
+  };
+
+  const handleSaveClickFoundingdate = () => {
+    // Perform the save logic with the newFoundingdate value
+    setEditingFoundingdate(false);
+  };
+
+
+
+
+  const handleEditEntrepriseMission = () => {
+    setEditingEntrepriseMission(true);
+  };
+
+  const handleCancelEntrepriseMission = () => {
+    setEditingEntrepriseMission(false);
+    setNewEntrepriseMission(myEntreprise.EntrepriseMission); // Reset to original value
+  };
+
+  const handleSaveClickEntrepriseMission = () => {
+    // Perform the save logic with the newEntrepriseMission value
+    setEditingEntrepriseMission(false);
+  };
+
+
+
+  const handleEditFullAddress = () => {
+    setEditingFullAddress(true);
+  };
+
+  const handleCancelFullAddress = () => {
+    setEditingFullAddress(false);
+    setNewFullAddress(myEntreprise.FullAddress); // Reset to original value
+  };
+
+  const handleSaveClickFullAddress = () => {
+    // Perform the save logic with the newFullAddress value
+    setEditingFullAddress(false);
+  };
+
+
+
+  const handleEditSecteur = () => {
+    setEditingSecteur(true);
+  };
+
+  const handleCancelSecteur = () => {
+    setEditingSecteur(false);
+    setNewSecteur(myEntreprise.Secteur); // Reset to original value
+  };
+
+  const handleSaveClickSecteur = () => {
+    // Perform the save logic with the newSecteur value
+    setEditingSecteur(false);
+  };
+
+
+
+
+  const handleEditValeur = () => {
+    setEditingValeur(true);
+  };
+
+  const handleCancelValeur = () => {
+    setEditingValeur(false);
+    setNewValeur(myEntreprise.Valeur); // Reset to original value
+  };
+
+  const handleSaveClickValeur = () => {
+    // Perform the save logic with the newValeur value
+    setEditingValeur(false);
+  };
+
+
+
+  const handleEditEntrepriseVision = () => {
+    setEditingEntrepriseVision(true);
+  };
+
+  const handleCancelEntrepriseVision = () => {
+    setEditingEntrepriseVision(false);
+    setNewEntrepriseVision(myEntreprise.EntrepriseVision); // Reset to original value
+  };
+
+  const handleSaveClickEntrepriseVision = () => {
+    // Perform the save logic with the newEntrepriseVision value
+    setEditingEntrepriseVision(false);
+  };
+
+
+
+  const handleEditTypeOfClients = () => {
+    setEditingTypeOfClients(true);
+  };
+
+  const handleCancelTypeOfClients = () => {
+    setEditingTypeOfClients(false);
+    setNewTypeOfClients(myEntreprise.TypeOfClients); // Reset to original value
+  };
+
+  const handleSaveClickTypeOfClients = () => {
+    // Perform the save logic with the newTypeOfClients value
+    setEditingTypeOfClients(false);
+  };
+
+
+  const handleEditClientLocation = () => {
+    setEditingClientLocation(true);
+  };
+
+  const handleCancelClientLocation = () => {
+    setEditingClientLocation(false);
+    setNewClientLocation(myEntreprise.ClientLocation); // Reset to original value
+  };
+
+  const handleSaveClickClientLocation = () => {
+    // Perform the save logic with the newClientLocation value
+    setEditingClientLocation(false);
+  };
+
+
+  const handleEditSecteurActiviteDetails = () => {
+    setEditingSecteurActiviteDetails(true);
+  };
+
+  const handleCancelSecteurActiviteDetails = () => {
+    setEditingSecteurActiviteDetails(false);
+    setNewSecteurActiviteDetails(myEntreprise.SecteurActiviteDetails); // Reset to original value
+  };
+
+  const handleSaveClickSecteurActiviteDetails = () => {
+    // Perform the save logic with the newSecteurActiviteDetails value
+    setEditingSecteurActiviteDetails(false);
+  };
+
+
+
 
 
   const handleEditStage = () => {
@@ -96,19 +327,19 @@ export default function Entreprise() {
     setNewStage(myEntreprise.stage); // Reset to original value
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClickStage = () => {
     // Perform the save logic with the newStage value
     setEditingStage(false);
   };
 
-  const handleClickCompanyname = () => {
-    setOpenCompanyname(!openCompanyname);
+  const handleClickCompanyName = () => {
+    setOpenCompanyName(!openCompanyName);
   }
   const handleClickMinibio = () => {
     setOpenMinibio(!openMinibio);
   }
-  const handleClickProjectdescription = () => {
-    setOpenProjectdescription(!openProjectdescription);
+  const handleClickProjectDescription = () => {
+    setOpenProjectDescription(!openProjectDescription);
   }
   const handleClickFoundingdate = () => {
     setOpenFoundingdate(!openFoundingdate);
@@ -122,32 +353,32 @@ export default function Entreprise() {
   const handleClickValeur = () => {
     setOpenValeur(!openValeur);
   }
-  const handleClickfulladdress = () => {
-    setOpenfulladdress(!openfulladdress);
+  const handleClickFullAddress = () => {
+    setOpenfullAddress(!openfullAddress);
   }
-  const handleClicksecteur = () => {
+  const handleClickSecteur = () => {
     setOpenSecteur(!openSecteur);
   }
   const handleClickStage = () => {
     setOpenStage(!openStage);
   };
-  const handleClicktypeOfClients = () => {
+  const handleClickTypeOfClients = () => {
     setOpenTypeOfClients(!opentypeOfClients);
   }
-  const handleClickclientLocation = () => {
-    setOpenclientLocation(!openclientLocation);
+  const handleClickClientLocation = () => {
+    setOpenClientLocation(!openClientLocation);
   }
-  const handleClicksecteuractivitedetails = () => {
-    setOpenSecteuractivitedetails(!openSecteuractivitedetails);
+  const handleClickSecteurActiviteDetails = () => {
+    setOpenSecteurActiviteDetails(!openSecteurActiviteDetails);
   }
 
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChangeTab = (event, newValue) => {
+    setValueTab(newValue);
   };
 
-  const handleChangeIndex = (index) => {
-    setValue(index);
+  const handleChangeIndexTab = (index) => {
+    setValueTab(index);
   };
 
   return (
@@ -202,7 +433,7 @@ export default function Entreprise() {
               <AppBar position="static">
                 <Tabs
                   value={value}
-                  onChange={handleChange}
+                  onChange={handleChangeTab}
                   indicatorColor="secondary"
                   textColor="inherit"
                   variant="fullWidth"
@@ -217,7 +448,7 @@ export default function Entreprise() {
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
                 sx={{ width: '100%'}}
-                onChangeIndex={handleChangeIndex}
+                onChangeIndex={handleChangeIndexTab}
               >
                 <TabPanel value={value} index={0} dir={theme.direction}>
                   <Box sx={{ display: 'flex', }} >
@@ -238,9 +469,9 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openCompanyname ? <ExpandLess onClick={handleClickCompanyname} /> : <ExpandMore onClick={handleClickCompanyname} />}
+                        {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />}
                       </ListItemButton>
-                      <Collapse in={openCompanyname} timeout="auto" unmountOnExit sx={{ padding: 2 }} >
+                      <Collapse in={openCompanyName} timeout="auto" unmountOnExit sx={{ padding: 2 }} >
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
@@ -262,9 +493,9 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openProjectdescription ? <ExpandLess onClick={handleClickProjectdescription} /> : <ExpandMore onClick={handleClickProjectdescription} />}
+                        {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}
                       </ListItemButton>
-                      <Collapse in={openProjectdescription} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
+                      <Collapse in={openProjectDescription} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
@@ -323,9 +554,9 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openfulladdress ? <ExpandLess onClick={handleClickfulladdress} /> : <ExpandMore onClick={handleClickfulladdress} />}
+                        {openfullAddress ? <ExpandLess onClick={handleClickFullAddress} /> : <ExpandMore onClick={handleClickFullAddress} />}
                       </ListItemButton>
-                      <Collapse in={openfulladdress} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
+                      <Collapse in={openfullAddress} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
@@ -336,7 +567,7 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openSecteur ? <ExpandLess onClick={handleClicksecteur} /> : <ExpandMore onClick={handleClicksecteur} />}
+                        {openSecteur ? <ExpandLess onClick={handleClickSecteur} /> : <ExpandMore onClick={handleClickSecteur} />}
                       </ListItemButton>
                       <Collapse in={openSecteur} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -360,7 +591,7 @@ export default function Entreprise() {
                               value={newStage}
                               onChange={(e) => setNewStage(e.target.value)}
                             />
-                            <Button onClick={handleSaveClick}>Save</Button>
+                            <Button onClick={handleSaveClickStage}>Save</Button>
                             <Button onClick={handleCancelStage}>Cancel</Button>
                           </>
                         ) : (
@@ -390,7 +621,7 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {opentypeOfClients ? <ExpandLess onClick={handleClicktypeOfClients} /> : <ExpandMore onClick={handleClicktypeOfClients} />}
+                        {opentypeOfClients ? <ExpandLess onClick={handleClickTypeOfClients} /> : <ExpandMore onClick={handleClickTypeOfClients} />}
                       </ListItemButton>
                       <Collapse in={opentypeOfClients} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -402,9 +633,9 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openclientLocation ? <ExpandLess onClick={handleClickclientLocation} /> : <ExpandMore onClick={handleClickclientLocation} />}
+                        {openClientLocation ? <ExpandLess onClick={handleClickClientLocation} /> : <ExpandMore onClick={handleClickClientLocation} />}
                       </ListItemButton>
-                      <Collapse in={openclientLocation} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
+                      <Collapse in={openClientLocation} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
 
@@ -414,9 +645,9 @@ export default function Entreprise() {
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openSecteuractivitedetails ? <ExpandLess onClick={handleClicksecteuractivitedetails} /> : <ExpandMore onClick={handleClicksecteuractivitedetails} />}
+                        {openSecteurActiviteDetails ? <ExpandLess onClick={handleClickSecteurActiviteDetails} /> : <ExpandMore onClick={handleClickSecteurActiviteDetails} />}
                       </ListItemButton>
-                      <Collapse in={openSecteuractivitedetails} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
+                      <Collapse in={openSecteurActiviteDetails} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                         <Typography sx={{ color: "red" }}>Coaching score</Typography>
                       </Collapse>
                     </List>
