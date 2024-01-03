@@ -136,7 +136,7 @@ export default function RegisterForm() {
   }));
 
 
-  const steps = ['Catégorie', 'Profile', 'Entreprise'];
+  const [steps, setSteps] = useState(['Catégorie', 'Profile', 'Entreprise']);
 
   // stepper
   const [activeStep, setActiveStep] = useState(0);
@@ -156,7 +156,15 @@ const handleChangeList = (event) => {
 
 // Stepper
   const handleNext = () => {
-    if (catSelector === 0) {
+
+    // if(catSelector===3 || catSelector===4){
+    //   setSteps([...steps.filter((val, key)=> val !== 'Entreprise')])
+    //   setCatError("");
+    //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      
+    // }
+    // else 
+   if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
     } else {
       setCatError("");
@@ -352,7 +360,10 @@ const handleChangeList = (event) => {
 
                     <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 1 ? 1 : 0.5 }}>
                       <Card
-                        onClick={() => setCatSelector(1)}
+                        onClick={() => {
+                          setCatSelector(1);
+                          setSteps(['Catégorie', 'Profile', 'Entreprise'])
+                        }}
                         sx={{
                           py: 5,
                           boxShadow: catSelector === 1 ? 0 : 5,
@@ -382,7 +393,10 @@ const handleChangeList = (event) => {
 
                     <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 2 ? 1 : 0.5 }}>
                       <Card
-                        onClick={() => setCatSelector(2)}
+                        onClick={() => {
+                          setCatSelector(2)
+                          setSteps(['Catégorie', 'Profile', 'Entreprise'])
+                        }}
                         sx={{
                           py: 5,
                           textAlign: 'center',
@@ -416,7 +430,10 @@ const handleChangeList = (event) => {
 
                     }}>
                       <Card
-                        onClick={() => setCatSelector(3)}
+                        onClick={() => {
+                          setCatSelector(3);
+                          setSteps([...steps.filter((val)=> val !== 'Entreprise')])
+                        }}
                         sx={{
                           py: 5,
                           boxShadow: catSelector === 3 ? 0 : 5,
@@ -446,7 +463,10 @@ const handleChangeList = (event) => {
 
                     <Grid item xs={12} sm={3} sx={{ cursor: 'pointer', opacity: catSelector === 4 ? 1 : 0.5 }}>
                       <Card
-                        onClick={() => setCatSelector(4)}
+                        onClick={() =>{
+                          setCatSelector(4);
+                          setSteps([...steps.filter((val)=> val !== 'Entreprise')])
+                        }}
                         sx={{
                           py: 5,
                           boxShadow: catSelector === 4 ? 0 : 5,
