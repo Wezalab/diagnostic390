@@ -79,21 +79,26 @@ export default function Entreprise() {
   const [openclientLocation, setOpenclientLocation] = useState(false);
   const [openSecteuractivitedetails, setOpenSecteuractivitedetails] = useState(false);
 
-  const [editing, setEditing] = useState(false);
+  // Team
+  // Document ? RCCM, ID NAT, 
+  // Etat fin 3 derniere annee
+
+  const [editingStage, setEditingStage] = useState(false);
   const [newStage, setNewStage] = useState(myEntreprise.stage); // Assuming myEntreprise is available
 
-  const handleEditClick = () => {
-    setEditing(true);
+
+  const handleEditStage = () => {
+    setEditingStage(true);
   };
 
-  const handleCancelClick = () => {
-    setEditing(false);
+  const handleCancelStage = () => {
+    setEditingStage(false);
     setNewStage(myEntreprise.stage); // Reset to original value
   };
 
   const handleSaveClick = () => {
     // Perform the save logic with the newStage value
-    setEditing(false);
+    setEditingStage(false);
   };
 
   const handleClickCompanyname = () => {
@@ -277,7 +282,7 @@ export default function Entreprise() {
 
 
                       <ListItemButton>
-                        <ListItemText primary="Mission de l'Entreprise" secondary={myEntreprise.entrepriseMission} />
+                        <ListItemText primary="Mission de l'Entreprise" secondary={myEntreprise.project_mission} />
 
                         <ListItemIcon>
                           <EditIcon />
@@ -289,7 +294,7 @@ export default function Entreprise() {
                       </Collapse>
 
                       <ListItemButton>
-                        <ListItemText primary="Vision de l'Entreprise" secondary={myEntreprise.entrepriseVision} />
+                        <ListItemText primary="Vision de l'Entreprise" secondary={myEntreprise.project_vision} />
 
                         <ListItemIcon>
                           <EditIcon />
@@ -348,7 +353,7 @@ export default function Entreprise() {
                       </ListItemButton> */}
 
                       <ListItemButton>
-                        {editing ? (
+                        {editingStage ? (
                           <>
                             <TextField
                               label="New Stage"
@@ -356,7 +361,7 @@ export default function Entreprise() {
                               onChange={(e) => setNewStage(e.target.value)}
                             />
                             <Button onClick={handleSaveClick}>Save</Button>
-                            <Button onClick={handleCancelClick}>Cancel</Button>
+                            <Button onClick={handleCancelStage}>Cancel</Button>
                           </>
                         ) : (
                           <>
@@ -365,7 +370,7 @@ export default function Entreprise() {
                               {openStage ? (
                                 <CloseIcon onClick={handleClickStage} />
                               ) : (
-                                <EditIcon onClick={handleEditClick} />
+                                <EditIcon onClick={handleEditStage} />
                               )}
                             </ListItemIcon>
                             {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}
