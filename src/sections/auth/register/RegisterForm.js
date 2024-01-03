@@ -53,10 +53,6 @@ export default function RegisterForm() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
-  // const isStepOptional = (step) => {
-  //   return step === 1;
-  // };
-
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -76,20 +72,6 @@ export default function RegisterForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  // const handleSkip = () => {
-  //   if (!isStepOptional(activeStep)) {
-  //     // You probably want to guard against something like this,
-  //     // it should never occur unless someone's actively trying to break something.
-  //     throw new Error("You can't skip a step that isn't optional.");
-  //   }
-
-  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //   setSkipped((prevSkipped) => {
-  //     const newSkipped = new Set(prevSkipped.values());
-  //     newSkipped.add(activeStep);
-  //     return newSkipped;
-  //   });
-  // };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -150,11 +132,6 @@ export default function RegisterForm() {
         // Dispatch registration action here
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
-        // name, email, mobile, sex, password
-        // if (name && email && password && confirmPassword && phone && sex) {
-        //   await dispatch(register(name, email, phone, sex, password));
-        //   await dispatch(login(email,password));
-        // }
 
         dispatch(register(name, email, phone, sex, password))
           .then((data) => {
@@ -182,11 +159,7 @@ export default function RegisterForm() {
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
-            // if (isStepOptional(index)) {
-            //   labelProps.optional = (
-            //     <Typography variant="caption">Optional</Typography>
-            //   );
-            // }
+
             if (isStepSkipped(index)) {
               stepProps.completed = false;
             }
@@ -209,87 +182,123 @@ export default function RegisterForm() {
           </>
         ) : (
           <>
-            {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
             {
-              activeStep === 0 ? <Box sx={{ mt: 2, mb: 1 }} >
+              activeStep === 0 ?
 
-                <Stack spacing={3}>
-                  {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
-                  {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
-
-                  <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
-                  <TextField type="email" name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
-                  <TextField type="tel" name="phone" label="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} error={!!phoneError} helperText={phoneError} />
-                  <FormControl fullWidth error={!!sexError}>
-                    <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={sex}
-                      label="Sexe"
-                      onChange={handleChange}
+                <Box sx={{ mt: 2, mb: 1 }} >
+                  {
+                    registeredUser && <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                    // minHeight="100vh"
                     >
-                      <MenuItem value="M">Masculin</MenuItem>
-                      <MenuItem value="F">Féminin</MenuItem>
-                      <MenuItem value="AUTRE">Autre</MenuItem>
-                    </Select>
-                    {!!sexError && <FormHelperText>Le sexe ne peut pas être vide</FormHelperText>}
-                  </FormControl>
-                  <TextField
-                    name="password"
-                    label="Mot de passe"
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    defaultValue="AUTRE"
-                  />
+                      <Paper elevation={3} sx={{ padding: 3, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-                  <TextField
-                    name="confirmPassword"
-                    label="Confirmer le mot de passe"
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                            <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    error={!!confirmPasswordError}
-                    helperText={confirmPasswordError}
-                  />
-                </Stack>
+                        <img src='../../../assets/verified.gif' alt="Success Gif" style={{ width: '15%', marginBottom: 2, alignSelf: 'center' }} />
 
-                <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-                  S'enregistrer
-                </LoadingButton>
+                        <Typography variant="h5" gutterBottom>Compte créé avec succès!
+                        </Typography>
+                        <Typography>Un email a été envoyé à votre adresse pour confirmation.
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleNext}
+                          sx={{ marginTop: 2 }}
+                        >
+                          Continuer
+                        </Button>
+                      </Paper>
+                    </Box>
+                  }
+                  {
 
-                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                  <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
-                  <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-                    Se connecter
-                  </Link>
-                </Stack>
+                    !registeredUser &&
 
-              </Box> : null
+                    <Box>
+
+                      <Stack spacing={3}>
+                        {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
+                        {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
+
+                        <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
+                        <TextField type="email" name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
+                        <TextField type="tel" name="phone" label="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} error={!!phoneError} helperText={phoneError} />
+                        <FormControl fullWidth error={!!sexError}>
+                          <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={sex}
+                            label="Sexe"
+                            onChange={handleChange}
+                          >
+                            <MenuItem value="M">Masculin</MenuItem>
+                            <MenuItem value="F">Féminin</MenuItem>
+                            <MenuItem value="AUTRE">Autre</MenuItem>
+                          </Select>
+                          {!!sexError && <FormHelperText>Le sexe ne peut pas être vide</FormHelperText>}
+                        </FormControl>
+                        <TextField
+                          name="password"
+                          label="Mot de passe"
+                          type={showPassword ? 'text' : 'password'}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          error={!!passwordError}
+                          helperText={passwordError}
+                          defaultValue="AUTRE"
+                        />
+
+                        <TextField
+                          name="confirmPassword"
+                          label="Confirmer le mot de passe"
+                          type={showPassword ? 'text' : 'password'}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          error={!!confirmPasswordError}
+                          helperText={confirmPasswordError}
+                        />
+                      </Stack>
+
+                      <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                        S'enregistrer
+                      </LoadingButton>
+
+                      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+                        <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
+                        <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+                          Se connecter
+                        </Link>
+                      </Stack>
+
+                    </Box>}
+                </Box>
+
+                : null
             }
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -303,119 +312,10 @@ export default function RegisterForm() {
               <Button onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'Fin' : 'Suivant'}
               </Button>
-            </Box>
+            </Box> */}
           </>
         )}
       </Box>
-      {/* {
-        registeredUser && <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        // minHeight="100vh"
-        >
-          <Paper elevation={3} sx={{ padding: 3, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-            <img src='../../../assets/verified.gif' alt="Success Gif" style={{ width: '15%', marginBottom: 2, alignSelf: 'center' }} />
-
-            <Typography variant="h5" gutterBottom>Compte créé avec succès!
-            </Typography>
-            <Typography>Un email a été envoyé à votre adresse pour confirmation.
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/login', { replace: true })
-              }
-              sx={{ marginTop: 2 }}
-            >
-              Connectez-vous maintenant
-            </Button>
-          </Paper>
-        </Box>
-      }
-      {
-
-        !registeredUser &&
-
-        <Box>
-
-          <Stack spacing={3}>
-            {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
-            {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
-
-            <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
-            <TextField type="email" name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
-            <TextField type="tel" name="phone" label="Téléphone" value={phone} onChange={(e) => setPhone(e.target.value)} error={!!phoneError} helperText={phoneError} />
-            <FormControl fullWidth error={!!sexError}>
-              <InputLabel id="demo-simple-select-label">Sexe</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={sex}
-                label="Sexe"
-                onChange={handleChange}
-              >
-                <MenuItem value="M">Masculin</MenuItem>
-                <MenuItem value="F">Féminin</MenuItem>
-                <MenuItem value="AUTRE">Autre</MenuItem>
-              </Select>
-              {!!sexError && <FormHelperText>Le sexe ne peut pas être vide</FormHelperText>}
-            </FormControl>
-            <TextField
-              name="password"
-              label="Mot de passe"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={!!passwordError}
-              helperText={passwordError}
-              defaultValue="AUTRE"
-            />
-
-            <TextField
-              name="confirmPassword"
-              label="Confirmer le mot de passe"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              error={!!confirmPasswordError}
-              helperText={confirmPasswordError}
-            />
-          </Stack>
-
-          <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-            S'enregistrer
-          </LoadingButton>
-
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-            <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
-            <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-              Se connecter
-            </Link>
-          </Stack>
-
-        </Box>
-      } */}
     </>
   );
 }
