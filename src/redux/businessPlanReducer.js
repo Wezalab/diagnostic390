@@ -60,7 +60,10 @@ const businessPlanSlice = createSlice({
           "customer_base": [
               "Clientèle Urbaine"
           ],
-          "owner": "65943de2f36f33984137a8c7",
+        
+          "owner": {
+            "_id": "65943de2f36f33984137a8c7"
+        },
           "company_name_evaBusiness Plan luation": [],
           "logo_evaluation": [],
           "evaluation_mini_bio": [],

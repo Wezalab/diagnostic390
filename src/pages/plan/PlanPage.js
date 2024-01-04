@@ -21,7 +21,7 @@ export default function PlanPage() {
   const { businessPlanList, isLoadingBusinessPlan } = useSelector((state) => state.businessPlan);
 
 
-  const myBusinessPlan = businessPlanList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  const myBusinessPlan = businessPlanList.filter((obj) => obj.owner && obj.owner._id === user?.user?.user?.userId);
   // const myBusinessPlan = businessPlanList
   console.log(myBusinessPlan);
 
@@ -64,7 +64,7 @@ export default function PlanPage() {
             <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
 
               {
-                myBusinessPlan && myBusinessPlan.map((value, key) =>
+                myBusinessPlan.length !==0 && myBusinessPlan.map((value, key) =>
                 (
                   <Grid key={key} item xs={6}>
                     <AppWidgetBusinessPlan myBusinessPlans={value} />
@@ -73,7 +73,7 @@ export default function PlanPage() {
                 )
               }
               {
-                myBusinessPlan.length !== 0 && <Box
+                myBusinessPlan.length === 0 && <Box
                   display="flex"
                   width='100%'
                   flexDirection="column"

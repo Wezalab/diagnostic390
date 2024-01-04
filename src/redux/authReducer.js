@@ -31,8 +31,8 @@ const u = {
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    // user: userData ? userData.user : null, // Use user data from LocalStorage or set to null
-    user: u,
+    user: userData ? userData.user : null, // Use user data from LocalStorage or set to null
+    // user: u,
     error: null,
     isLoading: false,
   },
