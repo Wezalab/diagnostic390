@@ -158,9 +158,6 @@ export default function ViewVenture() {
         <Card >
           <CardHeader
             avatar={
-              // <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              //   R
-              // </Avatar>
               <Box>
                 <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100 }} />
 
