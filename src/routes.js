@@ -13,6 +13,7 @@ import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
 import PlanPage from './pages/plan/PlanPage';
 import Entreprise from './pages/Entreprise/Entreprise';
+import UserProfile from './pages/UserProfile';
 
 export default function Router() {
   // const { user } = useSelector((state) => state.auth);
@@ -25,6 +26,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
+        { path: 'profile', element: <UserProfile /> },
         { path: 'add-entreprise', element: <AddEntreprisePage /> },
         { path: 'view-venture', element: <ViewVenture /> },
         { path: 'plan', element: <PlanPage /> },

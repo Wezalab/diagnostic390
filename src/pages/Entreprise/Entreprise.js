@@ -490,8 +490,8 @@ export default function Entreprise() {
                       </ListItemButton>
 
 
-                      <Collapse in={openCompanyName} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
-                        <Typography sx={{ color: "red" }}>Coaching score</Typography>
+                      <Collapse in={openCompanyName} timeout="auto" unmountOnExit sx={{ padding: 2, background:'aliceblue' }}>
+                        <Typography sx={{ color: "red" }}>Coaching! score</Typography>
                       </Collapse>
 
                       <ListItemButton>

@@ -23,6 +23,10 @@ const { user } = useSelector((state) => state.auth);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
+  const handleGoToProfile = () =>{
+    navigate('/dashboard/profile', { replace: true });
+
+  }
 
   const handleClose = () => {
     setOpen(null);
@@ -79,6 +83,13 @@ const { user } = useSelector((state) => state.auth);
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
+        <MenuItem onClick={()=>{
+          handleClose();
+          handleGoToProfile();
+        }
+          } sx={{ m: 1 }}>
+          Mon Profile
+        </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

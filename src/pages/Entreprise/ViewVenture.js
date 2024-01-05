@@ -234,8 +234,8 @@ export default function ViewVenture() {
                         </ListItemIcon>
                         {openCompanyname ? <ExpandLess onClick={handleClickCompanyname} /> : <ExpandMore onClick={handleClickCompanyname} />}
                       </ListItemButton>
-                      <Collapse in={openCompanyname} timeout="auto" unmountOnExit sx={{padding: 2}} >
-                        <Typography sx={{color:"red"}}>Coaching score</Typography>
+                      <Collapse in={openCompanyname} timeout="auto" unmountOnExit sx={{padding: 2, background:'aliceblue'}} >
+                        <Typography sx={{color:"red"}}>Coaching score!</Typography>
                       </Collapse>
 
                       <ListItemButton>
