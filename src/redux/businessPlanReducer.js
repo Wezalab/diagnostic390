@@ -32,7 +32,8 @@ export const createBusinessPlan = createAsyncThunk('businessPlan/create', async 
 const businessPlanSlice = createSlice({
   name: "businessPlan",
   initialState: {
-    businessPlanList: [
+    businessPlanList:[],
+    businessPlanList2: [
       {
           "social_Media": [],
           "_id": "6594194fee69a5db0ebcd831",
