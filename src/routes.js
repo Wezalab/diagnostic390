@@ -1,5 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // import the useSelector hook
+// import { useSelector } from 'react-redux'; // import the useSelector hook
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
