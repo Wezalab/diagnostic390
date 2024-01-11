@@ -235,8 +235,9 @@ export default function RegisterForm() {
         // Dispatch registration action here
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
+        const role = catSelector == 1? 'user':catSelector ==2? 'pme': catSelector==3?'femme': 'psde';
 
-        dispatch(register(name, email, phone, sex, password))
+        dispatch(register(name, email, phone, sex, password, role))
           .then((data) => {
             console.log("data", data);
           })

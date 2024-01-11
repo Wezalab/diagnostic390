@@ -13,7 +13,7 @@ export const register = (name, email, phone, sex, password) => async (dispatch) 
       username: name,
       sex,
       password,
-      role: "user",
+      role,
       mobile_secondaire:phone,
 
     });
