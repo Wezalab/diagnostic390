@@ -22,7 +22,8 @@ export const register = (name, email, phone, sex, password) => async (dispatch) 
     dispatch(registerSuccess(response.data));
 
   } catch (error) {
-    console.log("-----====",error.response.data.message);
-    dispatch(registerFailure(error.response.data.message));
+    console.log("-----====",error);
+    dispatch(registerFailure(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" ));
+    // dispatch(registerFailure("Verifiez votre internet!" ));
   }
 };

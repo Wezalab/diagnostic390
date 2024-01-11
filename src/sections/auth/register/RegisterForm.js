@@ -242,6 +242,7 @@ export default function RegisterForm() {
           })
           .catch((error) => {
             console.error('Registration error:', error);
+            
           });
         console.log();
         console.log("registeredUser2", await registeredUser);
@@ -525,7 +526,7 @@ export default function RegisterForm() {
 
                   <Box sx={{ mt: 2, mb: 1 }} >
                     {
-                      !registeredUser && <Box
+                      registeredUser && <Box
                         display="flex"
                         flexDirection="column"
                         alignItems="center"
@@ -622,6 +623,8 @@ export default function RegisterForm() {
                         <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                           S'enregistrer
                         </LoadingButton>
+                        {/* {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>} */}
+
 
                         {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
                           <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
