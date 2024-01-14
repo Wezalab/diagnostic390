@@ -10,7 +10,7 @@ export const fetchEntreprises = createAsyncThunk(
   "entreprise/fetchEntreprises",
   async () => {
     const response = await axios.get(
-      "https://diagnostic-swyu.onrender.com/api/projects/"
+      "https://diagnostic-swyu.onrender.com/api/entreprises/"
     );
     return response.data;
   }
@@ -20,7 +20,7 @@ export const fetchEntreprises = createAsyncThunk(
 export const createEntreprise = createAsyncThunk('entreprise/create', async (EntrepriseData) => {
   console.log("----------------------",EntrepriseData);
   try {
-    const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/projects/`, EntrepriseData);
+    const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/entreprises/`, EntrepriseData);
     return response.data;
   } catch (error) {
     console.log("Error =========??????", error);
@@ -32,8 +32,8 @@ export const createEntreprise = createAsyncThunk('entreprise/create', async (Ent
 const entreprisesSlice = createSlice({
   name: "entreprises",
   initialState: {
-    entrepriseList2:[],
-    entrepriseList: [
+    entrepriseList:[],
+    entrepriseList2: [
       {
           "social_Media": [],
           "_id": "6594194fee69a5db0ebcd831",
