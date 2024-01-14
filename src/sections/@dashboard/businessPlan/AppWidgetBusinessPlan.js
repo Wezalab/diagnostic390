@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 // components
 import Iconify from '../../../components/iconify';
 
-AppWidgetEntreprise.propTypes = {
-  myEntreprises: PropTypes.object.isRequired,
+AppWidgetBusinessPlan.propTypes = {
+  myBusinessPlans: PropTypes.object.isRequired,
 };
 
 
@@ -18,7 +18,6 @@ const ButtonColorEdit = '#fff';
 
 const StyledCard = styled(Card)({
   display: 'inline-block',
-  width:'100%',
   boxSizing: 'border-box',
   boxShadow: '2px 2px 25px 0px rgba(0, 0, 0, 0.3)',
   borderRadius: '3px',
@@ -94,8 +93,8 @@ const StyledCardActionEdit = styled(Button)({
   },
 });
 
-export default function AppWidgetEntreprise({ myEntreprises}) {
-  console.log(myEntreprises);
+export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
+  console.log(myBusinessPlans);
   const navigate = useNavigate();
 
   const cardsData = [
@@ -115,13 +114,13 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
             <CardContent sx={{ borderBottomWidth: '80%', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', }}>
               <StyledCardTitle>
                 <Card sx={{ width: "fit-content" }}>
-                  <Typography sx={{ p: 1 }} variant="h6">{myEntreprises.company_name}</Typography>
+                  <Typography sx={{ p: 1 }} variant="h6">{myBusinessPlans.company_name}</Typography>
                 </Card>
               </StyledCardTitle>
-              <StyledCardDesc>{myEntreprises.mini_bio}</StyledCardDesc>
+              <StyledCardDesc>{myBusinessPlans.mini_bio}</StyledCardDesc>
               <Box sx={{display:'flex', flexDirection:'row'}}>
               <Iconify icon='mdi:location' width={20} height={20} />
-                <Typography variant="body2">{myEntreprises.full_address}</Typography>
+                <Typography variant="body2">{myBusinessPlans.full_address}</Typography>
               </Box>
               <Grid container spacing={2} mt={1} justifyContent="space-between" >
                 <Grid item xs={12} sm={3}>
@@ -129,17 +128,29 @@ export default function AppWidgetEntreprise({ myEntreprises}) {
                   <Typography variant="body2">Identité de l'Entreprise</Typography>
                 </Grid>
 
+                <Grid item xs={12} sm={3}>
+                  <Typography variant="h4">N/A</Typography>
+                  <Typography variant="body2">Opportunité du Marché</Typography>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Typography variant="h4">N/A</Typography>
+                  <Typography variant="body2">Équipe et Leadership</Typography>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Typography variant="h4">N/A</Typography>
+                  <Typography variant="body2">Viabilité Financière</Typography>
+                </Grid>
 
               </Grid>
 
             </CardContent>
             <CardActions>
             
-              <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myEntreprises   }) }>
+              <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans   }) }>
                 visualiser
               </StyledCardActionReadMore>
 
-              <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myEntreprises }) }>
+              <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans }) }>
                 Modifier
               </StyledCardActionEdit>
             </CardActions>

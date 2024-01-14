@@ -12,7 +12,6 @@ export default function AccountPopover() {
   const dispatch = useDispatch();
 
 const { user } = useSelector((state) => state.auth);
-console.log(user.user.user);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -24,6 +23,10 @@ console.log(user.user.user);
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
+  const handleGoToProfile = () =>{
+    navigate('/dashboard/profile', { replace: true });
+
+  }
 
   const handleClose = () => {
     setOpen(null);
@@ -80,6 +83,13 @@ console.log(user.user.user);
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
+        <MenuItem onClick={()=>{
+          handleClose();
+          handleGoToProfile();
+        }
+          } sx={{ m: 1 }}>
+          Mon Profile
+        </MenuItem>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

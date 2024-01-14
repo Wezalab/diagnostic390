@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
+import {Typography} from "@mui/material"
 //
 import Header from './header';
 import Nav from './nav';
@@ -43,6 +44,7 @@ export default function DashboardLayout() {
 
       <Main>
         <Outlet />
+        <Typography variant="caption">© 2024 TRANSFORME. Tous droits réservés.</Typography>
       </Main>
     </StyledRoot>
   );

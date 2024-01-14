@@ -15,7 +15,8 @@ export default function DashboardAppPage() {
   const { user } = useSelector((state) => state.auth);
   const { entrepriseList, isLoadingEntreprise } = useSelector((state) => state.entreprise);
 
-  const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  // const myEntreprises = entrepriseList.filter((obj) => obj.owner && obj.owner._id === user.user.user.userId);
+  const myEntreprises = entrepriseList
   console.log(myEntreprises);
 
   useEffect(() => {
@@ -25,29 +26,28 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Diagnostic360 </title>
+        <title> Dashboard | Business360 </title>
       </Helmet>
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-          Mon Tableau de board
+        Concours de plans d’affaires - COPA
         </Typography>
         <Typography sx={{ mb: 3 }}>
-          Bienvenue {user.user.user.name}
+          Bienvenue {user? user?.user?.user?.name: ""}
         </Typography>
 
         {
-
           isLoadingEntreprise ? 
           <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
           <CircularProgress sx={{alignSelf:'center'}} /> </Box> :
 
-            <Grid container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
+            <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
 
               {
                 myEntreprises && myEntreprises.map((value, key) =>
                 (
-                  <Grid key={key} item xs={12}>
+                  <Grid key={key} item xs={6}>
                     <AppWidgetEntreprise myEntreprises={value} />
                   </Grid>
                 )
@@ -59,7 +59,7 @@ export default function DashboardAppPage() {
                   flexDirection="column"
                   alignItems="center"
                   justifyContent="center"
-                  minHeight="50vh"
+                  width='100%'
                 >
 
                   <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />

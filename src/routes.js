@@ -1,5 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // import the useSelector hook
+// import { useSelector } from 'react-redux'; // import the useSelector hook
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
@@ -11,19 +11,26 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/registerPage';
 import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
+import PlanPage from './pages/plan/PlanPage';
+import Entreprise from './pages/Entreprise/Entreprise';
+import UserProfile from './pages/UserProfile';
 
 export default function Router() {
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      // element: user ? <DashboardLayout /> : <Navigate to="/login" />,
+      element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
+        { path: 'profile', element: <UserProfile /> },
         { path: 'add-entreprise', element: <AddEntreprisePage /> },
         { path: 'view-venture', element: <ViewVenture /> },
+        { path: 'plan', element: <PlanPage /> },
+        { path: 'entreprise', element: <Entreprise /> },
         
         
       ],

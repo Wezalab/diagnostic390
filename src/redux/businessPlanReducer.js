@@ -2,25 +2,25 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Here, we are using the createAsyncThunk function to create an asynchronous thunk to fetch 
-// the list of entreprises. 
-// Then we define a new slice called entreprisesSlice with an initial state containing 
-// an empty list of entreprises, isLoading flag, and an error message if any.
+// the list of businessPlan. 
+// Then we define a new slice called businessPlanSlice with an initial state containing 
+// an empty list of businessPlan, isLoading flag, and an error message if any.
 
-export const fetchEntreprises = createAsyncThunk(
-  "entreprise/fetchEntreprises",
+export const fetchBusinessPlans = createAsyncThunk(
+  "businessPlan/fetchBusinessPlans",
   async () => {
     const response = await axios.get(
-      "https://diagnostic-swyu.onrender.com/api/projects/"
+      "https://diagnostic-swyu.onrender.com/api/businessPlan/"
     );
     return response.data;
   }
 );
 
-// Create an async thunk to create a new Entreprise object
-export const createEntreprise = createAsyncThunk('entreprise/create', async (EntrepriseData) => {
-  console.log("----------------------",EntrepriseData);
+// Create an async thunk to create a new BusinessPlan object
+export const createBusinessPlan = createAsyncThunk('businessPlan/create', async (BusinessPlanData) => {
+  console.log("----------------------",BusinessPlanData);
   try {
-    const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/projects/`, EntrepriseData);
+    const response = await axios.post(`https://diagnostic-swyu.onrender.com/api/businessPlan/`, BusinessPlanData);
     return response.data;
   } catch (error) {
     console.log("Error =========??????", error);
@@ -29,15 +29,15 @@ export const createEntreprise = createAsyncThunk('entreprise/create', async (Ent
   }
 });
 
-const entreprisesSlice = createSlice({
-  name: "entreprises",
+const businessPlanSlice = createSlice({
+  name: "businessPlan",
   initialState: {
-    entrepriseList2:[],
-    entrepriseList: [
+    businessPlanList:[],
+    businessPlanList2: [
       {
           "social_Media": [],
           "_id": "6594194fee69a5db0ebcd831",
-          "company_name": "Rology",
+          "company_name": "Business Plan Rology",
           "mini_bio": "The leading ai-assisted teleradiology platform in the mea region",
           "project_description": "Rology provides an innovative teleradiology platform that delivers final diagnostic reports at a zero-setup cost in comparison to traditional costs, offering savings of up to 25% of the total reporting cost.\nOur platform enables round-the-clock radiology services, thus increasing capacity by as much as 30%, and eliminating patient backlog, through a very competitive turn-around time which was decreased by 50%. Moreover, it ensures optimal machine utilization, reducing downtime and potentially increasing revenue by up to 20%.",
           "founding_date": null,
@@ -61,8 +61,11 @@ const entreprisesSlice = createSlice({
           "customer_base": [
               "Clientèle Urbaine"
           ],
-          "owner": null,
-          "company_name_evaluation": [],
+        
+          "owner": {
+            "_id": "65943de2f36f33984137a8c7"
+        },
+          "company_name_evaBusiness Plan luation": [],
           "logo_evaluation": [],
           "evaluation_mini_bio": [],
           "project_description_evaluation": [],
@@ -92,7 +95,7 @@ const entreprisesSlice = createSlice({
       {
           "social_Media": [],
           "_id": "65941b05ee69a5db0ebcd843",
-          "company_name": "OmniBiz",
+          "company_name": "Business Plan OmniBiz",
           "mini_bio": "Transforming Traditional Retail in Africa",
           "project_description": "Through deep understanding of the Retailer owing to extensive experience in FMCG Retail and platform tech for SMEs in Nigeria, they have been able to create a decentralized approach to digitized retail. In an entirely asset light model, they have activated networks of logistics and warehousing partners as well as networks of brands and distribution partners in order to enable seamless procurement for retailers. They have 1000 active distributor stockpoints, 750 committed vehicles and 65k monthly active retailers helping create this ecosystem. Most recently, post understanding the SMEs in depth, they enabled access to finance through an aggregator embedded wallet and offered working capital finance through product loans on the platform.",
           "founding_date": "2023-01-21T00:00:00.000Z",
@@ -115,9 +118,9 @@ const entreprisesSlice = createSlice({
               "Clientèle Urbaine"
           ],
           "owner": {
-              "_id": "6594198aee69a5db0ebcd838"
+              "_id": "65943de2f36f33984137a8c7"
           },
-          "company_name_evaluation": [],
+          "company_name_evaBusiness Plan luation": [],
           "logo_evaluation": [],
           "evaluation_mini_bio": [],
           "project_description_evaluation": [],
@@ -147,7 +150,7 @@ const entreprisesSlice = createSlice({
       {
           "social_Media": [],
           "_id": "659442b9f36f33984137a8d5",
-          "company_name": "Flexcoord LTD",
+          "company_name": "Business Plan Flexcoord LTD",
           "mini_bio": "Vente de matelas",
           "project_description": "A l’attention des PME lauréates, les conventions de financement sont en cours de signature dans les quatre villes. L’accompagnement démarrera dans les prochaines semaines selon un calendrier spécifique par ville.\n\nLes PME recevront prochainement le calendrier détaillé de l’accompagnement et seront contactées par leur coach pour la planification des sessions de coaching.\n\nL’équipe COPA se tient à votre disposition pour toute information complémentaire.",
           "founding_date": "2000-01-08T00:00:00.000Z",
@@ -180,7 +183,7 @@ const entreprisesSlice = createSlice({
           "owner": {
               "_id": "65943de2f36f33984137a8c7"
           },
-          "company_name_evaluation": [],
+          "company_name_evaBusiness Plan luation": [],
           "logo_evaluation": [],
           "evaluation_mini_bio": [],
           "project_description_evaluation": [],
@@ -208,45 +211,45 @@ const entreprisesSlice = createSlice({
           "team_evaluation": []
       }
   ],
-    isLoadingEntreprise: false,
-    errorEntreprise: null,
+    isLoadingBusinessPlan: false,
+    errorBusinessPlan: null,
 
-    isLoadingCreateEntreprise: false,
-    errorCreateEntreprise: null,
+    isLoadingCreateBusinessPlan: false,
+    errorCreateBusinessPlan: null,
   },
   reducers: {},
   // In the extraReducers field, we define how the state should change when the asynchronous
-  // thunk fetchEntreprises is in a pending, fulfilled, or rejected state. 
+  // thunk fetchBusinessPlans is in a pending, fulfilled, or rejected state. 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchEntreprises.pending, (state) => {
-        state.isLoadingEntreprise = true;
-        state.errorEntreprise = null;
+      .addCase(fetchBusinessPlans.pending, (state) => {
+        state.isLoadingBusinessPlan = true;
+        state.errorBusinessPlan = null;
       })
-      .addCase(fetchEntreprises.fulfilled, (state, action) => {
-        state.isLoadingEntreprise = false;
-        state.entrepriseList = action.payload;
-        state.errorEntreprise = null;
+      .addCase(fetchBusinessPlans.fulfilled, (state, action) => {
+        state.isLoadingBusinessPlan = false;
+        state.businessPlanList = action.payload;
+        state.errorBusinessPlan = null;
       })
-      .addCase(fetchEntreprises.rejected, (state, action) => {
-        state.isLoadingEntreprise = false;
-        state.errorEntreprise = action.error.message;
+      .addCase(fetchBusinessPlans.rejected, (state, action) => {
+        state.isLoadingBusinessPlan = false;
+        state.errorBusinessPlan = action.error.message;
       });
 
-    // Handle the createEntreprise action
+    // Handle the createBusinessPlan action
     builder
-      .addCase(createEntreprise.pending, (state) => {
-        state.isLoadingCreateEntreprise = true;
+      .addCase(createBusinessPlan.pending, (state) => {
+        state.isLoadingCreateBusinessPlan = true;
       })
-      .addCase(createEntreprise.fulfilled, (state, action) => {
-        state.isLoadingCreateEntreprise = false;
-        state.entrepriseList.push(action.payload);
+      .addCase(createBusinessPlan.fulfilled, (state, action) => {
+        state.isLoadingCreateBusinessPlan = false;
+        state.businessPlanList.push(action.payload);
       })
-      .addCase(createEntreprise.rejected, (state, action) => {
-        state.isLoadingCreateEntreprise = false;
-        state.errorCreateEntreprise = action.error.message;
+      .addCase(createBusinessPlan.rejected, (state, action) => {
+        state.isLoadingCreateBusinessPlan = false;
+        state.errorCreateBusinessPlan = action.error.message;
       });
   },
 });
 
-export default entreprisesSlice.reducer;
+export default businessPlanSlice.reducer;

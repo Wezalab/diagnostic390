@@ -1,7 +1,12 @@
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
+
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
@@ -42,6 +47,12 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+const { user } = useSelector((state) => state.auth);
+const navigate = useNavigate();
+
+  const handleClick = () =>{
+    navigate('/login', { replace: true }) 
+  }
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -68,7 +79,13 @@ export default function Header({ onOpenNav }) {
         >
           <Searchbar />
           <LanguagePopover />
-          <AccountPopover />
+          {
+            user? <AccountPopover />:
+            <LoadingButton fullWidth size="large" variant="contained" onClick={handleClick}>
+            Se connecter
+          </LoadingButton>
+          }
+          
         </Stack>
       </StyledToolbar>
     </StyledRoot>
