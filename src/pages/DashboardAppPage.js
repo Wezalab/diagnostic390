@@ -31,14 +31,13 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-        Concours de Plans d’Affaires - COPA
+        Concours de plans d’affaires - COPA
         </Typography>
         <Typography sx={{ mb: 3 }}>
           Bienvenue {user? user?.user?.user?.name: ""}
         </Typography>
 
         {
-
           isLoadingEntreprise ? 
           <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
           <CircularProgress sx={{alignSelf:'center'}} /> </Box> :

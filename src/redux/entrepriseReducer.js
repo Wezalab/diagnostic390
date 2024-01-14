@@ -32,8 +32,8 @@ export const createEntreprise = createAsyncThunk('entreprise/create', async (Ent
 const entreprisesSlice = createSlice({
   name: "entreprises",
   initialState: {
-    entrepriseList:[],
-    entrepriseList2: [
+    entrepriseList2:[],
+    entrepriseList: [
       {
           "social_Media": [],
           "_id": "6594194fee69a5db0ebcd831",

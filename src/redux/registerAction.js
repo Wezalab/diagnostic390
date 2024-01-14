@@ -2,7 +2,7 @@ import axios from 'axios';
 import { registerFailure, registerStart, registerSuccess } from './registerReducer';
 
 
-export const register = (name, email, phone, sex, password) => async (dispatch) => {
+export const register = (name, email, phone, sex, password, role) => async (dispatch) => {
   try {
     dispatch(registerStart());
 
