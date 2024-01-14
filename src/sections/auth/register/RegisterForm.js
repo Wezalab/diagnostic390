@@ -11,7 +11,6 @@ import {
   InputAdornment,
   TextField,
   Typography,
-  CircularProgress,
   Box,
   FormControl,
   InputLabel,
@@ -84,7 +83,6 @@ export default function RegisterForm() {
   const defaultDate = '2000-01-01';
 
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
-  const { user } = useSelector((state) => state.auth);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
 
@@ -309,7 +307,7 @@ export default function RegisterForm() {
         }
         console.log("user", latestCreatedUser);
         console.log("newvalue", newValue);
-        
+
 
         dispatch(createEntreprise(newValue))
           .then((data) => {
@@ -624,7 +622,7 @@ export default function RegisterForm() {
                             error={!!confirmPasswordError}
                             helperText={confirmPasswordError}
                           />
-                        {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
+                          {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
 
                         </Stack>
 

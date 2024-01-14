@@ -12,7 +12,7 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Plans d’Affaires',
+    title: 'Mes plans d’affaires',
     path: '/dashboard/plan',
     icon: icon('ic_analytics'),
   },
