@@ -6,8 +6,9 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import {
   Container, Typography, Card, IconButton, CardActions, CardContent, CardHeader,
-  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField, Stack
+  CardMedia, Breadcrumbs, Link, Tab, Box, useTheme, Tabs, AppBar, Button, TextField, Stack, CardActionArea, Paper
 } from '@mui/material';
+
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -23,11 +24,24 @@ import SwipeableViews from 'react-swipeable-views';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from 'react-router-dom';
+
+import Fab from "@material-ui/core/Fab";
+import Grid from "@material-ui/core/Grid";
+
+import blue from "@material-ui/core/colors/blue";
+
+// import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
+
+import { makeStyles } from "@material-ui/core/styles";
+import { useForm } from "react-hook-form";
+
+
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { store } from '../../redux/Store';
 import { fetchBusinessPlans } from '../../redux/businessPlanReducer';
+import Iconify from '../../components/iconify';
 
 
 function TabPanel(props) {
@@ -54,6 +68,7 @@ TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
+  myBusinessPlans: PropTypes.object.isRequired,
 };
 
 function a11yProps(index) {
@@ -63,16 +78,64 @@ function a11yProps(index) {
   };
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center"
+  },
+  icon: {
+    margin: theme.spacing(2)
+  },
+  cardContainer: {
+    width: "100px",
+    margin: "10px",
+  },
+  cardRoot: {
+    paddingBottom: "14px !important"
+  },
+  cardRootHide: {
+    paddingBottom: "14px !important",
+    margin: "-16px"
+  },
+  input: {
+    display: "none"
+  },
+  button: {
+    color: blue[900],
+    margin: 10
+  },
+  logo: {
+    width: "100px",
+    height: "100px"
+  },
+  submit: {
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: "120px",
+  }
+}));
+
 export default function ViewPlan() {
 
-  const { businessPlanList } = useSelector((state) => state.businessPlan);
+  // const { businessPlanList } = useSelector((state) => state.businessPlan);
   const { user } = useSelector((state) => state.auth);
+  const location = useLocation();
+
   console.log("user==>", user?.user?.user?.role);
   const navigate = useNavigate();
+  const myBusinessPlans = location.state;
+
+  const classes = useStyles();
+  const { register, handleSubmit, reset } = useForm();
+  const [uploadState, setUploadState] = useState("initial");
+  const [image, setImage] = useState("");
 
 
-  // const myBusinessPlan = businessPlanList
-  const myBusinessPlan = businessPlanList.find((obj) => obj.owner && obj.owner._id === user?.user?.user?.userId);
+  const myBusinessPlan = myBusinessPlans
+  // const myBusinessPlan = businessPlanList.find((obj) => obj.owner && obj.owner._id === user?.user?.user?.userId);
   console.log("myBusinessPlan", myBusinessPlan);
 
 
@@ -142,6 +205,9 @@ export default function ViewPlan() {
 
   const [editingStage, setEditingStage] = useState(false);
   const [newStage, setNewStage] = useState(myBusinessPlan?.stage); // Assuming myBusinessPlan is available
+
+  // state logo and post to cloudinary
+  const [loadPic, setLoadPic] = useState("")
 
 
   const handleEditCompanyName = () => {
@@ -328,10 +394,6 @@ export default function ViewPlan() {
     setEditingSecteurActiviteDetails(false);
   };
 
-
-
-
-
   const handleEditStage = () => {
     setEditingStage(true);
   };
@@ -395,6 +457,161 @@ export default function ViewPlan() {
     setValueTab(index);
   };
 
+  // Changne profile image
+  const onChangeProfile = async (event) => {
+    console.log('onChangeProfile');
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = (e) => {
+
+        setUploadState("uploaded");
+      };
+    }
+  };
+
+  const handleUploadClick = async (event) => {
+    console.log("oksssssssss");
+    try {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      if (file) {
+        reader.readAsDataURL(file);
+
+        reader.onloadend = async (e) => {
+          try {
+            console.log("reader.result", reader.result);
+
+            // Call the onCloudinarySaveCb function to upload the image
+            const imageUrl = await onCloudinarySaveCb(reader.result);
+            console.log("Image uploaded to Cloudinary:", imageUrl);
+            setImage(imageUrl);
+
+
+            // Now you can handle the Cloudinary URL as needed
+            setUploadState("uploaded");
+          } catch (error) {
+            console.error("Error uploading image to Cloudinary:", error);
+          }
+        };
+      }
+    } catch (error) {
+      console.error("Error handling upload:", error);
+    }
+  };
+
+
+
+  // const handleUploadClick2 = async (event) => {
+  //   try{
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   if  (file) {
+  //     reader.readAsDataURL(file);
+  //     console.log('okmmmmm');
+  //     reader.onloadend = function (e) {
+  //       // setImage(reader.result);
+  //       console.log("reader.result", reader.result);
+
+  //       onCloudinarySaveCb(reader.result);
+  //       setUploadState("uploaded");
+  //     };
+  //   }}catch(e){
+  //     console.log("error", e);
+  //   }
+  // };
+
+  //   const onCloudinarySaveCb = async (base64Img) => {
+  //     let pic = "";
+
+  //     try {
+  //         setLoadPic(true);
+  //         const apiUrl =
+  //             'https://api.cloudinary.com/v1_1/micity/image/upload';
+  //         const data = {
+  //             file: base64Img,
+  //             upload_preset: 'ml_default'
+  //         };
+
+  //         await fetch(apiUrl, {
+  //             body: JSON.stringify(data),
+  //             headers: {
+  //                 'content-type': 'application/json'
+  //             },
+  //             method: 'POST'
+  //         })
+  //             .then(async response => {
+  //                 const data = await response.json();
+  //                 if (data.secure_url) {
+  //                     setLoadPic(false);
+  //                     pic = data.secure_url;
+  //                 }
+  //             })
+  //             .catch(err => {
+  //                 console.log('Cannot upload');
+  //                 setLoadPic(false);
+  //                 console.log(err);
+  //             });
+
+  //     } catch (e) {
+  //         setLoadPic(false);
+  //         console.log("Error while onCloudinarySave", e);
+  //     }
+  //     return pic; // Moved inside the try block
+
+  // };
+
+  const onCloudinarySaveCb = async (base64Img) => {
+    let pic = ""
+    try {
+      setLoadPic(true);
+
+      const apiUrl = 'https://api.cloudinary.com/v1_1/micity/image/upload';
+      const data = {
+        file: base64Img,
+        upload_preset: 'ml_default'
+      };
+
+      const response = await fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST'
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok && responseData.secure_url) {
+        setLoadPic(false);
+        console.log('Image uploaded to Cloudinary:', responseData.secure_url);
+        pic = responseData.secure_url;
+      } else {
+        setLoadPic(false);
+        console.error('Error uploading image to Cloudinary:', responseData);
+        throw new Error('Error uploading image to Cloudinary');
+      }
+    } catch (error) {
+      setLoadPic(false);
+      console.error('Error in onCloudinarySaveCb:', error);
+      throw error;
+    }
+    return pic
+  };
+
+
+  const handleResetClick = (event) => {
+    setImage(null);
+    setUploadState("initial");
+    reset({ logo: null });
+  };
+
+  const onUpload = (data) => {
+    console.log(data.logo[0])
+  }
+
   return (
     <>
       <Helmet>
@@ -449,10 +666,49 @@ export default function ViewPlan() {
                   //   R
                   // </Avatar>
                   <Box>
-                    <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100 }} />
+                    {/* <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100 }} /> */}
 
-                    <Typography variant="caption" >Changer la photo</Typography>
-                    
+                    <div className={classes.root}>
+                      <Paper className={classes.cardContainer}>
+                        <CardContent
+                          className={
+                            uploadState !== "uploaded" ? classes.cardRoot : classes.cardRootHide
+                          }
+                        >
+                          <Grid container justify="center" alignItems="center">
+                            <input
+                              accept="image/jpeg,image/png,image/tiff,image/webp"
+                              className={classes.input}
+                              id="contained-button-file"
+                              name="logo"
+                              // ref={register({required:true})}
+                              type="file"
+                              onChange={(e) => handleUploadClick(e)}
+                            />
+                            <label
+                              htmlFor="contained-button-file"
+                              className={uploadState === "uploaded" ? classes.input : null}
+                            >
+                              <Fab component="span" className={classes.button}>
+                                {/* <AddPhotoAlternateIcon /> */}
+                                <Iconify icon="et:pictures" />
+                              </Fab>
+                            </label>
+                          </Grid>
+                        </CardContent>
+                        {uploadState === "uploaded" && (
+                          <CardActionArea onClick={handleResetClick}>
+                            <img className={classes.logo} src={image} alt="LOGO" />
+                          </CardActionArea>
+                        )}
+                      </Paper>
+                      {/* <Typography underline="hover" sx={{cursor: "pointer",}} variant="caption" onClick={()=> handleUploadClick2()} >Changer la photo</Typography>
+
+       */}
+                    </div>
+
+
+
                   </Box>
                 }
                 action={
@@ -487,9 +743,10 @@ export default function ViewPlan() {
                       variant="fullWidth"
                       aria-label="full width tabs example"
                     >
-                      <Tab label="Identité du projet" {...a11yProps(0)} />
-                      <Tab label="Equipe" {...a11yProps(1)} />
-                      <Tab label="Historique financière" {...a11yProps(2)} />
+                      <Tab sx={{ textTransform: "inherit" }} label="Identité du projet" {...a11yProps(0)} />
+                      <Tab sx={{ textTransform: "inherit" }} label="Equipe" {...a11yProps(1)} />
+                      <Tab sx={{ textTransform: "inherit" }} label="Besoin en équipement" {...a11yProps(2)} />
+                      <Tab sx={{ textTransform: "inherit" }} label="Historique financière" {...a11yProps(3)} />
                     </Tabs>
                   </AppBar>
                   <SwipeableViews
@@ -524,20 +781,20 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Nom du Business Plan" secondary={newCompanyName} />
-                                 {
-                                   user?.user?.user?.role !==  "USER"? <>
-                                  <ListItemIcon>
-                                    {openCompanyName ? (
-                                      <CloseIcon onClick={handleClickCompanyName} />
-                                    ) : (
-                                      <EditIcon onClick={handleEditCompanyName} />
-                                    )}
-                                  </ListItemIcon>
-                                  
-                                 {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />} </>
-                             :null
-                                 }
-                                  </>
+                                {
+                                  user?.user?.user?.role !== "USER" ? <>
+                                    <ListItemIcon>
+                                      {openCompanyName ? (
+                                        <CloseIcon onClick={handleClickCompanyName} />
+                                      ) : (
+                                        <EditIcon onClick={handleEditCompanyName} />
+                                      )}
+                                    </ListItemIcon>
+
+                                    {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />} </>
+                                    : null
+                                }
+                              </>
                             )}
                           </ListItemButton>
 
@@ -563,16 +820,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Detail simple du Business Plan" secondary={newMinibio} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openMinibio ? (
-                                    <CloseIcon onClick={handleClickMinibio} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditMinibio} />
-                                  )}
-                                </ListItemIcon>
-                                {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openMinibio ? (
+                                      <CloseIcon onClick={handleClickMinibio} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditMinibio} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
                           <Collapse in={openMinibio} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
@@ -598,16 +855,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Description du Business Plan" secondary={newProjectDescription} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openProjectDescription ? (
-                                    <CloseIcon onClick={handleClickProjectDescription} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditProjectDescription} />
-                                  )}
-                                </ListItemIcon>
-                                {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openProjectDescription ? (
+                                      <CloseIcon onClick={handleClickProjectDescription} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditProjectDescription} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -634,16 +891,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Date de création du Business Plan" secondary={newFoundingdate} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openFoundingdate ? (
-                                    <CloseIcon onClick={handleClickFoundingdate} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditFoundingdate} />
-                                  )}
-                                </ListItemIcon>
-                                {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openFoundingdate ? (
+                                      <CloseIcon onClick={handleClickFoundingdate} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditFoundingdate} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -669,16 +926,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Mission du Business Plan" secondary={newEntrepriseMission} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openEntrepriseMission ? (
-                                    <CloseIcon onClick={handleClickEntrepriseMission} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditEntrepriseMission} />
-                                  )}
-                                </ListItemIcon>
-                                {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openEntrepriseMission ? (
+                                      <CloseIcon onClick={handleClickEntrepriseMission} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditEntrepriseMission} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -705,16 +962,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Vision du Business Plan" secondary={newEntrepriseVision} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openEntrepriseVision ? (
-                                    <CloseIcon onClick={handleClickEntrepriseVision} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditEntrepriseVision} />
-                                  )}
-                                </ListItemIcon>
-                                {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openEntrepriseVision ? (
+                                      <CloseIcon onClick={handleClickEntrepriseVision} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditEntrepriseVision} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -742,16 +999,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="Valeur du projet" secondary={newValeur} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openValeur ? (
-                                    <CloseIcon onClick={handleClickValeur} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditValeur} />
-                                  )}
-                                </ListItemIcon>
-                                {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openValeur ? (
+                                      <CloseIcon onClick={handleClickValeur} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditValeur} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -763,11 +1020,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Addresse du projet" secondary={myBusinessPlan?.full_address} />
 
-                           {user?.user?.user?.role !==  "USER"? <>
-                            <ListItemIcon>
-                              <EditIcon />
-                            </ListItemIcon>
-                            {openfullAddress ? <ExpandLess onClick={handleClickFullAddress} /> : <ExpandMore onClick={handleClickFullAddress} />}</>: null}
+                            {user?.user?.user?.role !== "USER" ? <>
+                              <ListItemIcon>
+                                <EditIcon />
+                              </ListItemIcon>
+                              {openfullAddress ? <ExpandLess onClick={handleClickFullAddress} /> : <ExpandMore onClick={handleClickFullAddress} />}</> : null}
                           </ListItemButton>
                           <Collapse in={openfullAddress} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -777,11 +1034,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Secteur d'activité" secondary={myBusinessPlan?.secteur} />
 
-                           {user?.user?.user?.role !==  "USER"? <>
-                            <ListItemIcon>
-                              <EditIcon />
-                            </ListItemIcon>
-                            {openSecteur ? <ExpandLess onClick={handleClickSecteur} /> : <ExpandMore onClick={handleClickSecteur} />}</>: null}
+                            {user?.user?.user?.role !== "USER" ? <>
+                              <ListItemIcon>
+                                <EditIcon />
+                              </ListItemIcon>
+                              {openSecteur ? <ExpandLess onClick={handleClickSecteur} /> : <ExpandMore onClick={handleClickSecteur} />}</> : null}
                           </ListItemButton>
                           <Collapse in={openSecteur} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -812,16 +1069,16 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="A quel stage etes-vous?" secondary={myBusinessPlan?.stage} />
-                               {user?.user?.user?.role !==  "USER"? <>
-                                <ListItemIcon>
-                                  {openStage ? (
-                                    <CloseIcon onClick={handleClickStage} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditStage} />
-                                  )}
-                                </ListItemIcon>
-                                {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}</>: null
-                              }</>
+                                {user?.user?.user?.role !== "USER" ? <>
+                                  <ListItemIcon>
+                                    {openStage ? (
+                                      <CloseIcon onClick={handleClickStage} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditStage} />
+                                    )}
+                                  </ListItemIcon>
+                                  {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}</> : null
+                                }</>
                             )}
                           </ListItemButton>
 
@@ -834,11 +1091,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Quel type de clients servez-vous ?" secondary={myBusinessPlan?.typeOfClients} />
 
-                           {user?.user?.user?.role !==  "USER"? <>
-                            <ListItemIcon>
-                              <EditIcon />
-                            </ListItemIcon>
-                            {opentypeOfClients ? <ExpandLess onClick={handleClickTypeOfClients} /> : <ExpandMore onClick={handleClickTypeOfClients} />}</>: null}
+                            {user?.user?.user?.role !== "USER" ? <>
+                              <ListItemIcon>
+                                <EditIcon />
+                              </ListItemIcon>
+                              {opentypeOfClients ? <ExpandLess onClick={handleClickTypeOfClients} /> : <ExpandMore onClick={handleClickTypeOfClients} />}</> : null}
                           </ListItemButton>
                           <Collapse in={opentypeOfClients} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -847,11 +1104,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Où sont basés vos clients ?" secondary={myBusinessPlan?.clientLocation} />
 
-                           {user?.user?.user?.role !==  "USER"? <>
-                            <ListItemIcon>
-                              <EditIcon />
-                            </ListItemIcon>
-                            {openClientLocation ? <ExpandLess onClick={handleClickClientLocation} /> : <ExpandMore onClick={handleClickClientLocation} />}</>: null}
+                            {user?.user?.user?.role !== "USER" ? <>
+                              <ListItemIcon>
+                                <EditIcon />
+                              </ListItemIcon>
+                              {openClientLocation ? <ExpandLess onClick={handleClickClientLocation} /> : <ExpandMore onClick={handleClickClientLocation} />}</> : null}
                           </ListItemButton>
                           <Collapse in={openClientLocation} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -860,11 +1117,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Quel sont vos secteurs d'activité?" secondary={myBusinessPlan?.secteur_activite_details} />
 
-                           {user?.user?.user?.role !==  "USER"? <>
-                            <ListItemIcon>
-                              <EditIcon />
-                            </ListItemIcon>
-                            {openSecteurActiviteDetails ? <ExpandLess onClick={handleClickSecteurActiviteDetails} /> : <ExpandMore onClick={handleClickSecteurActiviteDetails} />}</>: null}
+                            {user?.user?.user?.role !== "USER" ? <>
+                              <ListItemIcon>
+                                <EditIcon />
+                              </ListItemIcon>
+                              {openSecteurActiviteDetails ? <ExpandLess onClick={handleClickSecteurActiviteDetails} /> : <ExpandMore onClick={handleClickSecteurActiviteDetails} />}</> : null}
                           </ListItemButton>
                           <Collapse in={openSecteurActiviteDetails} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -876,7 +1133,12 @@ export default function ViewPlan() {
                     <TabPanel value={value} index={1} dir={theme.direction}>
                       Equipe
                     </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
+
+                    <TabPanel sx={{ textTransform: "inherit" }} value={value} index={2} dir={theme.direction}>
+                      Besoin en equipement
+                    </TabPanel>
+
+                    <TabPanel sx={{ textTransform: "inherit" }} value={value} index={3} dir={theme.direction}>
                       Historique financière
                     </TabPanel>
 
