@@ -38,9 +38,9 @@ import { useForm } from "react-hook-form";
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../../redux/Store';
-import { fetchBusinessPlans } from '../../redux/businessPlanReducer';
+import { fetchBusinessPlans, updateLogo } from '../../redux/businessPlanReducer';
 import Iconify from '../../components/iconify';
 
 
@@ -115,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: "120px",
+  },
+  uploadedImage: {
+    width: "200px",
   }
 }));
 
@@ -124,9 +127,14 @@ export default function ViewPlan() {
   const { user } = useSelector((state) => state.auth);
   const location = useLocation();
 
+  const { errorUpdateLogoBusinessPlan } = useSelector((state) => state.businessPlan);
+
+
   console.log("user==>", user?.user?.user?.role);
   const navigate = useNavigate();
   const myBusinessPlans = location.state;
+  console.log("myBusinessPlans==>", myBusinessPlans._id);
+
 
   const classes = useStyles();
   const { register, handleSubmit, reset } = useForm();
@@ -145,6 +153,8 @@ export default function ViewPlan() {
 
   const [value, setValueTab] = useState(0);
   const theme = useTheme();
+  const dispatch = useDispatch();
+
 
   const [openCompanyName, setOpenCompanyName] = useState(false);
   const [openMinibio, setOpenMinibio] = useState(false);
@@ -485,9 +495,20 @@ export default function ViewPlan() {
             console.log("reader.result", reader.result);
 
             // Call the onCloudinarySaveCb function to upload the image
-            const imageUrl = await onCloudinarySaveCb(reader.result);
-            console.log("Image uploaded to Cloudinary:", imageUrl);
-            setImage(imageUrl);
+            const logo = await onCloudinarySaveCb(reader.result);
+            console.log("Image uploaded to Cloudinary:", logo);
+            setImage(logo);
+
+
+            await dispatch(updateLogo({ _id: myBusinessPlans._id, logo }))
+              .then((data) => {
+                console.log("data", errorUpdateLogoBusinessPlan, data);
+
+
+              })
+              .catch((error) => {
+                console.error('Registration error:', error);
+              });
 
 
             // Now you can handle the Cloudinary URL as needed
@@ -501,67 +522,6 @@ export default function ViewPlan() {
       console.error("Error handling upload:", error);
     }
   };
-
-
-
-  // const handleUploadClick2 = async (event) => {
-  //   try{
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   if  (file) {
-  //     reader.readAsDataURL(file);
-  //     console.log('okmmmmm');
-  //     reader.onloadend = function (e) {
-  //       // setImage(reader.result);
-  //       console.log("reader.result", reader.result);
-
-  //       onCloudinarySaveCb(reader.result);
-  //       setUploadState("uploaded");
-  //     };
-  //   }}catch(e){
-  //     console.log("error", e);
-  //   }
-  // };
-
-  //   const onCloudinarySaveCb = async (base64Img) => {
-  //     let pic = "";
-
-  //     try {
-  //         setLoadPic(true);
-  //         const apiUrl =
-  //             'https://api.cloudinary.com/v1_1/micity/image/upload';
-  //         const data = {
-  //             file: base64Img,
-  //             upload_preset: 'ml_default'
-  //         };
-
-  //         await fetch(apiUrl, {
-  //             body: JSON.stringify(data),
-  //             headers: {
-  //                 'content-type': 'application/json'
-  //             },
-  //             method: 'POST'
-  //         })
-  //             .then(async response => {
-  //                 const data = await response.json();
-  //                 if (data.secure_url) {
-  //                     setLoadPic(false);
-  //                     pic = data.secure_url;
-  //                 }
-  //             })
-  //             .catch(err => {
-  //                 console.log('Cannot upload');
-  //                 setLoadPic(false);
-  //                 console.log(err);
-  //             });
-
-  //     } catch (e) {
-  //         setLoadPic(false);
-  //         console.log("Error while onCloudinarySave", e);
-  //     }
-  //     return pic; // Moved inside the try block
-
-  // };
 
   const onCloudinarySaveCb = async (base64Img) => {
     let pic = ""
@@ -608,9 +568,6 @@ export default function ViewPlan() {
     reset({ logo: null });
   };
 
-  const onUpload = (data) => {
-    console.log(data.logo[0])
-  }
 
   return (
     <>
@@ -681,7 +638,6 @@ export default function ViewPlan() {
                               className={classes.input}
                               id="contained-button-file"
                               name="logo"
-                              // ref={register({required:true})}
                               type="file"
                               onChange={(e) => handleUploadClick(e)}
                             />
@@ -689,18 +645,26 @@ export default function ViewPlan() {
                               htmlFor="contained-button-file"
                               className={uploadState === "uploaded" ? classes.input : null}
                             >
-                              <Fab component="span" className={classes.button}>
-                                {/* <AddPhotoAlternateIcon /> */}
-                                <Iconify icon="et:pictures" />
-                              </Fab>
+                              {myBusinessPlans.logo ? (
+                                null
+                              ) : (
+                                <Fab component="span" className={classes.button}>
+                                  <Iconify icon="icon-park:add-picture" />
+                                </Fab>
+                              )}
                             </label>
                           </Grid>
+
                         </CardContent>
-                        {uploadState === "uploaded" && (
+                        {(uploadState === "uploaded") && (
                           <CardActionArea onClick={handleResetClick}>
                             <img className={classes.logo} src={image} alt="LOGO" />
                           </CardActionArea>
                         )}
+
+                        {myBusinessPlans.logo && <CardActionArea onClick={handleResetClick}>
+                          <img className={classes.logo} src={myBusinessPlans.logo} alt="LOGO" />
+                        </CardActionArea>}
                       </Paper>
                       {/* <Typography underline="hover" sx={{cursor: "pointer",}} variant="caption" onClick={()=> handleUploadClick2()} >Changer la photo</Typography>
 
