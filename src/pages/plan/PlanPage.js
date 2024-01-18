@@ -1,13 +1,11 @@
 import { Helmet } from 'react-helmet-async';
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 
 // @mui
 import {
   Container, Box, CircularProgress, Typography, Button, Grid
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { LoadingButton } from '@mui/lab';
-
 
 import { useSelector } from 'react-redux';
 import { store } from '../../redux/Store';
@@ -29,10 +27,7 @@ export default function PlanPage() {
     store.dispatch(fetchBusinessPlans());
   }, []);
 
-  const handleClick = ()=> {
 
-  }
-  
   return (
     <>
       <Helmet>
@@ -40,31 +35,30 @@ export default function PlanPage() {
       </Helmet>
 
       <Container >
-        <Box  sx={{ display:'flex', flexDirection:'row', justifyContent:"space-between", marginBottom:5  }} >
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginBottom: 5 }} >
           <Typography variant="h4" sx={{ mb: 1 }}>
-          Plan d’Affaires
+            Plan d’Affaires
           </Typography>
-          
-          {
-            user?<LoadingButton size="large" variant="contained" onClick={handleClick}>
-            Ajouter un plan d’Affaires
-          </LoadingButton>: null
-          }
-          
+
+          {/* {
+            user ? <LoadingButton sx={{ textTransform: "inherit" }} size="large" variant="contained"
+            onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}>
+              Ajouter un plan d’Affaires
+            </LoadingButton> : null
+          } */}
+
         </Box>
-    
-        
 
         {
 
-          isLoadingBusinessPlan ? 
-          <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
-          <CircularProgress sx={{alignSelf:'center'}} /> </Box> :
+          isLoadingBusinessPlan ?
+            <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
+              <CircularProgress sx={{ alignSelf: 'center' }} /> </Box> :
 
             <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
 
               {
-                myBusinessPlan.length !==0 && myBusinessPlan.map((value, key) =>
+                myBusinessPlan.length !== 0 && myBusinessPlan.map((value, key) =>
                 (
                   <Grid key={key} item xs={6}>
                     <AppWidgetBusinessPlan myBusinessPlans={value} />
@@ -79,7 +73,7 @@ export default function PlanPage() {
                   flexDirection="column"
                   alignItems="center"
                   justifyContent="center"
-                  // minHeight="50vh"
+                // minHeight="50vh"
                 >
 
                   <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
@@ -88,36 +82,36 @@ export default function PlanPage() {
                     Vous n'avez enregistré aucun plan d’affaires !
                   </Typography>
                   {
-                    user? <>
-                    <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
-                    sx={{ marginTop: 2 }}
-                  >
-                    Enregistrer votre plan d’affaires
-                  </Button></>:
-                  <>
-                  <Typography>Pour enregistrer votre plan d’affaires, veuillez vous identifier 
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/login', { replace: true })}
-                    sx={{ marginTop: 2 }}
-                  >
-                    Se connecter
-                  </Button>
-                  </>
+                    user ? <>
+                      <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
+                        sx={{ marginTop: 2 }}
+                      >
+                        Enregistrer votre plan d’affaires
+                      </Button></> :
+                      <>
+                        <Typography>Pour enregistrer votre plan d’affaires, veuillez vous identifier
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => navigate('/login', { replace: true })}
+                          sx={{ marginTop: 2 }}
+                        >
+                          Se connecter
+                        </Button>
+                      </>
                   }
                 </Box>
               }
 
             </Grid>
-          }
-        
+        }
+
       </Container>
 
     </>
