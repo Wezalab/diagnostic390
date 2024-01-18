@@ -114,7 +114,7 @@ export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
             <CardContent sx={{ borderBottomWidth: '80%', borderBottom: '1px solid rgba(0, 0, 0, 0.1)', }}>
               <StyledCardTitle>
                 <Card sx={{ width: "fit-content" }}>
-                  <Typography sx={{ p: 1 }} variant="h6">{myBusinessPlans.company_name}</Typography>
+                  <Typography sx={{ p: 1 }} variant="h6">{myBusinessPlans.business_plan_name}</Typography>
                 </Card>
               </StyledCardTitle>
               <StyledCardDesc>{myBusinessPlans.mini_bio}</StyledCardDesc>

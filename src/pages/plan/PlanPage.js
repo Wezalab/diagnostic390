@@ -88,7 +88,7 @@ export default function PlanPage() {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
+                        onClick={() => navigate('/dashboard/add-businessPlan', { replace: true })}
                         sx={{ marginTop: 2 }}
                       >
                         Enregistrer votre plan d’affaires

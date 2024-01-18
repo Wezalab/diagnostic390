@@ -169,7 +169,7 @@ export default function ViewVenture() {
                 <MoreVertIcon />
               </IconButton>
             }
-            title={myEntreprise.company_name}
+            title={myEntreprise.business_plan_name}
             subheader={myEntreprise.mini_bio}
 
           />
