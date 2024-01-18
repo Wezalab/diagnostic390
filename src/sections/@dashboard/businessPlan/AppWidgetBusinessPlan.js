@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {  styled } from '@mui/material/styles';
 import {  Box, Button, Card, CardActions, CardContent, Container, CssBaseline, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // utils
 // components
@@ -94,8 +95,10 @@ const StyledCardActionEdit = styled(Button)({
 });
 
 export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
-  console.log(myBusinessPlans);
+  console.log("ok???",myBusinessPlans);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth.user.user);
+  console.log("user", user);
 
   const cardsData = [
     {
@@ -149,10 +152,13 @@ export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
               <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans   }) }>
                 visualiser
               </StyledCardActionReadMore>
+              {
+                user && myBusinessPlans.owner._id === user.userId? <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans }) }>
+                Modifier {}
+              </StyledCardActionEdit>: null
+              }
 
-              <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans }) }>
-                Modifier
-              </StyledCardActionEdit>
+              
             </CardActions>
           </StyledCard>
         ))}

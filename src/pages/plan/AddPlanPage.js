@@ -74,13 +74,13 @@ export default function AddPlanPage() {
     try {
       // Validate and set error messages
       if (!entrepriseName.trim()) {
-        setEntrepriseError("Le nom de l'entreprise ne peut pas être vide");
+        setEntrepriseError("Le nom du projet ne peut pas être vide");
       } else {
         setEntrepriseError('');
       }
 
       if (!miniBio.trim()) {
-        setMiniBioError("Le details de l'entreprise ne peut pas être vide");
+        setMiniBioError("Le details du projet ne peut pas être vide");
       } else {
         setMiniBioError('');
       }
@@ -159,8 +159,7 @@ export default function AddPlanPage() {
               <Typography variant="h6" gutterBottom>Avec votre plan d'affaires, vous pouvez:
               </Typography>
               <Typography  variant="caption" sx={{ mb:3 }}>
-                Postulez pour beneficier des opportunités de programme TRANSFORME
-
+                Postulez pour bénéficier des opportunités de programme TRANSFORME
               </Typography>
 
               <Stack spacing={3}>
@@ -195,7 +194,6 @@ export default function AddPlanPage() {
                 />
 
                 <TextField
-                  // shrink
                   id="outlined-required"
                   label="Date de création du projet"
                   placeholder="2/2/2000"
@@ -216,7 +214,7 @@ export default function AddPlanPage() {
 
                 <TextField
                   id="outlined-required"
-                  label="Valeur de l'entreprise"
+                  label="Valeur du projet"
                   placeholder="Valeur du projet"
                   multiline
                   value={entrepriseValue}
@@ -225,7 +223,7 @@ export default function AddPlanPage() {
 
                 <TextField
                   id="outlined-required"
-                  label="Addresse de l'entreprise"
+                  label="Addresse du projet"
                   placeholder="Addresse du projet"
                   value={entrepriseAddress}
                   onChange={(e) => setEntrepriseAddress(e.target.value)}
