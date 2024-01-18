@@ -67,6 +67,7 @@ export default function ViewPlan() {
 
   const { businessPlanList } = useSelector((state) => state.businessPlan);
   const { user } = useSelector((state) => state.auth);
+  console.log("user==>", user?.user?.user?.role);
   const navigate = useNavigate();
 
 
@@ -406,40 +407,40 @@ export default function ViewPlan() {
           <Link underline="hover" color="inherit" href="/">
             Dashboard
           </Link>
-          <Typography color="text.primary">Mon entreprise</Typography>
+          <Typography color="text.primary">Mon Business Plan</Typography>
         </Breadcrumbs>
 
         {
           (myBusinessPlan?.length === 0 || myBusinessPlan === undefined) ?
 
 
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                width='100%'
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              width='100%'
+            >
+
+              <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
+
+              <Typography variant="h5" gutterBottom>
+                Vous n'avez enregistré aucune Business Plan!
+              </Typography>
+              <Typography>Pour enregistrer votre Business Plan, cliquez sur le bouton en bas et commencez
+
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate('/dashboard/add-Business Plan', { replace: true })}
+                sx={{ marginTop: 2 }}
               >
+                Enregistrer votre Business Plan
+              </Button>
+            </Box>
 
-                <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
-
-                <Typography variant="h5" gutterBottom>
-                  Vous n'avez enregistré aucune entreprise!
-                </Typography>
-                <Typography>Pour enregistrer votre entreprise, cliquez sur le bouton en bas et commencez
-
-                </Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
-                    sx={{ marginTop: 2 }}
-                  >
-                    Enregistrer votre entreprise
-                  </Button>
-              </Box>
-
-             :
+            :
 
             <Card sx={{ width: '100%' }}>
               <CardHeader
@@ -451,6 +452,7 @@ export default function ViewPlan() {
                     <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100 }} />
 
                     <Typography variant="caption" >Changer la photo</Typography>
+                    
                   </Box>
                 }
                 action={
@@ -485,7 +487,7 @@ export default function ViewPlan() {
                       variant="fullWidth"
                       aria-label="full width tabs example"
                     >
-                      <Tab label="Identité de l'entreprise" {...a11yProps(0)} />
+                      <Tab label="Identité du projet" {...a11yProps(0)} />
                       <Tab label="Equipe" {...a11yProps(1)} />
                       <Tab label="Historique financière" {...a11yProps(2)} />
                     </Tabs>
@@ -502,11 +504,6 @@ export default function ViewPlan() {
                           sx={{ width: '100%', bgcolor: 'background.paper' }}
                           component="nav"
                           aria-labelledby="nested-list-subheader"
-                        // subheader={
-                        //   <ListSubheader component="div" id="nested-list-subheader">
-                        //     Nested List Items
-                        //   </ListSubheader>
-                        // }
                         >
 
 
@@ -515,27 +512,32 @@ export default function ViewPlan() {
                               <Stack sx={{ width: '100%', alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <TextField
                                   sx={{ width: '65%' }}
-                                  label="Nouveau mom de l'entreprise"
+                                  label="Nouveau mom du projet"
                                   value={newCompanyName}
                                   onChange={(e) => setNewCompanyName(e.target.value)}
                                 />
-                                <Box >
+                                <Box>
                                   <Button sx={{ marginRight: 1 }} variant='outlined' color="success" onClick={handleSaveClickCompanyName}>Valider</Button>
                                   <Button variant='outlined' color='error' onClick={handleCancelCompanyName}>Annuler</Button>
                                 </Box>
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Nom de l'Business Plan" secondary={newCompanyName} />
-                                <ListItemIcon>
-                                  {openCompanyName ? (
-                                    <CloseIcon onClick={handleClickCompanyName} />
-                                  ) : (
-                                    <EditIcon onClick={handleEditCompanyName} />
-                                  )}
-                                </ListItemIcon>
-                                {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />}
-                              </>
+                                <ListItemText primary="Nom du Business Plan" secondary={newCompanyName} />
+                                 {
+                                   user?.user?.user?.role !==  "USER"? <>
+                                  <ListItemIcon>
+                                    {openCompanyName ? (
+                                      <CloseIcon onClick={handleClickCompanyName} />
+                                    ) : (
+                                      <EditIcon onClick={handleEditCompanyName} />
+                                    )}
+                                  </ListItemIcon>
+                                  
+                                 {openCompanyName ? <ExpandLess onClick={handleClickCompanyName} /> : <ExpandMore onClick={handleClickCompanyName} />} </>
+                             :null
+                                 }
+                                  </>
                             )}
                           </ListItemButton>
 
@@ -549,7 +551,7 @@ export default function ViewPlan() {
                               <Stack sx={{ width: '100%', alignItems: 'center', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <TextField
                                   sx={{ width: '65%' }}
-                                  label="Nouveau detail simple de l'Business Plan"
+                                  label="Nouveau detail simple du Business Plan"
                                   value={newMinibio}
                                   onChange={(e) => setNewMinibio(e.target.value)}
                                 />
@@ -560,7 +562,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Detail simple de l'Business Plan" secondary={newMinibio} />
+                                <ListItemText primary="Detail simple du Business Plan" secondary={newMinibio} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openMinibio ? (
                                     <CloseIcon onClick={handleClickMinibio} />
@@ -568,8 +571,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditMinibio} />
                                   )}
                                 </ListItemIcon>
-                                {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}
-                              </>
+                                {openMinibio ? <ExpandLess onClick={handleClickMinibio} /> : <ExpandMore onClick={handleClickMinibio} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
                           <Collapse in={openMinibio} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
@@ -583,7 +586,7 @@ export default function ViewPlan() {
                                 <TextField
                                   multiline
                                   sx={{ width: '65%' }}
-                                  label="Nouvelle description de l'Business Plan"
+                                  label="Nouvelle description du Business Plan"
                                   value={newProjectDescription}
                                   onChange={(e) => setNewProjectDescription(e.target.value)}
                                 />
@@ -594,7 +597,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Description de l'Business Plan" secondary={newProjectDescription} />
+                                <ListItemText primary="Description du Business Plan" secondary={newProjectDescription} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openProjectDescription ? (
                                     <CloseIcon onClick={handleClickProjectDescription} />
@@ -602,8 +606,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditProjectDescription} />
                                   )}
                                 </ListItemIcon>
-                                {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}
-                              </>
+                                {openProjectDescription ? <ExpandLess onClick={handleClickProjectDescription} /> : <ExpandMore onClick={handleClickProjectDescription} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -618,7 +622,7 @@ export default function ViewPlan() {
                                 <TextField
                                   type="date"
                                   sx={{ width: '65%' }}
-                                  label="Nouvelle date de création de l'Business Plan"
+                                  label="Nouvelle date de création du Business Plan"
                                   value={newFoundingdate}
                                   onChange={(e) => setNewFoundingdate(e.target.value)}
                                 />
@@ -629,7 +633,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Date de création de l'Business Plan" secondary={newFoundingdate} />
+                                <ListItemText primary="Date de création du Business Plan" secondary={newFoundingdate} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openFoundingdate ? (
                                     <CloseIcon onClick={handleClickFoundingdate} />
@@ -637,8 +642,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditFoundingdate} />
                                   )}
                                 </ListItemIcon>
-                                {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}
-                              </>
+                                {openFoundingdate ? <ExpandLess onClick={handleClickFoundingdate} /> : <ExpandMore onClick={handleClickFoundingdate} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -652,7 +657,7 @@ export default function ViewPlan() {
                                 <TextField
                                   multiline
                                   sx={{ width: '65%' }}
-                                  label="Nouvelle Mission de l'Business Plan"
+                                  label="Nouvelle Mission du Business Plan"
                                   value={newEntrepriseMission}
                                   onChange={(e) => setNewEntrepriseMission(e.target.value)}
                                 />
@@ -663,7 +668,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Mission de l'Business Plan" secondary={newEntrepriseMission} />
+                                <ListItemText primary="Mission du Business Plan" secondary={newEntrepriseMission} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openEntrepriseMission ? (
                                     <CloseIcon onClick={handleClickEntrepriseMission} />
@@ -671,8 +677,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditEntrepriseMission} />
                                   )}
                                 </ListItemIcon>
-                                {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}
-                              </>
+                                {openEntrepriseMission ? <ExpandLess onClick={handleClickEntrepriseMission} /> : <ExpandMore onClick={handleClickEntrepriseMission} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -687,7 +693,7 @@ export default function ViewPlan() {
                                 <TextField
                                   multiline
                                   sx={{ width: '65%' }}
-                                  label="Nouvelle Vision de l'Business Plan"
+                                  label="Nouvelle Vision du Business Plan"
                                   value={newEntrepriseVision}
                                   onChange={(e) => setNewEntrepriseVision(e.target.value)}
                                 />
@@ -698,7 +704,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Vision de l'Business Plan" secondary={newEntrepriseVision} />
+                                <ListItemText primary="Vision du Business Plan" secondary={newEntrepriseVision} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openEntrepriseVision ? (
                                     <CloseIcon onClick={handleClickEntrepriseVision} />
@@ -706,8 +713,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditEntrepriseVision} />
                                   )}
                                 </ListItemIcon>
-                                {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}
-                              </>
+                                {openEntrepriseVision ? <ExpandLess onClick={handleClickEntrepriseVision} /> : <ExpandMore onClick={handleClickEntrepriseVision} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -723,7 +730,7 @@ export default function ViewPlan() {
                                 <TextField
                                   multiline
                                   sx={{ width: '65%' }}
-                                  label="Nouvelle Valeur de l'entreprise"
+                                  label="Nouvelle Valeur du projet"
                                   value={newValeur}
                                   onChange={(e) => setNewValeur(e.target.value)}
                                 />
@@ -734,7 +741,8 @@ export default function ViewPlan() {
                               </Stack>
                             ) : (
                               <>
-                                <ListItemText primary="Valeur de l'entreprise" secondary={newValeur} />
+                                <ListItemText primary="Valeur du projet" secondary={newValeur} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openValeur ? (
                                     <CloseIcon onClick={handleClickValeur} />
@@ -742,8 +750,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditValeur} />
                                   )}
                                 </ListItemIcon>
-                                {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}
-                              </>
+                                {openValeur ? <ExpandLess onClick={handleClickValeur} /> : <ExpandMore onClick={handleClickValeur} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -753,12 +761,13 @@ export default function ViewPlan() {
 
 
                           <ListItemButton>
-                            <ListItemText primary="Addresse de l'entreprise" secondary={myBusinessPlan?.full_address} />
+                            <ListItemText primary="Addresse du projet" secondary={myBusinessPlan?.full_address} />
 
+                           {user?.user?.user?.role !==  "USER"? <>
                             <ListItemIcon>
                               <EditIcon />
                             </ListItemIcon>
-                            {openfullAddress ? <ExpandLess onClick={handleClickFullAddress} /> : <ExpandMore onClick={handleClickFullAddress} />}
+                            {openfullAddress ? <ExpandLess onClick={handleClickFullAddress} /> : <ExpandMore onClick={handleClickFullAddress} />}</>: null}
                           </ListItemButton>
                           <Collapse in={openfullAddress} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -768,10 +777,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Secteur d'activité" secondary={myBusinessPlan?.secteur} />
 
+                           {user?.user?.user?.role !==  "USER"? <>
                             <ListItemIcon>
                               <EditIcon />
                             </ListItemIcon>
-                            {openSecteur ? <ExpandLess onClick={handleClickSecteur} /> : <ExpandMore onClick={handleClickSecteur} />}
+                            {openSecteur ? <ExpandLess onClick={handleClickSecteur} /> : <ExpandMore onClick={handleClickSecteur} />}</>: null}
                           </ListItemButton>
                           <Collapse in={openSecteur} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -781,10 +791,11 @@ export default function ViewPlan() {
                           {/* <ListItemButton>
                         <ListItemText primary="A quel stage etes-vous?" secondary={myBusinessPlan?.stage} />
                         
+                       {user?.user?.user?.role !==  "USER"? <>
                         <ListItemIcon>
                           <EditIcon />
                         </ListItemIcon>
-                        {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}
+                        {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}</>: null
                       </ListItemButton> */}
 
                           <ListItemButton>
@@ -801,6 +812,7 @@ export default function ViewPlan() {
                             ) : (
                               <>
                                 <ListItemText primary="A quel stage etes-vous?" secondary={myBusinessPlan?.stage} />
+                               {user?.user?.user?.role !==  "USER"? <>
                                 <ListItemIcon>
                                   {openStage ? (
                                     <CloseIcon onClick={handleClickStage} />
@@ -808,8 +820,8 @@ export default function ViewPlan() {
                                     <EditIcon onClick={handleEditStage} />
                                   )}
                                 </ListItemIcon>
-                                {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}
-                              </>
+                                {openStage ? <ExpandLess onClick={handleClickStage} /> : <ExpandMore onClick={handleClickStage} />}</>: null
+                              }</>
                             )}
                           </ListItemButton>
 
@@ -822,10 +834,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Quel type de clients servez-vous ?" secondary={myBusinessPlan?.typeOfClients} />
 
+                           {user?.user?.user?.role !==  "USER"? <>
                             <ListItemIcon>
                               <EditIcon />
                             </ListItemIcon>
-                            {opentypeOfClients ? <ExpandLess onClick={handleClickTypeOfClients} /> : <ExpandMore onClick={handleClickTypeOfClients} />}
+                            {opentypeOfClients ? <ExpandLess onClick={handleClickTypeOfClients} /> : <ExpandMore onClick={handleClickTypeOfClients} />}</>: null}
                           </ListItemButton>
                           <Collapse in={opentypeOfClients} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -834,10 +847,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Où sont basés vos clients ?" secondary={myBusinessPlan?.clientLocation} />
 
+                           {user?.user?.user?.role !==  "USER"? <>
                             <ListItemIcon>
                               <EditIcon />
                             </ListItemIcon>
-                            {openClientLocation ? <ExpandLess onClick={handleClickClientLocation} /> : <ExpandMore onClick={handleClickClientLocation} />}
+                            {openClientLocation ? <ExpandLess onClick={handleClickClientLocation} /> : <ExpandMore onClick={handleClickClientLocation} />}</>: null}
                           </ListItemButton>
                           <Collapse in={openClientLocation} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
@@ -846,10 +860,11 @@ export default function ViewPlan() {
                           <ListItemButton>
                             <ListItemText primary="Quel sont vos secteurs d'activité?" secondary={myBusinessPlan?.secteur_activite_details} />
 
+                           {user?.user?.user?.role !==  "USER"? <>
                             <ListItemIcon>
                               <EditIcon />
                             </ListItemIcon>
-                            {openSecteurActiviteDetails ? <ExpandLess onClick={handleClickSecteurActiviteDetails} /> : <ExpandMore onClick={handleClickSecteurActiviteDetails} />}
+                            {openSecteurActiviteDetails ? <ExpandLess onClick={handleClickSecteurActiviteDetails} /> : <ExpandMore onClick={handleClickSecteurActiviteDetails} />}</>: null}
                           </ListItemButton>
                           <Collapse in={openSecteurActiviteDetails} timeout="auto" unmountOnExit sx={{ padding: 2 }}>
                             <Typography sx={{ color: "red" }}>Coaching score</Typography>
