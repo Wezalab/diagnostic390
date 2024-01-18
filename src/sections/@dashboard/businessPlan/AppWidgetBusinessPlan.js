@@ -149,11 +149,11 @@ export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
             </CardContent>
             <CardActions>
             
-              <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans   }) }>
+              <StyledCardActionReadMore onClick={()=>  navigate('/dashboard/view-plan', { replace: true, state: myBusinessPlans   }) }>
                 visualiser
               </StyledCardActionReadMore>
               {
-                user && myBusinessPlans.owner._id === user.userId? <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-venture', { replace: true, state: myBusinessPlans }) }>
+                user && myBusinessPlans.owner._id === user.userId? <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-plan', { replace: true, state: myBusinessPlans }) }>
                 Modifier {}
               </StyledCardActionEdit>: null
               }
