@@ -48,6 +48,25 @@ export const updateLogo = createAsyncThunk(
   }
 );
 
+// Create an async thunk to update an existing Business object
+export const updateCover = createAsyncThunk(
+  "BusinessCover/update",
+  async ({
+      _id,
+      cover
+  }) => {
+    console.log("id========", _id);
+    const url = `https://diagnostic-swyu.onrender.com/api/projects/cover/${_id}`; // Concatenate ID to the base URL
+    
+    const response = await axios.put(url, { // Use PUT request for updating
+      cover
+    });
+
+    console.log("Edit Business---?????? ok==", response.data);
+    return response.data;
+  }
+);
+
 
 const businessPlanSlice = createSlice({
   name: "businessPlan",
@@ -63,6 +82,10 @@ const businessPlanSlice = createSlice({
     isLoadingUpdateLogoBusinessPlan: false,
     errorUpdateLogoBusinessPlan: null,
     updateLogoBusinessPlan: null,
+
+    isLoadingUpdateCoverBusinessPlan: false,
+    errorUpdateCoverBusinessPlan: null,
+    updateCoverBusinessPlan: null,
   },
   reducers: {},
   // In the extraReducers field, we define how the state should change when the asynchronous
@@ -108,6 +131,19 @@ const businessPlanSlice = createSlice({
       .addCase(updateLogo.rejected, (state, action) => {
         state.isLoadingUpdateLogoBusinessPlan = false;
         state.errorUpdateLogoBusinessPlan = action.error.message;
+      });
+
+      builder
+      .addCase(updateCover.pending, (state) => {
+        state.isLoadingUpdateCoverBusinessPlan = true;
+      })
+      .addCase(updateCover.fulfilled, (state, action) => {
+        state.isLoadingUpdateCoverBusinessPlan = false;
+        state.updateCoverBusinessPlan = action.payload;
+      })
+      .addCase(updateCover.rejected, (state, action) => {
+        state.isLoadingUpdateCoverBusinessPlan = false;
+        state.errorUpdateCoverBusinessPlan = action.error.message;
       });
   },
 });

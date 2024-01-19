@@ -30,17 +30,14 @@ import Grid from "@material-ui/core/Grid";
 
 import blue from "@material-ui/core/colors/blue";
 
-// import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
-
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
-
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../../redux/Store';
-import { fetchBusinessPlans, updateLogo } from '../../redux/businessPlanReducer';
+import { fetchBusinessPlans, updateCover, updateLogo } from '../../redux/businessPlanReducer';
 import Iconify from '../../components/iconify';
 
 
@@ -127,8 +124,7 @@ export default function ViewPlan() {
   const { user } = useSelector((state) => state.auth);
   const location = useLocation();
 
-  const { errorUpdateLogoBusinessPlan } = useSelector((state) => state.businessPlan);
-
+  const { errorUpdateLogoBusinessPlan, errorUpdateCoverBusinessPlan } = useSelector((state) => state.businessPlan);
 
   console.log("user==>", user?.user?.user?.role);
   const navigate = useNavigate();
@@ -139,7 +135,9 @@ export default function ViewPlan() {
   const classes = useStyles();
   const { register, handleSubmit, reset } = useForm();
   const [uploadState, setUploadState] = useState("initial");
+  const [uploadStateCover, setUploadStateCover] = useState("initial");
   const [image, setImage] = useState("");
+  const [imageCover, setImageCover] = useState("");
 
 
   const myBusinessPlan = myBusinessPlans
@@ -467,19 +465,6 @@ export default function ViewPlan() {
     setValueTab(index);
   };
 
-  // Changne profile image
-  const onChangeProfile = async (event) => {
-    console.log('onChangeProfile');
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = (e) => {
-
-        setUploadState("uploaded");
-      };
-    }
-  };
 
   const handleUploadClick = async (event) => {
     console.log("oksssssssss");
@@ -521,6 +506,78 @@ export default function ViewPlan() {
     } catch (error) {
       console.error("Error handling upload:", error);
     }
+  };
+
+  const handleUploadClickCover = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async (e) => {
+        try {
+          console.log("reader.result", reader.result);
+
+          // Call the onCloudinarySaveCb function to upload the image
+          const cover = await onCloudinarySaveCover(reader.result);
+          console.log("Cover uploaded to Cloudinary:", cover);
+
+          setImageCover(cover);
+
+          await dispatch(updateCover({ _id: myBusinessPlans._id, cover }))
+            .then((data) => {
+              console.log("data", errorUpdateCoverBusinessPlan, data);
+            })
+            .catch((error) => {
+              console.error('Registration error:', error);
+            });
+
+
+          // Now you can handle the Cloudinary URL as needed
+          setUploadStateCover("uploaded");
+
+        } catch (error) {
+          console.error("Error uploading image to Cloudinary:", error);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onCloudinarySaveCover = async (base64Img) => {
+    let pic = ""
+    try {
+      setLoadPic(true);
+
+      const apiUrl = 'https://api.cloudinary.com/v1_1/micity/image/upload';
+      const data = {
+        file: base64Img,
+        upload_preset: 'ml_default'
+      };
+
+      const response = await fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST'
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok && responseData.secure_url) {
+        setLoadPic(false);
+        console.log('Cover uploaded to Cloudinary:', responseData.secure_url);
+        pic = responseData.secure_url;
+      } else {
+        setLoadPic(false);
+        console.error('Error uploading Cover to Cloudinary:', responseData);
+        throw new Error('Error uploading Cover to Cloudinary');
+      }
+    } catch (error) {
+      setLoadPic(false);
+      console.error('Error in onCloudinarySaveCb:', error);
+      throw error;
+    }
+    return pic
   };
 
   const onCloudinarySaveCb = async (base64Img) => {
@@ -645,7 +702,7 @@ export default function ViewPlan() {
                               htmlFor="contained-button-file"
                               className={uploadState === "uploaded" ? classes.input : null}
                             >
-                              {myBusinessPlans.logo ? (
+                              {myBusinessPlans?.logo ? (
                                 null
                               ) : (
                                 <Fab component="span" className={classes.button}>
@@ -662,13 +719,10 @@ export default function ViewPlan() {
                           </CardActionArea>
                         )}
 
-                        {myBusinessPlans.logo && <CardActionArea onClick={handleResetClick}>
-                          <img className={classes.logo} src={myBusinessPlans.logo} alt="LOGO" />
+                        {myBusinessPlans?.logo && <CardActionArea onClick={handleResetClick}>
+                          <img className={classes.logo} src={myBusinessPlans?.logo} alt="LOGO" />
                         </CardActionArea>}
                       </Paper>
-                      {/* <Typography underline="hover" sx={{cursor: "pointer",}} variant="caption" onClick={()=> handleUploadClick2()} >Changer la photo</Typography>
-
-       */}
                     </div>
 
 
@@ -684,12 +738,46 @@ export default function ViewPlan() {
                 subheader={myBusinessPlan?.mini_bio}
 
               />
-              <CardMedia
-                component="img"
-                height="194"
-                image="../../../assets/empty.jpg"
-                alt="Paella dish"
-              />
+
+
+              <Card sx={{ position: "relative" }}>
+                {(uploadStateCover === "uploaded" ?
+                  <CardMedia
+                    component="img"
+                    height="194"
+                    image={imageCover}
+                    alt="Uploaded Image"
+                  /> : myBusinessPlans?.cover ? <CardMedia
+                    component="img"
+                    height="194"
+                    image={myBusinessPlans?.cover}
+                    alt="Uploaded Image"
+                  /> : <CardMedia
+                    component="img"
+                    height="194"
+                    image={"../../../assets/empty.jpg"}
+                    alt="Uploaded Image"
+                  />
+                )}
+
+
+                <div style={{ textAlign: 'center', margin: '10px' }}>
+                  <label htmlFor="contained-button-fileCover">
+                    <input
+                      accept="image/jpeg,image/png,image/tiff,image/webp"
+                      style={{ display: 'none' }}
+                      id="contained-button-fileCover"
+                      type="file"
+                      onChange={(e) => handleUploadClickCover(e)}
+                    />
+                    <Button sx={{ textTransform: "inherit", position: "absolute", left: '40%', bottom: '40%' }} variant="contained" component="span">
+                      Téléverser l'image de couverture
+                    </Button>
+                  </label>
+                </div>
+
+              </Card>
+
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
                   {myBusinessPlan?.project_description}

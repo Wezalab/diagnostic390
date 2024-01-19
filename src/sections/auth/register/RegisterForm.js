@@ -291,6 +291,8 @@ export default function RegisterForm() {
           "project_vision": entrepriseVision,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
+          "logo":'',
+          "cover":'',
           // "objectifs": "Project Objectives",
           // "smart_ip": "Smart IP",
           // "objectif_social": "Social Objective",

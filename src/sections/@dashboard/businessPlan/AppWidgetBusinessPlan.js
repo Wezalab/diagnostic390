@@ -97,7 +97,7 @@ const StyledCardActionEdit = styled(Button)({
 export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
   console.log("ok???",myBusinessPlans);
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth.user.user);
+  const { user } = useSelector((state) => state.auth);
   console.log("user", user);
 
   const cardsData = [
@@ -153,12 +153,11 @@ export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
                 visualiser
               </StyledCardActionReadMore>
               {
-                user && myBusinessPlans.owner._id === user.userId? <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-plan', { replace: true, state: myBusinessPlans }) }>
+                user && myBusinessPlans.owner._id === user?.user?.user?.userId? <StyledCardActionEdit onClick={()=>  navigate('/dashboard/view-plan', { replace: true, state: myBusinessPlans }) }>
                 Modifier {}
               </StyledCardActionEdit>: null
               }
 
-              
             </CardActions>
           </StyledCard>
         ))}

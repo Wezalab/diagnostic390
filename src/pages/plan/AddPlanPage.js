@@ -102,6 +102,8 @@ export default function AddPlanPage() {
           "project_mission": entrepriseMission,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
+          "cover":'',
+          'logo': '',
           // "objectifs": "Project Objectives",
           // "smart_ip": "Smart IP",
           // "objectif_social": "Social Objective",
