@@ -676,13 +676,11 @@ export default function ViewPlan() {
             <Card sx={{ width: '100%' }}>
               <CardHeader
                 avatar={
-                  // <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  //   R
-                  // </Avatar>
+
                   <Box>
                     {/* <img src='../../../assets/empty.jpg' alt="profile" style={{ width: 100 }} /> */}
 
-                    <div className={classes.root}>
+                    {/* <div className={classes.root}>
                       <Paper className={classes.cardContainer}>
                         <CardContent
                           className={
@@ -702,7 +700,7 @@ export default function ViewPlan() {
                               htmlFor="contained-button-file"
                               className={uploadState === "uploaded" ? classes.input : null}
                             >
-                              {myBusinessPlans?.logo ? (
+                              {myBusinessPlans?.logo?.length !== 0 ? (
                                 null
                               ) : (
                                 <Fab component="span" className={classes.button}>
@@ -715,13 +713,47 @@ export default function ViewPlan() {
                         </CardContent>
                         {(uploadState === "uploaded") && (
                           <CardActionArea onClick={handleResetClick}>
+                            <img className={classes.logo} src={image} alt="LOGO"  />
+                          </CardActionArea>
+                        )}
+
+                        {myBusinessPlans?.logo?.length !== 0 && <CardActionArea onClick={handleResetClick}>
+                          <img className={classes.logo} src={myBusinessPlans?.logo} alt="LOGO" />
+                        </CardActionArea>}
+                      </Paper>
+                    </div> */}
+
+                    <div className={classes.root}>
+                      <Paper className={classes.cardContainer}>
+                        <CardContent className={uploadState !== 'uploaded' ? classes.cardRoot : classes.cardRootHide}>
+                          <Grid container justify="center" alignItems="center">
+                            <input
+                              accept="image/jpeg,image/png,image/tiff,image/webp"
+                              className={classes.input}
+                              id="contained-button-file"
+                              name="logo"
+                              type="file"
+                              onChange={(e) => handleUploadClick(e)}
+                            />
+                            <label
+                              htmlFor="contained-button-file"
+                              className={uploadState === 'uploaded' ? classes.input : null}
+                            >
+                              <Fab component="span" className={classes.button}>
+                                <Iconify icon="icon-park:add-picture" />
+                              </Fab>
+
+
+                            </label>
+                          </Grid>
+                        </CardContent>
+
+                        {uploadState === "uploaded" && (
+                          <CardActionArea onClick={handleResetClick}>
                             <img className={classes.logo} src={image} alt="LOGO" />
                           </CardActionArea>
                         )}
 
-                        {myBusinessPlans?.logo && <CardActionArea onClick={handleResetClick}>
-                          <img className={classes.logo} src={myBusinessPlans?.logo} alt="LOGO" />
-                        </CardActionArea>}
                       </Paper>
                     </div>
 
