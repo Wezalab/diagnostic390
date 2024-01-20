@@ -1,30 +1,37 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useDispatch, useSelector } from 'react-redux';
+import querystring from 'querystring';
 
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from 'axios';
 
 import Iconify from '../../../components/iconify';
-import { login } from '../../../redux/loginAction';
+// import { login } from '../../../redux/loginAction';
 
-import { store } from '../../../redux/Store';
-import { fetchEntreprises } from '../../../redux/entrepriseReducer';
+// import { store } from '../../../redux/Store';
+// import { fetchEntreprises } from '../../../redux/entrepriseReducer';
 
-// import { fetchDoctors } from '../../../redux/doctorsReducer';
-// import { fetchPatients } from '../../../redux/patientsReducer';
+
+const ENVIRONMENT = process.env.CK;
+
+
 
 export default function LoginForm() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
-  const [ localError, setLocalError ] = useState("");
+  const [localError, setLocalError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState(''); // admin1@wecare.com
-  const [password, setPassword] = useState(''); // wecare2022
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleClick = (e) => {
+  console.log("process.env.ck", ENVIRONMENT);
+  console.log("process.env.sk", process.env.SK);
+
+  const handleClick = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -35,10 +42,47 @@ export default function LoginForm() {
       return;
     }
 
-    setLocalError('')
-    store.dispatch(fetchEntreprises());
 
-    dispatch(login(email, password));
+    const storeUrl = 'https://central-achat.alphanewgroup.com/';
+    const endpoint = 'wc-auth/v1/authorize';
+
+    const params = {
+      app_name: 'My App Name',
+      scope: 'read_write',
+      user_id: 123,
+      return_url: 'https://diagnostic360.netlify.app/dashboard/app',
+      callback_url: 'https://diagnostic360.netlify.app/dashboard/app',
+    };
+
+    const queryString = querystring.stringify(params);
+
+    const url = `${storeUrl}${endpoint}?${queryString}`;
+
+    console.log(url);
+
+    // Example of JSON posted with the API Keys
+    const apiKeys = {
+      key_id: 1,
+      user_id: 123,
+      consumer_key: 'ck_72a265661d99bbcf4b37a5ac44a7780e54f948b5',
+      consumer_secret: 'cs_3b10064f35856f8d2ebf27e2ac8522c9480ee4e9',
+      key_permissions: 'read_write',
+    };
+
+    // Using Axios to send the API keys
+    axios.post(url, apiKeys)
+      .then(response => {
+        console.log('API Response:', response.data);
+      })
+      .catch(error => {
+        console.error('Error making API request:', error.message);
+      });
+
+
+    setLocalError('')
+    // store.dispatch(fetchEntreprises());
+
+    // dispatch(login(email, password));
   };
 
   return (
@@ -80,14 +124,14 @@ export default function LoginForm() {
       </LoadingButton>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-      <Typography variant="body" sx={{ }}>Voulez-vous Créer un compte?</Typography>
+        <Typography variant="body" sx={{}}>Voulez-vous Créer un compte?</Typography>
 
         <Link href="/register" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
           Créer un compte
         </Link>
       </Stack>
-      <Link href="/dashboard/app" style={{ cursor: 'pointer', textAlign:"center", color: 'red' }} variant="subtitle2" underline="hover">
-          Retour à l'accueil
+      <Link href="/dashboard/app" style={{ cursor: 'pointer', textAlign: "center", color: 'red' }} variant="subtitle2" underline="hover">
+        Retour à l'accueil
       </Link>
 
     </>
