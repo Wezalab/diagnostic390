@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */
+
 
 
 import { Helmet } from 'react-helmet-async';
@@ -727,14 +729,19 @@ export default function ViewPlan() {
                       <Paper className={classes.cardContainer}>
                         <CardContent className={uploadState !== 'uploaded' ? classes.cardRoot : classes.cardRootHide}>
                           <Grid container justify="center" alignItems="center">
+
+
+
                             <input
                               accept="image/jpeg,image/png,image/tiff,image/webp"
                               className={classes.input}
                               id="contained-button-file"
-                              name="logo"
+                              name="contained-button-file"
                               type="file"
                               onChange={(e) => handleUploadClick(e)}
                             />
+
+
                             <label
                               htmlFor="contained-button-file"
                               className={uploadState === 'uploaded' ? classes.input : null}
