@@ -21,9 +21,13 @@ export const register = (name, email, phone, sex, password, role) => async (disp
     // Dispatch loginSuccess action with response data
     dispatch(registerSuccess(response.data));
 
+    return response.data;
+
   } catch (error) {
     console.log("-----====",error);
     dispatch(registerFailure(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" ));
-    // dispatch(registerFailure("Verifiez votre internet!" ));
+    
+    // Throw the error to be caught by the promise's catch block
+    throw error;
   }
 };

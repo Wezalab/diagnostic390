@@ -11,7 +11,6 @@ import {
   InputAdornment,
   TextField,
   Typography,
-  CircularProgress,
   Box,
   FormControl,
   InputLabel,
@@ -84,7 +83,6 @@ export default function RegisterForm() {
   const defaultDate = '2000-01-01';
 
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
-  const { user } = useSelector((state) => state.auth);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
 
@@ -101,6 +99,8 @@ export default function RegisterForm() {
   const [sexError, setSexError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const [latestCreatedUser, setLatestCreatedUser] = useState('');
 
   // Categorie
   const [catSelector, setCatSelector] = useState(0);
@@ -235,15 +235,16 @@ export default function RegisterForm() {
         // Dispatch registration action here
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
-        const role = catSelector === 1? 'user':catSelector ===2? 'pme': catSelector===3?'femme': 'psde';
+        const role = catSelector === 1 ? 'user' : catSelector === 2 ? 'pme' : catSelector === 3 ? 'femme' : 'psde';
 
         dispatch(register(name, email, phone, sex, password, role))
           .then((data) => {
             console.log("data", data);
+            setLatestCreatedUser(data.userId)
           })
           .catch((error) => {
             console.error('Registration error:', error);
-            
+
           });
         console.log();
         console.log("registeredUser2", await registeredUser);
@@ -290,6 +291,8 @@ export default function RegisterForm() {
           "project_vision": entrepriseVision,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
+          "logo":'',
+          "cover":'',
           // "objectifs": "Project Objectives",
           // "smart_ip": "Smart IP",
           // "objectif_social": "Social Objective",
@@ -301,10 +304,12 @@ export default function RegisterForm() {
           // "pitch_text": "Project Pitch Text",
           // "pitch_deck_url": "https://wezalab.com/pitch_deck.pdf",
           // "website": "https://wezalab.com",
-          "owner": user.user.user.userId, // Replace with an actual user ID from the list
+          "owner": latestCreatedUser,
           "secteur_activite_details": sectorsOfActivity.map((item) => item.title)
         }
-        // console.log("newvalue", newValue);
+        console.log("user", latestCreatedUser);
+        console.log("newvalue", newValue);
+
 
         dispatch(createEntreprise(newValue))
           .then((data) => {
@@ -350,8 +355,8 @@ export default function RegisterForm() {
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
-            // minHeight="100vh"
-            mt={4}
+              // minHeight="100vh"
+              mt={4}
             >
               <Paper elevation={3} sx={{ padding: 3, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
@@ -364,8 +369,8 @@ export default function RegisterForm() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={()=> {
-                      navigate('/login', { replace: true });
+                  onClick={() => {
+                    navigate('/login', { replace: true });
                   }}
                   sx={{ marginTop: 2 }}
                 >
@@ -560,8 +565,8 @@ export default function RegisterForm() {
                       <Box>
 
                         <Stack spacing={3}>
-                          {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
-                          {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
+                          {/* {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>} */}
+                          {/* {isLoadingRegister && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>} */}
 
                           <TextField name="name" label="Nom complet" value={name} onChange={(e) => setName(e.target.value)} error={!!nameError} helperText={nameError} />
                           <TextField type="email" name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} error={!!emailError} helperText={emailError} />
@@ -619,7 +624,10 @@ export default function RegisterForm() {
                             error={!!confirmPasswordError}
                             helperText={confirmPasswordError}
                           />
+                          {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
+
                         </Stack>
+
 
                         <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                           S'enregistrer
@@ -909,14 +917,14 @@ export default function RegisterForm() {
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
 
-              <Button onClick={handleNext} variant="outlined" disabled={ activeStep && !registeredUser}  >
+              <Button onClick={handleNext} variant="outlined" disabled={activeStep && !registeredUser}  >
                 {activeStep === steps.length - 1 ? 'Fin' : 'Suivant'}
               </Button>
             </Box>
 
-            <Link href="/dashboard/app" style={{ display:'block', cursor: 'pointer', textAlign:"center", color: 'red' }} variant="subtitle2" underline="hover">
-          Retour à l'accueil
-      </Link>
+            <Link href="/dashboard/app" style={{ display: 'block', cursor: 'pointer', textAlign: "center", color: 'red' }} variant="subtitle2" underline="hover">
+              Retour à l'accueil
+            </Link>
           </>
         )}
       </Box>
