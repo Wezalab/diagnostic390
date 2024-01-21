@@ -1,25 +1,20 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import querystring from 'querystring';
+// import querystring from 'querystring';
 
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import axios from 'axios';
+// import axios from 'axios';
 
 import Iconify from '../../../components/iconify';
-// import { login } from '../../../redux/loginAction';
+import { login } from '../../../redux/loginAction';
 
-// import { store } from '../../../redux/Store';
-// import { fetchEntreprises } from '../../../redux/entrepriseReducer';
-
-
-const ENVIRONMENT = process.env.CK;
-
-
+import { store } from '../../../redux/Store';
+import { fetchEntreprises } from '../../../redux/entrepriseReducer';
 
 export default function LoginForm() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
   const [localError, setLocalError] = useState("");
@@ -28,8 +23,6 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  console.log("process.env.ck", ENVIRONMENT);
-  console.log("process.env.sk", process.env.SK);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -42,47 +35,57 @@ export default function LoginForm() {
       return;
     }
 
+    // const storeUrl = 'https://central-achat.alphanewgroup.com/';
+    // const endpoint = 'wc-auth/v1/authorize';
 
-    const storeUrl = 'https://central-achat.alphanewgroup.com/';
-    const endpoint = 'wc-auth/v1/authorize';
+    // const params = {
+    //   app_name: 'My App Name',
+    //   scope: 'read_write',
+    //   user_id: 123,
+    //   return_url: 'https://diagnostic360.netlify.app/dashboard/app',
+    //   callback_url: 'https://diagnostic360.netlify.app/dashboard/app',
+    // };
 
-    const params = {
-      app_name: 'My App Name',
-      scope: 'read_write',
-      user_id: 123,
-      return_url: 'https://diagnostic360.netlify.app/dashboard/app',
-      callback_url: 'https://diagnostic360.netlify.app/dashboard/app',
-    };
+    // const queryString = querystring.stringify(params);
 
-    const queryString = querystring.stringify(params);
+    // const url = `${storeUrl}${endpoint}?${queryString}`.toString();
 
-    const url = `${storeUrl}${endpoint}?${queryString}`;
 
-    console.log(url);
+    // // Example of JSON posted with the API Keys
+    // const apiKeys = {
+    //   key_id: "1",
+    //   user_id: "123",
+    //   consumer_key: 'ck_72a265661d99bbcf4b37a5ac44a7780e54f948b5',
+    //   consumer_secret: 'cs_3b10064f35856f8d2ebf27e2ac8522c9480ee4e9',
+    //   key_permissions: 'read_write'
+    // };
 
-    // Example of JSON posted with the API Keys
-    const apiKeys = {
-      key_id: 1,
-      user_id: 123,
-      consumer_key: 'ck_72a265661d99bbcf4b37a5ac44a7780e54f948b5',
-      consumer_secret: 'cs_3b10064f35856f8d2ebf27e2ac8522c9480ee4e9',
-      key_permissions: 'read_write',
-    };
+    // // Using Axios to send the API keys
+    // axios.post(url, apiKeys)
+    //   .then(response => {
+    //     console.log('API Response:', response.data);
 
-    // Using Axios to send the API keys
-    axios.post(url, apiKeys)
-      .then(response => {
-        console.log('API Response:', response.data);
-      })
-      .catch(error => {
-        console.error('Error making API request:', error.message);
-      });
+    //     return response.data
+    //   })
+    //   .catch(error => {
+    //     console.error('Error making API request:', error.message);
+    //   });
+
+    // console.log("take ==> ", {
+    //   storeUrl, endpoint, queryString, apiKeys
+    // });
+
+    // const response = await axios.post(`https://diagnostic-swyu.onrender.com/auth/central-achat`, {
+    //   url, apiKeys
+    // });
+
+    // console.log(response.data);
 
 
     setLocalError('')
-    // store.dispatch(fetchEntreprises());
+    store.dispatch(fetchEntreprises());
 
-    // dispatch(login(email, password));
+    dispatch(login(email, password));
   };
 
   return (
@@ -91,7 +94,7 @@ export default function LoginForm() {
         {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
         {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
         {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
-
+       
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <TextField
