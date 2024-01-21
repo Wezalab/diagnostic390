@@ -20,6 +20,7 @@ import MesProduits from './pages/Produit/MesProduits';
 import MesCommandes from './pages/Commande/MesCommandes';
 import MesClients from './pages/Client/MesClients';
 import Rapport from './pages/Rapport/Rappor';
+import Evaluation from './pages/Evaluation/Evaluation';
 
 export default function Router() {
   // const { user } = useSelector((state) => state.auth);
@@ -43,10 +44,7 @@ export default function Router() {
         { path: 'commandes', element: <MesCommandes /> },
         { path: 'clients', element: <MesClients /> },
         { path: 'rapport', element: <Rapport /> },
-        
-        
-        
-        
+        { path: 'evaluation', element: <Evaluation /> }
       ],
     },
     {
