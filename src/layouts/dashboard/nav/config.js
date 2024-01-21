@@ -33,7 +33,7 @@ const navConfig = [
   },
   {
     title: 'Mes commandes',
-    path: '/dashboard/patient',
+    path: '/dashboard/commandes',
     icon: icon('ic_analytics'),
   },
   {

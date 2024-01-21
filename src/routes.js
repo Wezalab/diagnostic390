@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import AddPlanPage from './pages/plan/AddPlanPage';
 import ViewPlan from './pages/plan/ViewPlan';
 import MesProduits from './pages/Produit/MesProduits';
+import MesCommandes from './pages/Commande/MesCommandes';
 
 export default function Router() {
   // const { user } = useSelector((state) => state.auth);
@@ -37,6 +38,8 @@ export default function Router() {
         { path: 'plan', element: <PlanPage /> },
         { path: 'entreprise', element: <Entreprise /> },
         { path: 'produits', element: <MesProduits /> },
+        { path: 'commandes', element: <MesCommandes /> },
+        
         
         
       ],
