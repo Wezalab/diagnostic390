@@ -43,7 +43,7 @@ const navConfig = [
   },
   {
     title: 'Rapports',
-    path: '/dashboard/patient',
+    path: '/dashboard/rapport',
     icon: icon('ic_analytics'),
   }
 ];
