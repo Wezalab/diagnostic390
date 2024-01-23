@@ -22,7 +22,7 @@ export default function DashboardAppPage() {
 
   // const myBusinessPlan = businessPlanList.filter((obj) => obj.owner && obj.owner._id === user?.user?.user?.userId);
   const myBusinessPlan = businessPlanList;
-  console.log(myBusinessPlan);
+  // console.log(myBusinessPlan);
 
   useEffect(() => {
     store.dispatch(fetchBusinessPlans());

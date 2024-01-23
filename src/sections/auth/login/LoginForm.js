@@ -35,53 +35,7 @@ export default function LoginForm() {
       return;
     }
 
-    // const storeUrl = 'https://central-achat.alphanewgroup.com/';
-    // const endpoint = 'wc-auth/v1/authorize';
-
-    // const params = {
-    //   app_name: 'My App Name',
-    //   scope: 'read_write',
-    //   user_id: 123,
-    //   return_url: 'https://diagnostic360.netlify.app/dashboard/app',
-    //   callback_url: 'https://diagnostic360.netlify.app/dashboard/app',
-    // };
-
-    // const queryString = querystring.stringify(params);
-
-    // const url = `${storeUrl}${endpoint}?${queryString}`.toString();
-
-
-    // // Example of JSON posted with the API Keys
-    // const apiKeys = {
-    //   key_id: "1",
-    //   user_id: "123",
-    //   consumer_key: 'ck_72a265661d99bbcf4b37a5ac44a7780e54f948b5',
-    //   consumer_secret: 'cs_3b10064f35856f8d2ebf27e2ac8522c9480ee4e9',
-    //   key_permissions: 'read_write'
-    // };
-
-    // // Using Axios to send the API keys
-    // axios.post(url, apiKeys)
-    //   .then(response => {
-    //     console.log('API Response:', response.data);
-
-    //     return response.data
-    //   })
-    //   .catch(error => {
-    //     console.error('Error making API request:', error.message);
-    //   });
-
-    // console.log("take ==> ", {
-    //   storeUrl, endpoint, queryString, apiKeys
-    // });
-
-    // const response = await axios.post(`https://diagnostic-swyu.onrender.com/auth/central-achat`, {
-    //   url, apiKeys
-    // });
-
-    // console.log(response.data);
-
-
+   
     setLocalError('')
     store.dispatch(fetchEntreprises());
 

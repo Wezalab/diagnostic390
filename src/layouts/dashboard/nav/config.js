@@ -22,11 +22,6 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Evaluation',
-    path: '/dashboard/evaluation',
-    icon: icon('ic_analytics'),
-  },
-  {
     title: 'Mes produits/services',
     path: '/dashboard/produits',
     icon: icon('ic_analytics'),
@@ -39,6 +34,11 @@ const navConfig = [
   {
     title: 'Mes clients',
     path: '/dashboard/clients',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Evaluation',
+    path: '/dashboard/evaluation',
     icon: icon('ic_analytics'),
   },
   {

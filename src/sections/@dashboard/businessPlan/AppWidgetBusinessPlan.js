@@ -95,10 +95,10 @@ const StyledCardActionEdit = styled(Button)({
 });
 
 export default function AppWidgetBusinessPlan({ myBusinessPlans}) {
-  console.log("ok???",myBusinessPlans);
+  // console.log("ok???",myBusinessPlans);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  console.log("user", user);
+  // console.log("user", user);
 
   const cardsData = [
     {
