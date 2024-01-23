@@ -44,7 +44,7 @@ export default function DashboardLayout() {
 
       <Main>
         <Outlet />
-        <Typography variant="caption">© 2024 TRANSFORME. Tous droits réservés.</Typography>
+        <Typography sx={{padding:4}} variant="caption">© 2024 TRANSFORME. Tous droits réservés.</Typography>
       </Main>
     </StyledRoot>
   );
