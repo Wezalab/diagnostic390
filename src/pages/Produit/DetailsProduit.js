@@ -60,7 +60,6 @@ export default function DetailsProduit() {
             <Link href="/dashboard/add-produit" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
               <Typography variant="h6">Modifier</Typography>
-
             </Link>
           </Box>
         </Box>

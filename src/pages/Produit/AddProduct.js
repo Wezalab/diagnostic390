@@ -8,24 +8,23 @@ import {
   Button
 } from '@mui/material';
 
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 
 
 export default function AddProduct() {
-  // const location = useLocation();
-  // const { productObject } = location.state || {};
+  const location = useLocation();
+  const { productObject } = location.state || {};
 
   // eslint-disable-next-line no-unused-vars
-  // const [product, setProduct] = useState(productObject && JSON.parse(productObject));
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [fullDesc, setFullDesc] = useState('');  
-  const [price, setPrice] = useState(0);
-  const [qt, setQt] = useState(0);
+  const [product, setProduct] = useState(productObject && JSON.parse(productObject));
+  const [name, setName] = useState(product ? product.name:'');
+  const [desc, setDesc] = useState(product ? product.short_description:'');
+  const [fullDesc, setFullDesc] = useState(product ? product.description:'');  
+  const [price, setPrice] = useState(product ? product.price:0);
+  const [qt, setQt] = useState(product ? product.stock_quantity:0);
 
-  const [uploadStateCover, setUploadStateCover] = useState("initial");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(product ? product.images:[]);
   // categories
 
   useEffect(() => {
@@ -45,8 +44,6 @@ export default function AddProduct() {
             alt:"img",
             src: reader.result
           }])
-
-          setUploadStateCover("uploaded");
 
         } catch (error) {
           console.error("Error uploading image to Cloudinary:", error);

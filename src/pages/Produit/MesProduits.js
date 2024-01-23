@@ -6243,7 +6243,7 @@ export default function MesProduits() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  console.log("filteredUsers", filteredUsers);
+  // console.log("filteredUsers", filteredUsers);
 
 
   return (
@@ -6418,8 +6418,8 @@ export default function MesProduits() {
 
         <MenuItem  onClick={()=> {
           console.log(currentProduct);
-          // const params = { productObject: currentProduct };
-          // navigate('/dashboard/ecole-details',  { state: params });
+          const params = { productObject: currentProduct };
+          navigate('/dashboard/add-produit',  { state: params });
         }}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Modifier
@@ -6428,7 +6428,7 @@ export default function MesProduits() {
         <MenuItem sx={{color:'red'}}  onClick={()=> {
           console.log(currentProduct);
           // const params = { productObject: currentProduct };
-          // navigate('/dashboard/ecole-details',  { state: params });
+          // navigate('/dashboard/-details',  { state: params });
         }}>
           <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />
           Supprimer
