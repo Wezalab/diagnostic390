@@ -18,19 +18,20 @@ export default function NavSection({ data = [], ...other }) {
   
   let data2 = data.filter((val) => val.title === "Accueil");
 
-
-  if (user?.user?.role === "USER") {
-    data2 = data.filter((val) => val.title === "Accueil" && val.title === "plan" && val.title ==="entreprise");
+  if (user?.user?.user?.role === "USER") {
+    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
+  }else if (user?.user?.user?.role === "PME") {
+    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
+  }else if (user?.user?.user?.role === "PSDE") {
+    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes produits/services" || val.title ==="Mes commandes"  || val.title ==="Mes clients"  || val.title ==="Rapports" || val.title ==="Evaluation");
+  }else if (user?.user?.user?.role === "FEMME") {
+    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires");
+  }else {
+    data2 = data.filter((val) => val.title === "Accueil");
   }
 
-  if (user?.user?.role === "fournisseir") {
-    data2 = data.filter((val) => val.title === "Accueil" && val.title === "produits" && val.title ==="commandes"  && val.title ==="clients"  && val.title ==="rapport");
-  }
-
-  if (user?.user?.role === "coach") {
-    data2 = data.filter((val) => val.title === "evaluation" );
-  }
-
+  console.log("data2", data2);
+  console.log("data", data);
 
   return (
     <Box {...other}>

@@ -28,9 +28,8 @@ export default function Router() {
 
   const getRoutesBasedOnRole = (role) => {
     switch (role) {
-      case 'user':
+      case 'USER':
         return [
-          { element: <Navigate to="/dashboard/app" />, index: true },
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'profile', element: <UserProfile /> },
           { path: 'add-entreprise', element: <AddEntreprisePage /> },
@@ -40,17 +39,28 @@ export default function Router() {
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
         ];
-      case 'fournisseur':
+        case 'PME':
+          return [
+            { path: 'app', element: <DashboardAppPage /> },
+            { path: 'profile', element: <UserProfile /> },
+            { path: 'add-entreprise', element: <AddEntreprisePage /> },
+            { path: 'add-businessPlan', element: <AddPlanPage /> },
+            { path: 'view-venture', element: <ViewVenture /> },
+            { path: 'view-plan', element: <ViewPlan /> },
+            { path: 'plan', element: <PlanPage /> },
+            { path: 'entreprise', element: <Entreprise /> },
+          ];
+        case 'FEMME':
+          return [
+            { path: 'app', element: <DashboardAppPage /> },
+            { path: 'profile', element: <UserProfile /> },
+            { path: 'add-businessPlan', element: <AddPlanPage /> },
+            { path: 'view-plan', element: <ViewPlan /> },
+            { path: 'plan', element: <PlanPage /> },
+          ];
+      case 'PSDE':
         return [
-          { element: <Navigate to="/dashboard/app" />, index: true },
-          { path: 'produits', element: <MesProduits /> },
-          { path: 'commandes', element: <MesCommandes /> },
-          { path: 'clients', element: <MesClients /> },
-          { path: 'rapport', element: <Rapport /> },
-        ];
-      case 'coach':
-        return [
-          { element: <Navigate to="/dashboard/app" />, index: true },
+          { path: 'app', element: <DashboardAppPage /> },
           { path: 'evaluation', element: <Evaluation /> },
           { path: 'produits', element: <MesProduits /> },
           { path: 'commandes', element: <MesCommandes /> },
@@ -61,9 +71,15 @@ export default function Router() {
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
         ];
-      default:
+        case undefined:
         return [
           { path: 'app', element: <DashboardAppPage /> },
+          { path: 'view-plan', element: <ViewPlan /> },
+        ];
+       
+      default:
+        return [
+          { element: <Navigate to="/dashboard/app" />, index: true },
           { path: 'view-plan', element: <ViewPlan /> },
         ];
     }
@@ -75,7 +91,7 @@ export default function Router() {
     {
       path: '/dashboard',
       element: <DashboardLayout />,
-      children: getRoutesBasedOnRole(user?.user?.role),
+      children: getRoutesBasedOnRole(user?.user?.user?.role),
     },
     {
       path: 'login',
