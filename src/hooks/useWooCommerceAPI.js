@@ -33,12 +33,16 @@ const useWooCommerceAPI = () => {
 
   // Function to fetch products
   const fetchProducts = async () => {
+    setLoading(true);
     try {
       const response = await api.get('/products');
       setProducts(response.data);
     } catch (error) {
       setError(error);
+      setLoading(false);
     }
+    setLoading(false);
+
   };
 
   // Function to fetch a specific product by ID
@@ -88,6 +92,7 @@ const useWooCommerceAPI = () => {
   }, []);
 
   return {
+    fetchProducts,
     customers,
     products,
     loading,
