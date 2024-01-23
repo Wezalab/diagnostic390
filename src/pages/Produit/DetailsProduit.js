@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 import Label from '../../components/label';
 
@@ -41,7 +41,7 @@ export default function DetailsProduit() {
   return (
     <>
       <Helmet>
-        <title> TRANSFORME | Mes Produits </title>
+        <title> TRANSFORME | Details d'un produit </title>
       </Helmet>
 
       <Container >
@@ -57,15 +57,13 @@ export default function DetailsProduit() {
 
 
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Link href="#" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+            <Link href="/dashboard/add-produit" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
               <Typography variant="h6">Modifier</Typography>
 
             </Link>
           </Box>
         </Box>
-
-
 
         <Grid container spacing={4}>
           <Grid item xs={7}>
@@ -140,12 +138,8 @@ export default function DetailsProduit() {
         <Paper sx={{padding:4, marginTop: 3}}>
             <Typography sx={{marginBottom: 3}} variant='h5'>Description</Typography>
             <Typography variant='caption'>{product.description?.split('<p>')[1]}</Typography>
-
-            
           </Paper>
-
       </Container>
-
     </>
   );
 }

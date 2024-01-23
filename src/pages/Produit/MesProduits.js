@@ -100,14 +100,6 @@ export default function MesProduits() {
     setOpen(null);
   };
 
-  // const handleOpenModaEcole = () => {
-  //   setEcoleModal(true);
-  // };
-
-  // const handleCloseModaEcole = () => {
-  //   setEcoleModal(null);
-  // };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -174,7 +166,7 @@ export default function MesProduits() {
           </Typography>
 
           <LoadingButton sx={{ textTransform: "inherit" }} size="large" variant="contained"
-            onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}>
+            onClick={() => navigate('/dashboard/add-produit', { replace: true })}>
             Ajouter un produit / Service
           </LoadingButton>
         </Box>
@@ -263,7 +255,7 @@ export default function MesProduits() {
                           </Typography>
 
                           <Typography variant="body2">
-                          Aucun résultat trouvé pour &nbsp;
+                            Aucun résultat trouvé pour &nbsp;
                             <strong>&quot;{filterName}&quot;</strong>.
                             <br /> Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.
                           </Typography>
@@ -333,7 +325,7 @@ export default function MesProduits() {
 
         <MenuItem  onClick={()=> {
           console.log(currentProduct);
-          const params = { productObject: currentProduct };
+          // const params = { productObject: currentProduct };
           // navigate('/dashboard/ecole-details',  { state: params });
         }}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
@@ -342,7 +334,7 @@ export default function MesProduits() {
 
         <MenuItem sx={{color:'red'}}  onClick={()=> {
           console.log(currentProduct);
-          const params = { productObject: currentProduct };
+          // const params = { productObject: currentProduct };
           // navigate('/dashboard/ecole-details',  { state: params });
         }}>
           <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />

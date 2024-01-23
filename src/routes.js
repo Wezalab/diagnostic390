@@ -23,6 +23,7 @@ import MesClients from './pages/Client/MesClients';
 import Rapport from './pages/Rapport/Rappor';
 import Evaluation from './pages/Evaluation/Evaluation';
 import DetailsProduit from './pages/Produit/DetailsProduit';
+import AddProduct from './pages/Produit/AddProduct';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -72,6 +73,8 @@ export default function Router() {
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'view-produit', element: <DetailsProduit /> },
+          { path: 'add-produit', element: <AddProduct/> },
+          
         ];
         case undefined:
         return [
