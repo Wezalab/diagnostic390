@@ -15,13 +15,27 @@ NavSection.propTypes = {
 export default function NavSection({ data = [], ...other }) {
 
   const { user } = useSelector((state) => state.auth);
-  const data2 = data.filter((val) => val.title !== "Accueil")
-  console.log("user----99,", user, data2);
+  
+  let data2 = data.filter((val) => val.title === "Accueil");
+
+
+  if (user?.user?.role === "USER") {
+    data2 = data.filter((val) => val.title === "Accueil" && val.title === "plan" && val.title ==="entreprise");
+  }
+
+  if (user?.user?.role === "fournisseir") {
+    data2 = data.filter((val) => val.title === "Accueil" && val.title === "produits" && val.title ==="commandes"  && val.title ==="clients"  && val.title ==="rapport");
+  }
+
+  if (user?.user?.role === "coach") {
+    data2 = data.filter((val) => val.title === "evaluation" );
+  }
+
 
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {data.map((item) => (
+        {data2.map((item) => (
           <NavItem key={item.title} item={item} />
         ))}
 
