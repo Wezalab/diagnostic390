@@ -1,32 +1,30 @@
 import { Helmet } from 'react-helmet-async';
 import React, { useEffect, useState } from 'react'
-import { filter } from 'lodash';
 
 // @mui
 import {
-  Container, Box, Typography, Link
+  Container, Box, Typography, Link, Grid, CardMedia, Paper, Rating
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
 import Iconify from '../../components/iconify';
+import Label from '../../components/label';
+
 
 
 export default function DetailsProduit() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { productObject } = location.state || {};
 
-  const {
-    products,
-    loading,
-    fetchProducts
-    // error,
-  } = useWooCommerceAPI();
-
+    // eslint-disable-next-line no-unused-vars
+   const [product, setProduct] = useState(productObject && JSON.parse(productObject));
+   const [value, setValue] = useState(2);
 
   useEffect(() => {
-    // store.dispatch(fetchBusinessPlans());
-    fetchProducts()
+ 
   }, []);
 
 
@@ -54,6 +52,39 @@ export default function DetailsProduit() {
           </Link>
          </Box>
         </Box>
+
+        
+        
+        <Grid container spacing={4}>
+          <Grid item xs={7}>
+            <Paper>
+              <CardMedia
+                component="img"
+                image={product.images[0]?.src}
+                alt="Prod"
+              />
+            </Paper>
+
+         
+          </Grid>
+          <Grid item xs={5}>
+          {/* eslint-disable camelcase  */}
+          
+           <Typography paddingBottom={2} variant="h6"><Label color={(product.stock_status === 'outofstock' && 'error') || 'success'}>
+            {product.stock_status === 'outofstock' ? "En rupture de stock": "En stock"}</Label> </Typography>
+           <Typography variant='h5'>{product.name}</Typography>
+           <Rating
+              name="simple-controlled"
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+              }}
+            />
+           <Typography variant='h5'>{product.price} $</Typography>
+           <Typography color="grey" variant='caption'>{product?.short_description}</Typography>
+          </Grid>
+         
+        </Grid>
 
       </Container>
     
