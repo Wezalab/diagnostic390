@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import querystring from 'querystring';
-
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// import axios from 'axios';
+import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
+
 
 import Iconify from '../../../components/iconify';
 import { login } from '../../../redux/loginAction';
@@ -17,12 +16,18 @@ export default function LoginForm() {
   const dispatch = useDispatch();
 
   const { error, isLoading } = useSelector((state) => state.auth);
+
+  const {
+    customers,
+    // loading,
+    // error,
+  } = useWooCommerceAPI();
+
   const [localError, setLocalError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -35,6 +40,7 @@ export default function LoginForm() {
       return;
     }
 
+    console.log("customers", customers);
    
     setLocalError('')
     store.dispatch(fetchEntreprises());
