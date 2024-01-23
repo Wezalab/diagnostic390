@@ -13,6 +13,8 @@ import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
 import { ProductListHead, ProductListToolbar } from '../../sections/@dashboard/product';
 import Scrollbar from '../../components/scrollbar';
 import Iconify from '../../components/iconify';
+import Label from '../../components/label/Label';
+
 
 
 
@@ -56,7 +58,7 @@ export default function MesProduits() {
     { id: 'date_created', label: 'Date de creation', alignRight: false },
     // { id: 'stock', label: 'Stock', alignRight: false },
     { id: 'price', label: 'Prix', alignRight: false },
-    { id: 'status', label: 'Etat', alignRight: false },
+    { id: 'stock_status', label: 'Stock', alignRight: false },
     { id: '' },
   ];
 
@@ -224,11 +226,12 @@ export default function MesProduits() {
 
                          <TableCell align="left">{date_created}</TableCell>
 
-                         {/* <TableCell align="left">{stock_quantity}</TableCell> */}
 
                          <TableCell align="left">{price}</TableCell>
 
-                         <TableCell align="left">{stock_status}</TableCell>
+                        
+                        <TableCell align="left"><Label color={(stock_status === 'outofstock' && 'error') || 'success'}>{stock_status}</Label> </TableCell>
+
                         
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={(e)=>{

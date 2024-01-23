@@ -35,7 +35,7 @@ const useWooCommerceAPI = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/products');
+      const response = await api.get('/products?per_page=100');
       setProducts(response.data);
     } catch (error) {
       setError(error);
