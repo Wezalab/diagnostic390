@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Grid, Breadcrumbs, TextField,Card, //  CardMedia, Paper, Rating, Divider, Button, ImageList, ImageListItem,
+  Container, Box, Typography, Link, Grid, Breadcrumbs, TextField, Card, //  CardMedia, Paper, Rating, Divider, Button, ImageList, ImageListItem,
   CardMedia,
   Button
 } from '@mui/material';
@@ -18,12 +18,15 @@ export default function AddProduct() {
 
   // eslint-disable-next-line no-unused-vars
   // const [product, setProduct] = useState(productObject && JSON.parse(productObject));
-  const [name,setName] = useState('');
-  const [desc,setDesc] = useState('');
-  const [fullDesc,setFullDesc] = useState('');
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [fullDesc, setFullDesc] = useState('');  
+  const [price, setPrice] = useState(0);
+  const [qt, setQt] = useState(0);
+
   const [uploadStateCover, setUploadStateCover] = useState("initial");
   const [images, setImages] = useState([]);
-
+  // categories
 
   useEffect(() => {
   }, []);
@@ -35,9 +38,13 @@ export default function AddProduct() {
       reader.onloadend = async (e) => {
         try {
           console.log("reader.result", reader.result);
-         
+
           // setImageCover( reader.result);
-          setImages([...images, reader.result])
+          setImages([...images, {
+            name:"img",
+            alt:"img",
+            src: reader.result
+          }])
 
           setUploadStateCover("uploaded");
 
@@ -51,7 +58,7 @@ export default function AddProduct() {
 
   const onDeletePic = (key) => {
     console.log(key);
-    setImages([...images.filter((_img, k)=> k !== key)])
+    setImages([...images.filter((_img, k) => k !== key)])
   }
 
   return (
@@ -81,7 +88,7 @@ export default function AddProduct() {
 
 
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Link href="#" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+            <Link href="#" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
               <Typography variant="h6">Modifier</Typography>
 
@@ -93,34 +100,23 @@ export default function AddProduct() {
           <Grid item xs={5}>
             <Typography variant='h6'>Details de votre product</Typography>
             <Typography variant="caption">Titre, description, image,...</Typography>
-            
+
 
           </Grid>
           <Grid item xs={7}>
-            <Card sx={{ padding: 4,  }}>
-              <TextField sx={{width: "100%", marginBottom:2}} name="name" label="Nom du produit" value={name} onChange={(e) => setName(e.target.value)} />
-              <TextField multiline rows={3} sx={{width: "100%", marginBottom:2}} name="desc" label="Description courte du produit" value={desc} onChange={(e) => setDesc(e.target.value)} />
+            <Card sx={{ padding: 4, }}>
+              <TextField sx={{ width: "100%", marginBottom: 2 }} name="name" label="Nom du produit" value={name} onChange={(e) => setName(e.target.value)} />
+              <TextField multiline rows={3} sx={{ width: "100%", marginBottom: 2 }} name="desc" label="Description courte du produit" value={desc} onChange={(e) => setDesc(e.target.value)} />
               <Typography variant="subtitle2">Description</Typography>
-              <TextField multiline rows={5} sx={{width: "100%", marginBottom:2, marginTop:1}} name="fullDesc" label="Description complete du produit" value={fullDesc} onChange={(e) => setFullDesc(e.target.value)} />
+              <TextField multiline rows={5} sx={{ width: "100%", marginBottom: 2, marginTop: 1 }} name="fullDesc" label="Description complete du produit" value={fullDesc} onChange={(e) => setFullDesc(e.target.value)} />
 
               <Card sx={{ position: "relative" }}>
-                {/* {(uploadStateCover === "uploaded" ?
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={imageCover}
-                    alt="Uploaded Image"
-                  /> :
-                 
-                )} */}
-                 <CardMedia
-                    component="img"
-                    height="194"
-                    image={"../../../assets/empty.jpg"}
-                    alt="Uploaded Image"
-                  />
-
-
+                <CardMedia
+                  component="img"
+                  height="194"
+                  image={"../../../assets/empty.jpg"}
+                  alt="Uploaded Image"
+                />
                 <div style={{ textAlign: 'center', margin: '10px' }}>
                   <label htmlFor="contained-button-fileCover">
                     <input
@@ -130,32 +126,48 @@ export default function AddProduct() {
                       type="file"
                       onChange={(e) => handleUploadClickCover(e)}
                     />
-                    <Button sx={{ textTransform: "inherit",marginTop:-20 }} variant="contained" component="span">
+                    <Button sx={{ textTransform: "inherit", marginTop: -20 }} variant="contained" component="span">
                       Téléverser une image
                     </Button>
-                    
-                    
+
                   </label>
-                  <Box sx={{display:'flex', flexDirection: "row"}}>
-                      {
-                        images && images.map((img, key) => {
-                          return <Card sx={{marginRight:1,  position: "relative"}} onClick={()=>onDeletePic(key)} >
-                            <Box sx={{position: 'absolute', backgroundColor: "#000", opacity:0.7, 
-                            display:'flex', justifyContent:'center', alignItems:'center',
-                            borderRadius: 5, right:0, width: 30,  height: 30 }}>
-                              <Iconify  sx={{color:"#fff"}} icon={'eva:edit-fill'} />
-                            </Box>
-                            <img style={{width: 90}} src={img} alt={key} />
-                          </Card>
-                        })
-                      }
-                    </Box>
+                  <Box sx={{ display: 'flex', flexDirection: "row" }}>
+                    {
+                      images && images.map((img, key) => {
+                        return <Card sx={{ marginRight: 1, position: "relative" }} onClick={() => onDeletePic(key)} >
+                          <Box sx={{
+                            position: 'absolute', backgroundColor: "#000", opacity: 0.7,
+                            display: 'flex', justifyContent: 'center', alignItems: 'center',
+                            borderRadius: 5, right: 0, width: 30, height: 30
+                          }}>
+                            <Iconify sx={{ color: "#fff" }} icon={'eva:edit-fill'} />
+                          </Box>
+                          <img style={{ width: 90 }} src={img.src} alt={key} />
+                        </Card>
+                      })
+                    }
+                  </Box>
                 </div>
-
               </Card>
-            
             </Card>
+          </Grid>
 
+          <Grid item xs={5}>
+            <Typography variant='h6'>Caracteristique</Typography>
+            <Typography variant="caption">Prix, couleur, demension,...</Typography>
+          </Grid>
+
+          <Grid item xs={7}>
+            <Card sx={{ padding: 4,display:'flex', justifyContent:'space-between'}}>
+
+              <Grid  xs={5}>
+                  <TextField sx={{ width: "100%", marginBottom: 2 }} name="prix" label="Prix du produit" value={price} onChange={(e) => setPrice(e.target.value)} />
+              </Grid>
+
+              <Grid  xs={5}>
+                  <TextField sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
+              </Grid>
+            </Card>
 
           </Grid>
         </Grid>
