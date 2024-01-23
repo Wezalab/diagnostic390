@@ -41,6 +41,7 @@ import { createEntreprise } from '../../../redux/entrepriseReducer';
 import { register } from '../../../redux/registerAction';
 
 import Iconify from '../../../components/iconify';
+import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -85,6 +86,16 @@ export default function RegisterForm() {
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
+  const {
+    // customers,
+    // products,
+    loading,
+    // error,
+    // fetchProductById,
+    postCustomer,
+  } = useWooCommerceAPI();
+
+  const [errorWooCommerce, setErrorWooCommerce] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
@@ -235,21 +246,37 @@ export default function RegisterForm() {
         // Dispatch registration action here
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
-        const role = catSelector === 1 ? 'user' : catSelector === 2 ? 'pme' : catSelector === 3 ? 'femme' : 'psde';
+        const role = catSelector === 1 ? 'USER' : catSelector === 2 ? 'PME' : catSelector === 3 ? 'FEMME' : 'PSDE';
 
-        dispatch(register(name, email, phone, sex, password, role))
+        // Call WooCommerceAPI
+        postCustomer({ "first_name": name, name, email, password })
           .then((data) => {
-            console.log("data", data);
-            setLatestCreatedUser(data.userId)
-          })
-          .catch((error) => {
-            console.error('Registration error:', error);
 
+            // If successfully create a user to woocommerce
+            if (data === "Création réussie") {
+              setErrorWooCommerce('');
+              dispatch(register(name, email, phone, sex, password, role))
+                .then((data) => {
+                  console.log("data", data);
+                  setLatestCreatedUser(data.userId)
+                })
+                .catch((error) => {
+                  console.error('Registration error:', error);
+                });
+            }
+            else {
+              setErrorWooCommerce(data)
+            }
+
+          })
+          .catch((e) => {
+            console.error('Error creating customer:', e.message);
           });
+
+
+
         console.log();
         console.log("registeredUser2", await registeredUser);
-
-
       }
     } catch (e) {
       console.log("errorRegister", errorRegister);
@@ -291,8 +318,8 @@ export default function RegisterForm() {
           "project_vision": entrepriseVision,
           "valeur": entrepriseValue,
           "stage": entrepriseStage,
-          "logo":'',
-          "cover":'',
+          "logo": '',
+          "cover": '',
           // "objectifs": "Project Objectives",
           // "smart_ip": "Smart IP",
           // "objectif_social": "Social Objective",
@@ -316,7 +343,10 @@ export default function RegisterForm() {
             console.log("data", errorCreateEntreprise, data);
 
             if (!errorCreateEntreprise) {
-              navigate('/dashboard', { replace: true });
+              
+              // navigate('/dashboard', { replace: true });
+              navigate('/login', { replace: true });
+
             }
           })
           .catch((error) => {
@@ -625,11 +655,12 @@ export default function RegisterForm() {
                             helperText={confirmPasswordError}
                           />
                           {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
+                          {errorWooCommerce && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorWooCommerce.split('<a ')[0]}</Typography>}
 
                         </Stack>
 
 
-                        <LoadingButton loading={isLoadingRegister} disabled={isLoadingRegister} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+                        <LoadingButton loading={isLoadingRegister || loading} disabled={isLoadingRegister || loading} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                           S'enregistrer
                         </LoadingButton>
                         {/* {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>} */}

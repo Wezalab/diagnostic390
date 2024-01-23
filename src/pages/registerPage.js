@@ -43,7 +43,7 @@ export default function RegisterPage() {
       </Helmet>
 
       <StyledRoot>
-        <Container maxWidth="sm">
+        <Container maxWidth="xl">
           <StyledContent>
             <Box
               component="img"
