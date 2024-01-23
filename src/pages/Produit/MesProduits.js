@@ -325,7 +325,7 @@ export default function MesProduits() {
         <MenuItem  onClick={()=> {
           console.log(currentProduct);
           const params = { productObject: currentProduct };
-          // navigate('/dashboard/ecole-details',  { state: params });
+          navigate('/dashboard/view-produit',  { state: params });
         }}>
           <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
           Voir Details

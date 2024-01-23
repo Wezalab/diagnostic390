@@ -22,6 +22,7 @@ import MesCommandes from './pages/Commande/MesCommandes';
 import MesClients from './pages/Client/MesClients';
 import Rapport from './pages/Rapport/Rappor';
 import Evaluation from './pages/Evaluation/Evaluation';
+import DetailsProduit from './pages/Produit/DetailsProduit';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -70,6 +71,7 @@ export default function Router() {
           { path: 'view-plan', element: <ViewPlan /> },
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
+          { path: 'view-produit', element: <DetailsProduit /> },
         ];
         case undefined:
         return [
