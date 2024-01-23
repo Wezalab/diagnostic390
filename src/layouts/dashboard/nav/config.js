@@ -23,10 +23,29 @@ const navConfig = [
   },
   {
     title: 'Evaluation',
-    path: '/dashboard/patient',
+    path: '/dashboard/evaluation',
     icon: icon('ic_analytics'),
   },
-  
+  {
+    title: 'Mes produits/services',
+    path: '/dashboard/produits',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Mes commandes',
+    path: '/dashboard/commandes',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Mes clients',
+    path: '/dashboard/clients',
+    icon: icon('ic_analytics'),
+  },
+  {
+    title: 'Rapports',
+    path: '/dashboard/rapport',
+    icon: icon('ic_analytics'),
+  }
 ];
 
 export default navConfig;
