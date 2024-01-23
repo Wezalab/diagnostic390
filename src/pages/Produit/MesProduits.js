@@ -4,7 +4,7 @@ import { filter } from 'lodash';
 
 // @mui
 import {
-  Container, Box, Typography, Card, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, Stack, IconButton, Paper, TablePagination, Avatar, CircularProgress,
+  Container, Box, Typography, Card, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, Stack, IconButton, Paper, TablePagination, Avatar, CircularProgress, Popover, MenuItem,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -56,7 +56,6 @@ export default function MesProduits() {
   const TABLE_HEAD = [
     { id: 'name', label: 'Produit', alignRight: false },
     { id: 'date_created', label: 'Date de creation', alignRight: false },
-    // { id: 'stock', label: 'Stock', alignRight: false },
     { id: 'price', label: 'Prix', alignRight: false },
     { id: 'stock_status', label: 'Stock', alignRight: false },
     { id: '' },
@@ -92,9 +91,9 @@ export default function MesProduits() {
   }
 
 
-  const handleOpenMenu = (event, ecoleObject) => {
+  const handleOpenMenu = (event, productObject) => {
     setOpen(event.currentTarget);
-    currentProduct(JSON.stringify(ecoleObject))
+    setCurrentProduct(JSON.stringify(productObject))
   };
 
   const handleCloseMenu = () => {
@@ -260,13 +259,13 @@ export default function MesProduits() {
                           }}
                         >
                           <Typography variant="h6" paragraph>
-                            Not found
+                          Pas trouvé
                           </Typography>
 
                           <Typography variant="body2">
-                            No results found for &nbsp;
+                          Aucun résultat trouvé pour &nbsp;
                             <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete words.
+                            <br /> Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.
                           </Typography>
                         </Paper>
                       </TableCell>
@@ -305,6 +304,51 @@ export default function MesProduits() {
         </Card>
 
       </Container>
+      <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem  onClick={()=> {
+          console.log(currentProduct);
+          const params = { productObject: currentProduct };
+          // navigate('/dashboard/ecole-details',  { state: params });
+        }}>
+          <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
+          Voir Details
+        </MenuItem>
+
+        <MenuItem  onClick={()=> {
+          console.log(currentProduct);
+          const params = { productObject: currentProduct };
+          // navigate('/dashboard/ecole-details',  { state: params });
+        }}>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          Modifier
+        </MenuItem>
+
+        <MenuItem sx={{color:'red'}}  onClick={()=> {
+          console.log(currentProduct);
+          const params = { productObject: currentProduct };
+          // navigate('/dashboard/ecole-details',  { state: params });
+        }}>
+          <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />
+          Supprimer
+        </MenuItem>
+      </Popover>
 
     </>
   );
