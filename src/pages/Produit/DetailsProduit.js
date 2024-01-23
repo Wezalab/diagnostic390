@@ -3,27 +3,24 @@ import React, { useEffect, useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Grid, CardMedia, Paper, Rating, Divider, Button
+  Container, Box, Typography, Link, Grid, CardMedia, Paper, Rating, Divider, Button, ImageList, ImageListItem,
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
 import Iconify from '../../components/iconify';
 import Label from '../../components/label';
 
 
-
 export default function DetailsProduit() {
-  const navigate = useNavigate();
   const location = useLocation();
   const { productObject } = location.state || {};
 
   // eslint-disable-next-line no-unused-vars
   const [product, setProduct] = useState(productObject && JSON.parse(productObject));
   const [value, setValue] = useState(2);
-  const [dispo, setDispo] = useState(0);  
-  const [stock, setStock] = useState(1);
+  const [dispo, setDispo] = useState(0);
+  const [stock, setStock] = useState(0);
 
   useEffect(() => {
     setDispo(product?.stock_quantity)
@@ -31,7 +28,7 @@ export default function DetailsProduit() {
 
   const handleIncrement = () => {
     if (stock < (dispo)) {
-    setStock(prevStock => prevStock + 1);
+      setStock(prevStock => prevStock + 1);
     }
   };
 
@@ -50,17 +47,20 @@ export default function DetailsProduit() {
       <Container >
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginBottom: 5 }} >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Iconify icon={'ion:arrow-back-sharp'} sx={{ mr: 2 }} />
-            <Link href="#" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-              Retour
+           
+            <Link href="/dashboard/produits" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+              <Iconify icon={'ion:arrow-back-sharp'} sx={{ mr: 2 }} />
+            <Typography variant="h6">Retour</Typography>
+
             </Link>
           </Box>
 
 
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-            <Link href="#" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-              Modifier
+            <Link href="#" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+              <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+              <Typography variant="h6">Modifier</Typography>
+
             </Link>
           </Box>
         </Box>
@@ -76,6 +76,20 @@ export default function DetailsProduit() {
                 alt="Prod"
               />
             </Paper>
+
+            <ImageList sx={{ width: '100%', paddingTop: 2 }} cols={10} >
+              {product.images.map((item) => (
+                <ImageListItem key={item.img}>
+                  <img
+                    srcSet={`${item.src}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${item.src}?w=164&h=164&fit=crop&auto=format`}
+                    alt={item.name}
+                    style={{ border: '1px solid #ddd', borderRadius: 5, cursor: 'pointer' }}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
 
 
           </Grid>
@@ -93,29 +107,42 @@ export default function DetailsProduit() {
               }}
             />
             <Typography variant='h5'>{product.price} $</Typography>
-            <Typography color="grey" variant='caption'>{product?.short_description}</Typography>
+            <Typography color="grey" variant='caption'>{product?.short_description?.split('<p>')[1]}</Typography>
 
             <Divider sx={{ marginTop: 3 }} />
 
             <Box sx={{ display: 'flex', justifyContent: "space-between", marginTop: 3 }}>
               <Typography>Quantité</Typography>
-              <Box sx={{display:'flex', flexDirection:'column'}}> 
-                  <Box sx={{ border: '1px #bbb solid', borderRadius: 5, display: 'inline-flex', alignItems: 'center' }}>
-                    <Button variant="text" onClick={handleDecrement}>-</Button>
-                    <Typography variant="caption" sx={{ paddingLeft: 1, paddingRight: 1 }}>{stock}</Typography>
-                    <Button variant="text" onClick={handleIncrement}>+</Button>
-                  </Box>
-                <Typography sx={{marginTop: 1, alignSelf:'flex-end' }} variant="caption">Stock disponible: {dispo-stock}</Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ border: '1px #bbb solid', borderRadius: 5, display: 'inline-flex', alignItems: 'center' }}>
+                  <Button variant="text" onClick={handleDecrement}>-</Button>
+                  <Typography variant="caption" sx={{ paddingLeft: 1, paddingRight: 1 }}>{stock}</Typography>
+                  <Button variant="text" onClick={handleIncrement}>+</Button>
+                </Box>
+                <Typography sx={{ marginTop: 1, alignSelf: 'flex-end' }} variant="caption">Stock disponible: {dispo - stock}</Typography>
               </Box>
             </Box>
 
 
             <Divider sx={{ marginTop: 3 }} />
 
+            <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 3 }}>
+              <Button sx={{ backgroundColor: "#0063cc" }} size="large" variant="contained" startIcon={<AddShoppingCartIcon />}>
+                Ajouter au panier
+              </Button>
+              <Button size="large" variant="contained" >
+                Acheter maintenant
+              </Button>
+            </Box>
 
           </Grid>
-
         </Grid>
+        <Paper sx={{padding:4, marginTop: 3}}>
+            <Typography sx={{marginBottom: 3}} variant='h5'>Description</Typography>
+            <Typography variant='caption'>{product.description?.split('<p>')[1]}</Typography>
+
+            
+          </Paper>
 
       </Container>
 
