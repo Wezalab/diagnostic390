@@ -1,24 +1,54 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Grid, Breadcrumbs, TextField, Card,
+  Container, Box, Typography, Link, Breadcrumbs, TextField, Card,
   CardMedia,
   InputAdornment,
   FormControl,
   InputLabel,
-  OutlinedInput
+  OutlinedInput,
+  ListItemText,
+  Select,
+  MenuItem,
+  Checkbox
 } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 import { LoadingButton } from '@mui/lab';
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
+import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 
 export default function AddProduct() {
   const location = useLocation();
   const { productObject } = location.state || {};
+
+  const {
+    categories,
+    fetchCategories
+    // error,
+  } = useWooCommerceAPI();
+  console.log("categories", categories);
+
+    //  react-hooks/exhaustive-deps
+    useEffect(() => {
+      fetchCategories();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   // eslint-disable-next-line no-unused-vars
   const [product, setProduct] = useState(productObject && JSON.parse(productObject));
@@ -26,14 +56,24 @@ export default function AddProduct() {
   const [desc, setDesc] = useState(product ? product.short_description : '');
   const [fullDesc, setFullDesc] = useState(product ? product.description : '');
   const [price, setPrice] = useState(product ? product.price : 0);
+  const [pricePromo, setPricePromo] = useState(product ? product.price : 0);
   const [qt, setQt] = useState(product ? product.stock_quantity : 0);
 
   const [images, setImages] = useState(product ? product.images : []);
   const [loadPic, setLoadPic] = useState(false);
 
   // categories
+  const [categoryName, setCategoryName] = useState([]);
 
-
+  const handleChangeCat = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setCategoryName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
   const handleUploadClickCover = (event) => {
     const file = event.target.files[0];
@@ -200,16 +240,16 @@ export default function AddProduct() {
           </Grid>
 
           <Grid item xs={4}>
-            <Typography variant='h6'>Caracteristique</Typography>
+            <Typography variant='h6'>Caractéristique</Typography>
             <Typography variant="caption">Prix, couleur, demension,...</Typography>
           </Grid>
 
           <Grid item xs={8}>
-            <Card sx={{ padding: 4, display: 'flex', justifyContent: 'space-between' }}>
-
-              <Grid xs={5}>
-                <FormControl fullWidth sx={{ m: 1 }}>
-                  <InputLabel htmlFor="outlined-adornment-amount">Prix du produit</InputLabel>
+            <Card  sx={{ flexGrow: 1, padding: 4, flexDirection:'row', display:'flex' }}>
+              <Grid container spacing={2}>
+              <Grid xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="outlined-adornment-amount">Prix du produit ($)</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-amount"
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -219,10 +259,47 @@ export default function AddProduct() {
                 </FormControl>
               </Grid>
 
-              <Grid xs={5}>
+              <Grid xs={6}>
 
                 <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
+              </Grid>
+
+              <Grid xs={6}>
+                <FormControl fullWidth >
+                  <InputLabel htmlFor="outlined-adornment-amount">Prix promo ($)</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                    label="Prix promo ($)"
+                    value={pricePromo} onChange={(e) => setPricePromo(e.target.value)}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid xs={6}>
+                <FormControl sx={{ width: '100%' }}>
+                  <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={categoryName}
+                    onChange={handleChangeCat}
+                    input={<OutlinedInput label="Categories" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {categories.map((cat) => (
+                      <MenuItem key={cat.id} value={cat.name}>
+                        <Checkbox checked={categoryName.indexOf(cat.name) > -1} />
+                        <ListItemText primary={cat.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                
+              </Grid>
               </Grid>
              
             </Card>

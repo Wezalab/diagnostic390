@@ -52,6 +52,7 @@ export default function MesProduits() {
     { id: 'date_created', label: 'Date de creation', alignRight: false },
     { id: 'price', label: 'Prix', alignRight: false },
     { id: 'stock_status', label: 'Stock', alignRight: false },
+    { id: 'stock_quantity', label: 'Quantité', alignRight: false },
     { id: '' },
   ];
 
@@ -181,7 +182,7 @@ export default function MesProduits() {
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     /* eslint-disable camelcase */
 
-                    const { id, name,  date_created, price, categories, stock_status, images } = row;
+                    const { id, name,  date_created, price, categories, stock_status, images, stock_quantity } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -199,7 +200,7 @@ export default function MesProduits() {
                               {name}
                             </Typography>
                             <Typography variant="caption" noWrap>
-                              {categories[0]?.name}
+                              {categories?.map(item => item.name)?.join(', ')}
                             </Typography>
                             </Box>
                           </Stack>
@@ -212,7 +213,8 @@ export default function MesProduits() {
 
                         
                         <TableCell align="left"><Label color={(stock_status === 'outofstock' && 'error') || 'success'}>{stock_status}</Label> </TableCell>
-
+                        <TableCell align="left">{stock_quantity}</TableCell>
+                        
                         
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={(e)=>{
@@ -305,7 +307,7 @@ export default function MesProduits() {
         }}
       >
         <MenuItem  onClick={()=> {
-          console.log(currentProduct);
+          // console.log(currentProduct);
           const params = { productObject: currentProduct };
           navigate('/dashboard/view-produit',  { state: params });
         }}>
@@ -314,7 +316,7 @@ export default function MesProduits() {
         </MenuItem>
 
         <MenuItem  onClick={()=> {
-          console.log(currentProduct);
+          // console.log(currentProduct);
           const params = { productObject: currentProduct };
           navigate('/dashboard/add-produit',  { state: params });
         }}>
@@ -323,7 +325,7 @@ export default function MesProduits() {
         </MenuItem>
 
         <MenuItem sx={{color:'red'}}  onClick={()=> {
-          console.log(currentProduct);
+          // console.log(currentProduct);
           // const params = { productObject: currentProduct };
           // navigate('/dashboard/-details',  { state: params });
         }}>

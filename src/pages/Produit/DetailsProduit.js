@@ -23,6 +23,8 @@ export default function DetailsProduit() {
   const [dispo, setDispo] = useState(0);
   const [stock, setStock] = useState(0);
 
+  console.log(product);
+
 
   useEffect(() => {
     setDispo(product?.stock_quantity);
@@ -103,6 +105,8 @@ export default function DetailsProduit() {
             <Typography paddingBottom={2} variant="h6"><Label color={(product.stock_status === 'outofstock' && 'error') || 'success'}>
               {product.stock_status === 'outofstock' ? "En rupture de stock" : "En stock"}</Label> </Typography>
             <Typography variant='h5'>{product.name}</Typography>
+            <Typography sx={{width: '100%', display:'block'}} variant='caption'>{product?.categories?.map(item => item.name)?.join(', ')}</Typography>
+            
             <Rating
               name="simple-controlled"
               value={value}

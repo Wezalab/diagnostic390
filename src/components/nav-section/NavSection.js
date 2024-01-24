@@ -30,8 +30,8 @@ export default function NavSection({ data = [], ...other }) {
     data2 = data.filter((val) => val.title === "Accueil");
   }
 
-  console.log("data2", data2);
-  console.log("data", data);
+  // console.log("data2", data2);
+  // console.log("data", data);
 
   return (
     <Box {...other}>

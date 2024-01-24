@@ -4,6 +4,7 @@ import axios from 'axios';
 const useWooCommerceAPI = () => {
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -37,6 +38,21 @@ const useWooCommerceAPI = () => {
     try {
       const response = await api.get('/products?per_page=100');
       setProducts(response.data);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+    setLoading(false);
+
+  };
+
+  // Function to fetch products
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/products/categories?per_page=100');
+
+      setCategories(response.data);
     } catch (error) {
       setError(error);
       setLoading(false);
@@ -83,6 +99,7 @@ const useWooCommerceAPI = () => {
     const fetchData = async () => {
       await fetchCustomers();
       await fetchProducts();
+      await fetchCategories();
       setLoading(false);
     };
 
@@ -93,7 +110,9 @@ const useWooCommerceAPI = () => {
 
   return {
     fetchProducts,
+    fetchCategories,
     customers,
+    categories,
     products,
     loading,
     error,
