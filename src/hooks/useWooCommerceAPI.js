@@ -5,6 +5,7 @@ const useWooCommerceAPI = () => {
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [commandes, setCommandes]= useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -43,7 +44,19 @@ const useWooCommerceAPI = () => {
       setLoading(false);
     }
     setLoading(false);
+  };
 
+   // Function to fetch products
+   const fetchCommandes = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/orders?per_page=100');
+      setCommandes(response.data);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+    setLoading(false);
   };
 
   // Function to fetch products
@@ -162,6 +175,9 @@ const useWooCommerceAPI = () => {
 
     customers,
     postCustomer,
+
+    commandes,
+    fetchCommandes,
 
     loading,
     error,

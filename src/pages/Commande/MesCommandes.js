@@ -1,117 +1,336 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { filter } from 'lodash';
 
 // @mui
 import {
-  Container, Box, CircularProgress, Typography, Button, Grid
+  Container, Box, Typography, Card, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, Stack, IconButton, Paper, TablePagination, Avatar, CircularProgress, Popover, MenuItem,
 } from '@mui/material';
-// import { LoadingButton } from '@mui/lab';
 
 import { useNavigate } from 'react-router-dom';
+import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
+import { CommandeListHead, CommandeListToolbar } from '../../sections/@dashboard/product';
 
-import { useSelector } from 'react-redux';
-import { store } from '../../redux/Store';
-import { fetchBusinessPlans } from '../../redux/businessPlanReducer';
-import AppWidgetBusinessPlan from '../../sections/@dashboard/businessPlan/AppWidgetBusinessPlan';
-
+import Scrollbar from '../../components/scrollbar';
+import Iconify from '../../components/iconify';
+import Label from '../../components/label/Label';
 
 export default function MesCommandes() {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  const { businessPlanList, isLoadingBusinessPlan } = useSelector((state) => state.businessPlan);
 
+  const {
+    commandes,
+    loading,
+    fetchCommandes
+    // error,
+  } = useWooCommerceAPI();
 
-  const myBusinessPlan = businessPlanList.filter((obj) => obj.owner && obj.owner._id === user?.user?.user?.userId);
-  // const myBusinessPlan = businessPlanList
-  console.log(myBusinessPlan);
-
+  //  react-hooks/exhaustive-deps
   useEffect(() => {
-    store.dispatch(fetchBusinessPlans());
+    fetchCommandes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [open, setOpen] = useState(null);
+
+  const [page, setPage] = useState(0);
+
+  const [order, setOrder] = useState('asc');
+
+  const [selected, setSelected] = useState([]);
+
+  const [orderBy, setOrderBy] = useState('name');
+
+  const [filterName, setFilterName] = useState('');
+
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [currentProduct, setCurrentProduct] = useState(null)
+
+  const TABLE_HEAD = [
+    { id: 'number', label: 'number', alignRight: false },
+    { id: 'customer_id', label: 'customer_id', alignRight: false },
+    { id: 'date_created', label: 'date_created', alignRight: false },
+    { id: 'total', label: 'total', alignRight: false },
+    { id: 'status', label: 'status', alignRight: false },
+    { id: '' },
+  ];
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  function applySortFilter(array, comparator, query) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+
+  const handleOpenMenu = (event, productObject) => {
+    setOpen(event.currentTarget);
+    setCurrentProduct(JSON.stringify(productObject))
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = commandes.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+    }
+    setSelected(newSelected);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commandes.length) : 0;
+
+  const filteredUsers = applySortFilter(commandes, getComparator(order, orderBy), filterName);
+
+  const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> TRANSFORME | Mes Produits </title>
+        <title> TRANSFORME | Mes Commandes </title>
       </Helmet>
 
       <Container >
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginBottom: 5 }} >
           <Typography variant="h4" sx={{ mb: 1 }}>
-            Mes Commmandes
+            Mes Commandes
           </Typography>
-
-         {/* <LoadingButton sx={{ textTransform: "inherit" }} size="large" variant="contained"
-            onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}>
-              Ajouter un produit / Service
-            </LoadingButton> */}
         </Box>
 
-        {
+        <Card>
+          <CommandeListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          isLoadingBusinessPlan ?
-            <Box container spacing={3} sx={{ display: 'flex', flexDirection: 'column', }}>
-              <CircularProgress sx={{ alignSelf: 'center' }} /> </Box> :
+          <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <CommandeListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={commandes.length}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    /* eslint-disable camelcase */
 
-            <Grid container spacing={1} sx={{ display: 'flex', flexDirection: 'row', }}>
+                    const { id, number,  customer_id, date_created, total, status} = row;
+                    
+                    const selectedUser = selected.indexOf(number) !== -1;
 
-              {
-                myBusinessPlan.length !== 0 && myBusinessPlan.map((value, key) =>
-                (
-                  <Grid key={key} item xs={6}>
-                    <AppWidgetBusinessPlan myBusinessPlans={value} />
-                  </Grid>
-                )
-                )
-              }
-              {
-                myBusinessPlan.length === 0 && <Box
-                  display="flex"
-                  width='100%'
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                // minHeight="50vh"
-                >
+                    return (
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, number)} />
+                        </TableCell>
 
-                  <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
+                        <TableCell align="left">{number}</TableCell>
 
-                  <Typography variant="h5" gutterBottom>
-                    Vous n'avez enregistré aucune commande !
-                  </Typography>
-                  {
-                    user ? <>
-                      <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => navigate('/dashboard/add-businessPlan', { replace: true })}
-                        sx={{ marginTop: 2 }}
-                      >
-                        Enregistrer votre plan d’affaires
-                      </Button></> :
-                      <>
-                        <Typography>Pour enregistrer votre plan d’affaires, veuillez vous identifier
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => navigate('/login', { replace: true })}
-                          sx={{ marginTop: 2 }}
+
+                        <TableCell component="th" scope="row" padding="2">
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                          
+                            <Avatar  variant="circular" alt="photo URL"  />
+                            <Box>
+                            <Typography variant="subtitle2" noWrap>
+                              {customer_id}
+                            </Typography>
+                            <Typography variant="caption" noWrap>
+                              email@test.com
+                            </Typography>
+                            </Box>
+                          </Stack>
+                        </TableCell>
+
+
+                         <TableCell align="left">{date_created } </TableCell>
+
+                         <TableCell align="left">{total} $</TableCell>
+
+                        
+                        <TableCell align="left"><Label color={(status === 'outofstock' && 'error') || 'success'}>{status}</Label> </TableCell>
+                        
+                        
+                        <TableCell align="right">
+                          <IconButton size="large" color="inherit" onClick={(e)=>{
+                              handleOpenMenu(e, row);
+                            }}>
+                            <Iconify icon={'eva:more-vertical-fill'} />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+
+                {isNotFound && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <Paper
+                          sx={{
+                            textAlign: 'center',
+                          }}
                         >
-                          Se connecter
-                        </Button>
-                      </>
-                  }
-                </Box>
-              }
+                          <Typography variant="h6" paragraph>
+                          Pas trouvé
+                          </Typography>
 
-            </Grid>
-        }
+                          <Typography variant="body2">
+                            Aucun résultat trouvé pour &nbsp;
+                            <strong>&quot;{filterName}&quot;</strong>.
+                            <br /> Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.
+                          </Typography>
+                        </Paper>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
+
+              {loading && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <Paper
+                          sx={{
+                            textAlign: 'center',
+                          }}
+                        >
+                          <CircularProgress />
+                        </Paper>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={commandes.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
 
       </Container>
+      <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem  onClick={()=> {
+          // console.log(currentProduct);
+          const params = { productObject: currentProduct };
+          navigate('/dashboard/view-produit',  { state: params });
+        }}>
+          <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
+          Voir Details
+        </MenuItem>
+
+        <MenuItem  onClick={()=> {
+          // console.log(currentProduct);
+          const params = { productObject: currentProduct };
+          navigate('/dashboard/add-produit',  { state: params });
+        }}>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          Modifier
+        </MenuItem>
+
+        <MenuItem sx={{color:'red'}}  onClick={()=> {
+          // console.log(currentProduct);
+          // const params = { productObject: currentProduct };
+          // navigate('/dashboard/-details',  { state: params });
+        }}>
+          <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />
+          Supprimer
+        </MenuItem>
+      </Popover>
 
     </>
   );
