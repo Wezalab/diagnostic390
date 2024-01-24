@@ -23,15 +23,18 @@ const useWooCommerceAPI = () => {
     },
   });
 
-  // Function to fetch customers
-  const fetchCustomers = async () => {
-    try {
-      const response = await api.get('/customers');
-      setCustomers(response.data);
-    } catch (error) {
-      setError(error);
-    }
-  };
+    // Function to fetch customers
+    const fetchCustomers = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get('/customers?per_page=100');
+        setCustomers(response.data);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+      setLoading(false);
+    };
 
   // Function to fetch products
   const fetchProducts = async () => {
@@ -174,6 +177,7 @@ const useWooCommerceAPI = () => {
     fetchCategories,
 
     customers,
+    fetchCustomers,
     postCustomer,
 
     commandes,

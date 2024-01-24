@@ -39,13 +39,13 @@ export default function MesCommandes() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('number');
 
-  const [filterName, setFilterName] = useState('');
+  const [filterNumber, setFilterNumber] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [currentProduct, setCurrentProduct] = useState(null)
+  const [currentCommamnde, setCurrentCommamnde] = useState(null)
 
   const TABLE_HEAD = [
     { id: 'number', label: 'number', alignRight: false },
@@ -80,15 +80,15 @@ export default function MesCommandes() {
       return a[1] - b[1];
     });
     if (query) {
-      return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+      return filter(array, (_user) => _user.number.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
   }
 
 
-  const handleOpenMenu = (event, productObject) => {
+  const handleOpenMenu = (event, commandeObject) => {
     setOpen(event.currentTarget);
-    setCurrentProduct(JSON.stringify(productObject))
+    setCurrentCommamnde(JSON.stringify(commandeObject))
   };
 
   const handleCloseMenu = () => {
@@ -103,18 +103,18 @@ export default function MesCommandes() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = commandes.map((n) => n.name);
+      const newSelecteds = commandes.map((n) => n.number);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, number) => {
+    const selectedIndex = selected.indexOf(number);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, number);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -136,14 +136,14 @@ export default function MesCommandes() {
 
   const handleFilterByName = (event) => {
     setPage(0);
-    setFilterName(event.target.value);
+    setFilterNumber(event.target.value);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commandes.length) : 0;
 
-  const filteredUsers = applySortFilter(commandes, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(commandes, getComparator(order, orderBy), filterNumber);
 
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = !filteredUsers.length && !!filterNumber;
 
   return (
     <>
@@ -159,7 +159,7 @@ export default function MesCommandes() {
         </Box>
 
         <Card>
-          <CommandeListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <CommandeListToolbar numSelected={selected.length} filterNumber={filterNumber} onFilterNumber={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -246,7 +246,7 @@ export default function MesCommandes() {
 
                           <Typography variant="body2">
                             Aucun résultat trouvé pour &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
+                            <strong>&quot;{filterNumber}&quot;</strong>.
                             <br /> Essayez de vérifier les fautes de frappe ou d'utiliser des mots complets.
                           </Typography>
                         </Paper>
@@ -305,8 +305,8 @@ export default function MesCommandes() {
         }}
       >
         <MenuItem  onClick={()=> {
-          // console.log(currentProduct);
-          const params = { productObject: currentProduct };
+          // console.log(currentCommamnde);
+          const params = { commandeObject: currentCommamnde };
           navigate('/dashboard/view-produit',  { state: params });
         }}>
           <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
@@ -314,8 +314,8 @@ export default function MesCommandes() {
         </MenuItem>
 
         <MenuItem  onClick={()=> {
-          // console.log(currentProduct);
-          const params = { productObject: currentProduct };
+          // console.log(currentCommamnde);
+          const params = { commandeObject: currentCommamnde };
           navigate('/dashboard/add-produit',  { state: params });
         }}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
@@ -323,8 +323,8 @@ export default function MesCommandes() {
         </MenuItem>
 
         <MenuItem sx={{color:'red'}}  onClick={()=> {
-          // console.log(currentProduct);
-          // const params = { productObject: currentProduct };
+          // console.log(currentCommamnde);
+          // const params = { commandeObject: currentCommamnde };
           // navigate('/dashboard/-details',  { state: params });
         }}>
           <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />
