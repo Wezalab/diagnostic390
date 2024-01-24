@@ -62,7 +62,7 @@ export default function AddProduct() {
   const [price, setPrice] = useState(product ? product.sale_price : 0);
   const [pricePromo, setPricePromo] = useState(product ? product.price : 0);
   const [qt, setQt] = useState(product ? product.stock_quantity : 0);
-  const [errMessage, setErrMessage] = useState("");
+  // const [errMessage, setErrMessage] = useState("");
 
   const [images, setImages] = useState(product ? product.images : []);
   const [loadPic, setLoadPic] = useState(false);
@@ -186,9 +186,9 @@ export default function AddProduct() {
         }
       }
     }
-    else{
-      setErrMessage("Veillez completer tous les champs")
-    }
+    // else{
+    //   setErrMessage("Veillez completer tous les champs")
+    // }
   }
 
   const onDeletePic = (key) => {
