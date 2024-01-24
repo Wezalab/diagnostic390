@@ -17,7 +17,7 @@ import {
 import Grid from '@mui/material/Unstable_Grid2';
 import { LoadingButton } from '@mui/lab';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 import useWooCommerceAPI from '../../hooks/useWooCommerceAPI';
 
@@ -35,14 +35,17 @@ const MenuProps = {
 
 export default function AddProduct() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { productObject } = location.state || {};
 
   const {
     categories,
-    fetchCategories
+    fetchCategories,
+    postProduct,
     // error,
+    loading
   } = useWooCommerceAPI();
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
     //  react-hooks/exhaustive-deps
     useEffect(() => {
@@ -55,15 +58,16 @@ export default function AddProduct() {
   const [name, setName] = useState(product ? product.name : '');
   const [desc, setDesc] = useState(product ? product.short_description : '');
   const [fullDesc, setFullDesc] = useState(product ? product.description : '');
-  const [price, setPrice] = useState(product ? product.price : 0);
+  const [price, setPrice] = useState(product ? product.sale_price : 0);
   const [pricePromo, setPricePromo] = useState(product ? product.price : 0);
   const [qt, setQt] = useState(product ? product.stock_quantity : 0);
+  const [errMessage, setErrMessage] = useState("");
 
   const [images, setImages] = useState(product ? product.images : []);
   const [loadPic, setLoadPic] = useState(false);
 
   // categories
-  const [categoryName, setCategoryName] = useState([]);
+  const [categoryName, setCategoryName] = useState(product?product?.categories?.map(val => val.name):[]);
 
   const handleChangeCat = (event) => {
     const {
@@ -140,8 +144,47 @@ export default function AddProduct() {
     return pic
   };
 
-  const onSaveProduct = () => {
+  const resultIds = categoryName?.map(searchName => {
+    const resultObject = categories?.find(item => item.name === searchName);
+    return resultObject ? {id: resultObject.id} : null;
+});
 
+  const onSaveProduct = async() => {
+  
+    const prodObject = {
+      name,
+      type: "simple",
+      short_description: desc,
+      description:fullDesc,
+      stock_quantity: qt,
+      regular_price:pricePromo,
+      sale_price:price,
+      tax_status:'none',
+      manage_stock:true,
+      images,
+      categories: resultIds?.filter(id => id !== null)
+    }
+
+    // validate all values
+    if(name!== "" && desc !== "" && fullDesc !== "" && images.length !== 0){
+       // if new Objec the save else if update
+      if (product) {
+        console.log("Edit");
+      } else {
+        console.log("Add");
+        console.log("Add",resultIds?.filter(id => id !== null) )
+        const saveState = await postProduct(prodObject);
+        console.log(saveState);
+        if (saveState === 'Création réussie') {
+          navigate('/dashboard/produits', { replace: true });
+
+        }
+      }
+
+    }
+    else{
+      setErrMessage("Veillez completer tous les champs")
+    }
   }
 
   const onDeletePic = (key) => {
@@ -253,14 +296,13 @@ export default function AddProduct() {
                   <OutlinedInput
                     id="outlined-adornment-amount"
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                    label="Prix du produit"
+                    label="Prix du produit ($)"
                     value={price} onChange={(e) => setPrice(e.target.value)}
                   />
                 </FormControl>
               </Grid>
 
               <Grid xs={6}>
-
                 <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
               </Grid>
@@ -279,20 +321,20 @@ export default function AddProduct() {
 
               <Grid xs={6}>
                 <FormControl sx={{ width: '100%' }}>
-                  <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
+                  <InputLabel id="m-checkbox-label">Catégories</InputLabel>
                   <Select
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
+                    labelId="m-checkbox-label"
+                    id="m-checkbox"
                     multiple
                     value={categoryName}
                     onChange={handleChangeCat}
-                    input={<OutlinedInput label="Categories" />}
+                    input={<OutlinedInput label="Catégories" />}
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                   >
                     {categories.map((cat) => (
                       <MenuItem key={cat.id} value={cat.name}>
-                        <Checkbox checked={categoryName.indexOf(cat.name) > -1} />
+                        <Checkbox checked={categoryName?.indexOf(cat.name) > -1} />
                         <ListItemText primary={cat.name} />
                       </MenuItem>
                     ))}
@@ -304,7 +346,7 @@ export default function AddProduct() {
              
             </Card>
             <Box sx={{display:'flex', justifyContent:'flex-end',marginTop: 2}}>
-            <LoadingButton sx={{display:'flex'}} size="large" variant="contained" onClick={()=>onSaveProduct()}>
+            <LoadingButton disabled={loading} loading={loading} sx={{display:'flex'}} size="large" variant="contained" onClick={()=>onSaveProduct()}>
               Enregistrer
             </LoadingButton>
             </Box>

@@ -93,6 +93,27 @@ const useWooCommerceAPI = () => {
     return 'Création réussie';
   };
 
+  // Function to post a new customer
+  const postProduct= async (productData) => {
+    setLoading(true);
+
+    try {
+      await api.post('/products', productData);
+      // Refresh product after posting
+      await fetchProducts();
+      setLoading(false);
+
+    } catch (error) {
+      setError(error?.response?.data?.message);
+      setLoading(false);
+
+      return `${error?.response?.data?.message}`;
+    }
+    setLoading(false);
+
+    return 'Création réussie';
+  };
+
   // Initial fetch of customers and products on component mount
   //  react-hooks/exhaustive-deps
   useEffect(() => {
@@ -118,6 +139,7 @@ const useWooCommerceAPI = () => {
     error,
     fetchProductById,
     postCustomer,
+    postProduct
   };
 };
 

@@ -182,7 +182,7 @@ export default function MesProduits() {
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     /* eslint-disable camelcase */
 
-                    const { id, name,  date_created, price, categories, stock_status, images, stock_quantity } = row;
+                    const { id, name,  date_created, price, categories, stock_status, images, stock_quantity, sale_price, regular_price } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -209,7 +209,7 @@ export default function MesProduits() {
                          <TableCell align="left">{date_created}</TableCell>
 
 
-                         <TableCell align="left">{price} $</TableCell>
+                         <TableCell align="left">{price || sale_price || regular_price } $</TableCell>
 
                         
                         <TableCell align="left"><Label color={(stock_status === 'outofstock' && 'error') || 'success'}>{stock_status}</Label> </TableCell>
