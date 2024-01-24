@@ -143,9 +143,9 @@ export default function MesCommandes() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commandes.length) : 0;
 
-  const filteredUsers = applySortFilter(commandes, getComparator(order, orderBy), filterNumber);
+  const filteredCommandes = applySortFilter(commandes, getComparator(order, orderBy), filterNumber);
 
-  const isNotFound = !filteredUsers.length && !!filterNumber;
+  const isNotFound = !filteredCommandes.length && !!filterNumber;
 
   return (
     <>
@@ -176,13 +176,13 @@ export default function MesCommandes() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredCommandes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     /* eslint-disable camelcase */
 
                     const { id, number,  customer_id, date_created, total,line_items, status} = row;
                     
                     const selectedOrder = selected.indexOf(number) !== -1;
-                    const selectedUser = customers.find((cus, key) => cus.id === customer_id);
+                    const selectedUser = customers.find((cus) => cus.id === customer_id);
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedOrder}>

@@ -24,6 +24,7 @@ import Rapport from './pages/Rapport/Rappor';
 import Evaluation from './pages/Evaluation/Evaluation';
 import DetailsProduit from './pages/Produit/DetailsProduit';
 import AddProduct from './pages/Produit/AddProduct';
+import DetailsCommande from './pages/Commande/DetailsCommande';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -74,6 +75,7 @@ export default function Router() {
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'view-produit', element: <DetailsProduit /> },
           { path: 'add-produit', element: <AddProduct/> },
+          { path: 'view-commande', element: <DetailsCommande/> },
           
         ];
         case undefined:
