@@ -21,6 +21,7 @@ export default function MesCommandes() {
   const {
     commandes,
     loading,
+    customers,
     fetchCommandes
     // error,
   } = useWooCommerceAPI();
@@ -31,6 +32,7 @@ export default function MesCommandes() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(commandes);
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -52,6 +54,7 @@ export default function MesCommandes() {
     { id: 'customer_id', label: 'customer_id', alignRight: false },
     { id: 'date_created', label: 'date_created', alignRight: false },
     { id: 'total', label: 'total', alignRight: false },
+    { id: 'line_items', label: 'line_items', alignRight: false },
     { id: 'status', label: 'status', alignRight: false },
     { id: '' },
   ];
@@ -84,7 +87,6 @@ export default function MesCommandes() {
     }
     return stabilizedThis.map((el) => el[0]);
   }
-
 
   const handleOpenMenu = (event, commandeObject) => {
     setOpen(event.currentTarget);
@@ -177,38 +179,39 @@ export default function MesCommandes() {
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     /* eslint-disable camelcase */
 
-                    const { id, number,  customer_id, date_created, total, status} = row;
+                    const { id, number,  customer_id, date_created, total,line_items, status} = row;
                     
-                    const selectedUser = selected.indexOf(number) !== -1;
+                    const selectedOrder = selected.indexOf(number) !== -1;
+                    const selectedUser = customers.find((cus, key) => cus.id === customer_id);
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedOrder}>
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, number)} />
+                          <Checkbox checked={selectedOrder} onChange={(event) => handleClick(event, number)} />
                         </TableCell>
 
-                        <TableCell align="left">{number}</TableCell>
+                        <TableCell align="left"># N°{number}</TableCell>
 
 
                         <TableCell component="th" scope="row" padding="2">
                           <Stack direction="row" alignItems="center" spacing={2}>
                           
-                            <Avatar  variant="circular" alt="photo URL"  />
+                            <Avatar src={selectedUser?.avatar_url}  variant="circular" alt="photo URL"  />
                             <Box>
                             <Typography variant="subtitle2" noWrap>
-                              {customer_id}
+                              {selectedUser?.username? selectedUser?.username : "Visiteur"}
                             </Typography>
                             <Typography variant="caption" noWrap>
-                              email@test.com
+                              {selectedUser?.email? selectedUser?.email : ""}
                             </Typography>
                             </Box>
                           </Stack>
                         </TableCell>
 
-
                          <TableCell align="left">{date_created } </TableCell>
 
                          <TableCell align="left">{total} $</TableCell>
+                         <TableCell align="left">{line_items?.length}</TableCell>
 
                         
                         <TableCell align="left"><Label color={(status === 'outofstock' && 'error') || 'success'}>{status}</Label> </TableCell>
@@ -307,29 +310,13 @@ export default function MesCommandes() {
         <MenuItem  onClick={()=> {
           // console.log(currentCommamnde);
           const params = { commandeObject: currentCommamnde };
-          navigate('/dashboard/view-produit',  { state: params });
+          navigate('/dashboard/view-commande',  { state: params });
         }}>
           <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
           Voir Details
         </MenuItem>
 
-        <MenuItem  onClick={()=> {
-          // console.log(currentCommamnde);
-          const params = { commandeObject: currentCommamnde };
-          navigate('/dashboard/add-produit',  { state: params });
-        }}>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Modifier
-        </MenuItem>
-
-        <MenuItem sx={{color:'red'}}  onClick={()=> {
-          // console.log(currentCommamnde);
-          // const params = { commandeObject: currentCommamnde };
-          // navigate('/dashboard/-details',  { state: params });
-        }}>
-          <Iconify icon={'fluent:delete-32-filled'} sx={{ mr: 2 }} />
-          Supprimer
-        </MenuItem>
+      
       </Popover>
 
     </>
