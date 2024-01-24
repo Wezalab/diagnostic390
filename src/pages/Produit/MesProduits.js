@@ -31,8 +31,6 @@ export default function MesProduits() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // console.log(products);
-
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -146,9 +144,6 @@ export default function MesProduits() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
-  // console.log("filteredUsers", filteredUsers);
-
-
   return (
     <>
       <Helmet>
@@ -166,7 +161,6 @@ export default function MesProduits() {
             Ajouter un produit / Service
           </LoadingButton>
         </Box>
-
 
         <Card>
           <ProductListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />

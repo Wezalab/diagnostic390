@@ -7,13 +7,14 @@ import {
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 import Label from '../../components/label';
 
 
 export default function DetailsProduit() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { productObject } = location.state || {};
 
   // eslint-disable-next-line no-unused-vars
@@ -22,8 +23,10 @@ export default function DetailsProduit() {
   const [dispo, setDispo] = useState(0);
   const [stock, setStock] = useState(0);
 
+
   useEffect(() => {
-    setDispo(product?.stock_quantity)
+    setDispo(product?.stock_quantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleIncrement = () => {
@@ -47,17 +50,21 @@ export default function DetailsProduit() {
       <Container >
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginBottom: 5 }} >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-           
-            <Link href="/dashboard/produits" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+
+            <Link href="/dashboard/produits" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'ion:arrow-back-sharp'} sx={{ mr: 2 }} />
-            <Typography variant="h6">Retour</Typography>
+              <Typography variant="h6">Retour</Typography>
 
             </Link>
           </Box>
 
 
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Link href="/dashboard/add-produit" style={{ cursor: 'pointer', display:'flex', alignItems:'center' }} variant="subtitle2" underline="hover">
+            <Link onClick={() => {
+              console.log(product);
+              const params = { productObject };
+              navigate('/dashboard/add-produit', { state: params });
+            }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
               <Typography variant="h6">Modifier</Typography>
             </Link>
@@ -134,10 +141,10 @@ export default function DetailsProduit() {
 
           </Grid>
         </Grid>
-        <Paper sx={{padding:4, marginTop: 3}}>
-            <Typography sx={{marginBottom: 3}} variant='h5'>Description</Typography>
-            <Typography variant='caption'>{product.description?.split('<p>')[1]}</Typography>
-          </Paper>
+        <Paper sx={{ padding: 4, marginTop: 3 }}>
+          <Typography sx={{ marginBottom: 3 }} variant='h5'>Description</Typography>
+          <Typography variant='caption'>{product.description?.split('<p>')[1]}</Typography>
+        </Paper>
       </Container>
     </>
   );

@@ -85,7 +85,6 @@ export default function AddProduct() {
             </Breadcrumbs>
           </Box>
 
-
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Link href="#" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} variant="subtitle2" underline="hover">
               <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
