@@ -1,11 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Grid, Breadcrumbs, TextField, Card, //  CardMedia, Paper, Rating, Divider, Button, ImageList, ImageListItem,
+  Container, Box, Typography, Link, Grid, Breadcrumbs, TextField, Card,
   CardMedia,
-  Button
+  Button,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  OutlinedInput
 } from '@mui/material';
 
 import { useLocation } from 'react-router-dom';
@@ -18,30 +22,28 @@ export default function AddProduct() {
 
   // eslint-disable-next-line no-unused-vars
   const [product, setProduct] = useState(productObject && JSON.parse(productObject));
-  const [name, setName] = useState(product ? product.name:'');
-  const [desc, setDesc] = useState(product ? product.short_description:'');
-  const [fullDesc, setFullDesc] = useState(product ? product.description:'');  
-  const [price, setPrice] = useState(product ? product.price:0);
-  const [qt, setQt] = useState(product ? product.stock_quantity:0);
+  const [name, setName] = useState(product ? product.name : '');
+  const [desc, setDesc] = useState(product ? product.short_description : '');
+  const [fullDesc, setFullDesc] = useState(product ? product.description : '');
+  const [price, setPrice] = useState(product ? product.price : 0);
+  const [qt, setQt] = useState(product ? product.stock_quantity : 0);
 
-  const [images, setImages] = useState(product ? product.images:[]);
+  const [images, setImages] = useState(product ? product.images : []);
   // categories
 
-  useEffect(() => {
-  }, []);
 
   const handleUploadClickCover = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = async (e) => {
+      reader.onloadend = async () => {
         try {
           console.log("reader.result", reader.result);
 
           // setImageCover( reader.result);
           setImages([...images, {
-            name:"img",
-            alt:"img",
+            name: "img",
+            alt: "img",
             src: reader.result
           }])
 
@@ -94,13 +96,13 @@ export default function AddProduct() {
         </Box>
 
         <Grid container spacing={4}>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Typography variant='h6'>Details de votre product</Typography>
             <Typography variant="caption">Titre, description, image,...</Typography>
 
 
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <Card sx={{ padding: 4, }}>
               <TextField sx={{ width: "100%", marginBottom: 2 }} name="name" label="Nom du produit" value={name} onChange={(e) => setName(e.target.value)} />
               <TextField multiline rows={3} sx={{ width: "100%", marginBottom: 2 }} name="desc" label="Description courte du produit" value={desc} onChange={(e) => setDesc(e.target.value)} />
@@ -130,8 +132,8 @@ export default function AddProduct() {
                   </label>
                   <Box sx={{ display: 'flex', flexDirection: "row" }}>
                     {
-                      images && images.map((img, key) => {
-                        return <Card sx={{ marginRight: 1, position: "relative" }} onClick={() => onDeletePic(key)} >
+                      images && images.map((img, key) => 
+                        <Card key={key} sx={{ marginRight: 1, position: "relative" }} onClick={() => onDeletePic(key)} >
                           <Box sx={{
                             position: 'absolute', backgroundColor: "#000", opacity: 0.7,
                             display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -141,7 +143,7 @@ export default function AddProduct() {
                           </Box>
                           <img style={{ width: 90 }} src={img.src} alt={key} />
                         </Card>
-                      })
+                      )
                     }
                   </Box>
                 </div>
@@ -149,20 +151,30 @@ export default function AddProduct() {
             </Card>
           </Grid>
 
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Typography variant='h6'>Caracteristique</Typography>
             <Typography variant="caption">Prix, couleur, demension,...</Typography>
           </Grid>
 
-          <Grid item xs={7}>
-            <Card sx={{ padding: 4,display:'flex', justifyContent:'space-between'}}>
+          <Grid item xs={8}>
+            <Card sx={{ padding: 4, display: 'flex', justifyContent: 'space-between' }}>
 
-              <Grid  xs={5}>
-                  <TextField sx={{ width: "100%", marginBottom: 2 }} name="prix" label="Prix du produit" value={price} onChange={(e) => setPrice(e.target.value)} />
+              <Grid xs={5}>
+                <FormControl fullWidth sx={{ m: 1 }}>
+                  <InputLabel htmlFor="outlined-adornment-amount">Prix du produit</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                    label="Prix du produit"
+                    value={price} onChange={(e) => setPrice(e.target.value)}
+                  />
+                </FormControl>
               </Grid>
 
-              <Grid  xs={5}>
-                  <TextField sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
+              <Grid xs={5}>
+
+                <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                  sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
               </Grid>
             </Card>
 
