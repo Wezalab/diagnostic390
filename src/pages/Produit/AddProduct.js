@@ -5,12 +5,12 @@ import React, { useState } from 'react'
 import {
   Container, Box, Typography, Link, Grid, Breadcrumbs, TextField, Card,
   CardMedia,
-  Button,
   InputAdornment,
   FormControl,
   InputLabel,
   OutlinedInput
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
@@ -29,7 +29,10 @@ export default function AddProduct() {
   const [qt, setQt] = useState(product ? product.stock_quantity : 0);
 
   const [images, setImages] = useState(product ? product.images : []);
+  const [loadPic, setLoadPic] = useState(false);
+
   // categories
+
 
 
   const handleUploadClickCover = (event) => {
@@ -40,11 +43,15 @@ export default function AddProduct() {
         try {
           console.log("reader.result", reader.result);
 
+           // Call the onCloudinarySaveCb function to upload the image
+           const img = await onCloudinarySaveCover(reader.result);
+           console.log("Img uploaded to Cloudinary:", img);
+ 
           // setImageCover( reader.result);
           setImages([...images, {
             name: "img",
             alt: "img",
-            src: reader.result
+            src: img
           }])
 
         } catch (error) {
@@ -54,6 +61,48 @@ export default function AddProduct() {
       reader.readAsDataURL(file);
     }
   };
+
+  const onCloudinarySaveCover = async (base64Img) => {
+    let pic = ""
+    try {
+      setLoadPic(true);
+
+      const apiUrl = 'https://api.cloudinary.com/v1_1/micity/image/upload';
+      const data = {
+        file: base64Img,
+        upload_preset: 'ml_default'
+      };
+
+      const response = await fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST'
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok && responseData.secure_url) {
+        setLoadPic(false);
+        console.log('Cover uploaded to Cloudinary:', responseData.secure_url);
+        pic = responseData.secure_url;
+      } else {
+        setLoadPic(false);
+        console.error('Error uploading Cover to Cloudinary:', responseData);
+        throw new Error('Error uploading Cover to Cloudinary');
+      }
+    } catch (error) {
+      setLoadPic(false);
+      console.error('Error in onCloudinarySaveCb:', error);
+      throw error;
+    }
+    return pic
+  };
+
+  const onSaveProduct = () => {
+
+  }
 
   const onDeletePic = (key) => {
     console.log(key);
@@ -124,21 +173,21 @@ export default function AddProduct() {
                       type="file"
                       onChange={(e) => handleUploadClickCover(e)}
                     />
-                    <Button sx={{ textTransform: "inherit", marginTop: -20 }} variant="contained" component="span">
+                    <LoadingButton disabled={loadPic} loading={loadPic} sx={{ textTransform: "inherit", marginTop: -20 }} variant="contained" component="span">
                       Téléverser une image
-                    </Button>
+                    </LoadingButton>
 
                   </label>
                   <Box sx={{ display: 'flex', flexDirection: "row" }}>
                     {
                       images && images.map((img, key) => 
                         <Card key={key} sx={{ marginRight: 1, position: "relative" }} onClick={() => onDeletePic(key)} >
-                          <Box sx={{
+                          <Box sx={{ cursor:'pointer',
                             position: 'absolute', backgroundColor: "#000", opacity: 0.7,
                             display: 'flex', justifyContent: 'center', alignItems: 'center',
                             borderRadius: 5, right: 0, width: 30, height: 30
                           }}>
-                            <Iconify sx={{ color: "#fff" }} icon={'eva:edit-fill'} />
+                            <Iconify sx={{ color: "#fff" }} icon={'fluent-mdl2:cancel'} />
                           </Box>
                           <img style={{ width: 90 }} src={img.src} alt={key} />
                         </Card>
@@ -175,7 +224,14 @@ export default function AddProduct() {
                 <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
               </Grid>
+             
             </Card>
+            <Box sx={{display:'flex', justifyContent:'flex-end',marginTop: 2}}>
+            <LoadingButton sx={{display:'flex'}} size="large" variant="contained" onClick={()=>onSaveProduct()}>
+              Enregistrer
+            </LoadingButton>
+            </Box>
+          
 
           </Grid>
         </Grid>

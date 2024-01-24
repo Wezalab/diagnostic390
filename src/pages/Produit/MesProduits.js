@@ -208,7 +208,7 @@ export default function MesProduits() {
                          <TableCell align="left">{date_created}</TableCell>
 
 
-                         <TableCell align="left">{price}</TableCell>
+                         <TableCell align="left">{price} $</TableCell>
 
                         
                         <TableCell align="left"><Label color={(stock_status === 'outofstock' && 'error') || 'success'}>{stock_status}</Label> </TableCell>
