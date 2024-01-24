@@ -42,6 +42,7 @@ export default function AddProduct() {
     categories,
     fetchCategories,
     postProduct,
+    editProduct,
     // error,
     loading
   } = useWooCommerceAPI();
@@ -170,17 +171,20 @@ export default function AddProduct() {
        // if new Objec the save else if update
       if (product) {
         console.log("Edit");
+
+        const saveState = await editProduct(prodObject, product.id );
+          console.log(saveState);
+          if (saveState === 'Modification réussie') {
+            navigate('/dashboard/produits', { replace: true });
+          }
       } else {
-        console.log("Add");
         console.log("Add",resultIds?.filter(id => id !== null) )
         const saveState = await postProduct(prodObject);
         console.log(saveState);
         if (saveState === 'Création réussie') {
           navigate('/dashboard/produits', { replace: true });
-
         }
       }
-
     }
     else{
       setErrMessage("Veillez completer tous les champs")

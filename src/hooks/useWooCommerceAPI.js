@@ -114,6 +114,27 @@ const useWooCommerceAPI = () => {
     return 'Création réussie';
   };
 
+   // Function to post a new customer
+   const editProduct= async (productData, id) => {
+    setLoading(true);
+
+    try {
+      await api.put(`/products/${id}`, productData);
+      // Refresh product after posting
+      await fetchProducts();
+      setLoading(false);
+
+    } catch (error) {
+      setError(error?.response?.data?.message);
+      setLoading(false);
+
+      return `${error?.response?.data?.message}`;
+    }
+    setLoading(false);
+
+    return 'Modification réussie';
+  };
+
   // Initial fetch of customers and products on component mount
   //  react-hooks/exhaustive-deps
   useEffect(() => {
@@ -130,16 +151,20 @@ const useWooCommerceAPI = () => {
   }, []);
 
   return {
-    fetchProducts,
-    fetchCategories,
-    customers,
-    categories,
     products,
+    postProduct,
+    fetchProducts,
+    editProduct,
+    fetchProductById,
+
+    categories,
+    fetchCategories,
+
+    customers,
+    postCustomer,
+
     loading,
     error,
-    fetchProductById,
-    postCustomer,
-    postProduct
   };
 };
 
