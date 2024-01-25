@@ -38,7 +38,7 @@ export default function DetailsCommande() {
                 <Typography variant="h6">Commande # N°{commande.number}</Typography>
               </div>
             </Box>
-            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">Le 25 janv 2924{commande.number}</Typography>
+            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">Le 25 janv 2024</Typography>
           </Box>
         </Box>
 
@@ -55,7 +55,7 @@ export default function DetailsCommande() {
                           <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={prod?.image?.id} src={prod?.image?.src} />
                           <Box>
                             <Typography variant="subtitle2">{prod.name}</Typography>
-                            <Typography variant="caption">Le 25 janv 2924{commande.number}</Typography>
+                            <Typography variant="caption">{commande.date_created}</Typography>
                           </Box>
                         </Box>
                         <Typography variant="body2">X{prod.quantity}</Typography>
@@ -85,8 +85,47 @@ export default function DetailsCommande() {
 
           </Grid>
           <Grid item xs={4}>
-            <Card>
-              <Typography variant="caption">Le 25 janv 2924{commande.number}</Typography>
+            <Card  sx={{ padding: 4 }}>
+              <Typography variant="h6">Information du client</Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2 }}>
+                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }}  alt="" src={commande?.image?.src} />
+                <Box sx={{display:'flex', flexDirection:"column"}}>
+                  <Typography variant="subtitle2">Nomm</Typography>
+                  <Typography variant="caption">email@com.com</Typography>
+                  <Typography variant="caption">Adresse IP: </Typography>
+                </Box>
+              </Box>
+              <Divider />
+              <Box sx={{ display: 'flex', flexDirection: "column", marginBottom:2, marginTop:2 }}>
+                <Typography variant="h6">Livraison</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Expédier par : </Typography>
+                  <Typography variant="caption">DHL</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Mode : </Typography>
+                  <Typography variant="caption">Standard</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Numéro de suivis : </Typography>
+                  <Typography variant="caption">XX91234NSD</Typography>
+                </Box>
+
+              </Box>
+
+              <Divider />
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2, marginTop:2 }}>
+                <Typography variant="h6">Expédition</Typography>
+
+              </Box>
+
+              <Divider />
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2, marginTop:2 }}>
+                <Typography variant="h6">Paiement</Typography>
+
+              </Box>
             </Card>
           </Grid>
         </Grid>
