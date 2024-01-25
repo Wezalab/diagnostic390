@@ -75,7 +75,7 @@ export default function DetailsCommande() {
               <div>
                 <Typography variant="h6">Commande # N°{commande.number}</Typography>
               </div>
-              <Button sx={{ marginLeft: 1 }} color="error" variant="outlined" size="small">{commande.status}</Button>
+              <Button sx={{ marginLeft: 1 }} color="error" variant="outlined" size="small">{options[selectedIndex]}</Button>
 
             </Box>
             <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">{commande.date_created}</Typography>

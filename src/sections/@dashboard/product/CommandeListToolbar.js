@@ -32,11 +32,11 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 CommandeListToolbar.propTypes = {
   numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
+  filterNumber: PropTypes.string,
+  onFilterNumber: PropTypes.func,
 };
 
-export default function CommandeListToolbar({ numSelected, filterName, onFilterName }) {
+export default function CommandeListToolbar({ numSelected, filterNumber, onFilterNumber }) {
   return (
     <StyledRoot
       sx={{
@@ -52,8 +52,8 @@ export default function CommandeListToolbar({ numSelected, filterName, onFilterN
         </Typography>
       ) : (
         <StyledSearch
-          value={filterName}
-          onChange={onFilterName}
+          value={filterNumber}
+          onChange={onFilterNumber}
           placeholder="Recheche une commande"
           startAdornment={
             <InputAdornment position="start">
