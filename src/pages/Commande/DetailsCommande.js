@@ -3,9 +3,10 @@ import React, { useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Card, Divider,
+  Container, Box, Typography, Link, Card, Divider, Button,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
@@ -23,13 +24,11 @@ export default function DetailsCommande() {
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
   console.log(commande);
-  console.log(selectedUser);
-
 
   return (
     <>
       <Helmet>
-        <title> TRANSFORME | Details d'une commande </title>
+        <title> TRANSFORME | Details de la commande </title>
       </Helmet>
 
       <Container >
@@ -42,8 +41,15 @@ export default function DetailsCommande() {
               <div>
                 <Typography variant="h6">Commande # N°{commande.number}</Typography>
               </div>
+              <Button sx={{marginLeft:1}} color="error" variant="outlined" size="small">{commande.status}</Button>
+
             </Box>
-            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">Le 25 janv 2024</Typography>
+            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">{commande.date_created}</Typography>
+          </Box>
+
+          <Box>
+            <Button color="error" variant="contained" size="small">{commande.status}</Button>
+            <Button sx={{marginLeft:1}} color="info" variant="contained" startIcon={<LocalPrintshopIcon />} size="small">Bon de commande</Button>
           </Box>
         </Box>
 
@@ -103,17 +109,17 @@ export default function DetailsCommande() {
               <Divider />
               <Box sx={{ display: 'flex', flexDirection: "column", marginBottom:2, marginTop:2 }}>
                 <Typography variant="h6">Expédition</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
                   <Typography variant="caption">Expédier par : </Typography>
                   <Typography variant="caption">DHL</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
                   <Typography variant="caption">Mode : </Typography>
                   <Typography variant="caption">Standard</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
                   <Typography variant="caption">Numéro de suivis : </Typography>
                   <Typography variant="caption">XX91234NSD</Typography>
                 </Box>
