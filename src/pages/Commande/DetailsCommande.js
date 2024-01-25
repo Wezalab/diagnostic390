@@ -31,7 +31,6 @@ export default function DetailsCommande() {
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }} >
           <Box>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-
               <Link href="/dashboard/commandes" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} variant="subtitle2" underline="hover">
                 <Iconify icon={'ion:arrow-back-sharp'} sx={{ mr: 2 }} />
               </Link>
@@ -49,24 +48,38 @@ export default function DetailsCommande() {
               <Typography variant="h6">Details</Typography>
               <Box>
                 {
-                  commande.line_items.map((prod, key) => 
-                     <div key={key} ><Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin:8  }} alt={prod?.image?.id} src={prod?.image?.src} />
-                        <Box>
-                          <Typography variant="subtitle2">{prod.name}</Typography>
-                          <Typography variant="caption">Le 25 janv 2924{commande.number}</Typography>
+                  commande.line_items.map((prod, key) =>
+                    <div key={key} >
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                          <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={prod?.image?.id} src={prod?.image?.src} />
+                          <Box>
+                            <Typography variant="subtitle2">{prod.name}</Typography>
+                            <Typography variant="caption">Le 25 janv 2924{commande.number}</Typography>
+                          </Box>
                         </Box>
+                        <Typography variant="body2">X{prod.quantity}</Typography>
+                        <Typography variant="subtitle1">{prod.price} $</Typography>
                       </Box>
 
-                      <Typography variant="body2">X{prod.quantity}</Typography>
-                      <Typography variant="subtitle1">{prod.price} $</Typography>
-                    </Box>
                       <Divider />
-                    </div>
 
-                  )
-                }
+                    </div>
+                  )}
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginTop: 2 }} >
+                  <Typography variant="subtitle1" sx={{ marginLeft: '70%' }}>Sous total : </Typography>
+                  <Typography variant="body1">{commande.total}$</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
+                  <Typography sx={{ color: '#a21', marginLeft: '70%' }} variant="subtitle1">Taxe : </Typography>
+                  <Typography sx={{ color: '#a21' }} variant="body1">0</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
+                  <Typography sx={{ marginLeft: '70%' }} variant="subtitle1">TOTAL : </Typography>
+                  <Typography variant="subtitle1">{commande.total}</Typography>
+                </Box>
               </Box>
             </Card>
 
@@ -74,7 +87,6 @@ export default function DetailsCommande() {
           <Grid item xs={4}>
             <Card>
               <Typography variant="caption">Le 25 janv 2924{commande.number}</Typography>
-
             </Card>
           </Grid>
         </Grid>
