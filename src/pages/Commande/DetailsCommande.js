@@ -1,29 +1,63 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 // @mui
 import {
-  Container, Box, Typography, Link, Card, Divider, Button,
+  Container, Box, Typography, Link, Card, Divider, Button, ButtonGroup,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
+
+const options = ["En attente", "Traitement", "Terminé", "En pause", "Annulé", "Remboursé", "Echec et poubelle"];
+// const options2 = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed and trash'];
 
 
 export default function DetailsCommande() {
   const location = useLocation();
   const { commandeObject, customers } = location.state || {};
 
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
   // eslint-disable-next-line no-unused-vars
   const [commande, setCommande] = useState(commandeObject && JSON.parse(commandeObject));
-  
+
   // eslint-disable-next-line no-unused-vars
-  // const [customer, setCustomer] = useState(customers && JSON.parse(customers));
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
   console.log(commande);
+
+  const handleClick = () => {
+    console.info(`You clicked ${options[selectedIndex]}`);
+  };
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <>
@@ -41,15 +75,68 @@ export default function DetailsCommande() {
               <div>
                 <Typography variant="h6">Commande # N°{commande.number}</Typography>
               </div>
-              <Button sx={{marginLeft:1}} color="error" variant="outlined" size="small">{commande.status}</Button>
+              <Button sx={{ marginLeft: 1 }} color="error" variant="outlined" size="small">{commande.status}</Button>
 
             </Box>
             <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">{commande.date_created}</Typography>
           </Box>
 
           <Box>
-            <Button color="error" variant="contained" size="small">{commande.status}</Button>
-            <Button sx={{marginLeft:1}} color="info" variant="contained" startIcon={<LocalPrintshopIcon />} size="small">Bon de commande</Button>
+
+            <>
+              <ButtonGroup color="error" variant='outlined' size="small" ref={anchorRef} aria-label="split button">
+                <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+                <Button
+                  size="small"
+                  aria-controls={open ? 'split-button-menu' : undefined}
+                  aria-expanded={open ? 'true' : undefined}
+                  aria-label="select merge strategy"
+                  aria-haspopup="menu"
+                  onClick={handleToggle}
+                >
+                  <ArrowDropDownIcon />
+                </Button>
+              </ButtonGroup>
+              <Popper
+                sx={{
+                  zIndex: 1,
+                }}
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === 'bottom' ? 'center top' : 'center bottom',
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList id="split-button-menu" autoFocusItem>
+                          {options.map((option, index) => (
+                            <MenuItem
+                              key={option}
+                              // disabled={index === 2}
+                              selected={index === selectedIndex}
+                              onClick={(event) => handleMenuItemClick(event, index)}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </>
+
+            <Button sx={{ marginLeft: 1 }} color="info" variant="contained" startIcon={<LocalPrintshopIcon />} size="small">Bon de commande</Button>
           </Box>
         </Box>
 
@@ -96,30 +183,30 @@ export default function DetailsCommande() {
 
           </Grid>
           <Grid item xs={4}>
-            <Card  sx={{ padding: 4 }}>
+            <Card sx={{ padding: 4 }}>
               <Typography variant="h6">Information du client</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2 }}>
-                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }}  alt={selectedUser.avatar_url} src={selectedUser.avatar_url} />
-                <Box sx={{display:'flex', flexDirection:"column"}}>
-                  <Typography variant="subtitle2">{selectedUser.username} {selectedUser?.first_name}</Typography> 
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={selectedUser.avatar_url} src={selectedUser.avatar_url} />
+                <Box sx={{ display: 'flex', flexDirection: "column" }}>
+                  <Typography variant="subtitle2">{selectedUser.username} {selectedUser?.first_name}</Typography>
                   <Typography variant="caption">{selectedUser?.email}</Typography>
                   <Typography variant="caption">{commande.customer_ip_address}</Typography>
                 </Box>
               </Box>
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: "column", marginBottom:2, marginTop:2 }}>
+              <Box sx={{ display: 'flex', flexDirection: "column", marginBottom: 2, marginTop: 2 }}>
                 <Typography variant="h6">Expédition</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Expédier par : </Typography>
                   <Typography variant="caption">DHL</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Mode : </Typography>
                   <Typography variant="caption">Standard</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Numéro de suivis : </Typography>
                   <Typography variant="caption">XX91234NSD</Typography>
                 </Box>
@@ -127,15 +214,15 @@ export default function DetailsCommande() {
               </Box>
 
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: 'column', marginBottom:2, marginTop:2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', marginBottom: 2, marginTop: 2 }}>
                 <Typography variant="h6">Livraison</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
-                  <Typography sx={{marginRight: 1}} variant="caption">Addresse: </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
+                  <Typography sx={{ marginRight: 1 }} variant="caption">Addresse: </Typography>
                   <Typography variant="caption">{commande.shipping.address_1}, {commande.shipping.address_2}
-                  {commande.shipping.city}, {commande.shipping.country}</Typography>
+                    {commande.shipping.city}, {commande.shipping.country}</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Contact: </Typography>
                   <Typography variant="caption">+243 00000000</Typography>
                 </Box>
@@ -143,14 +230,14 @@ export default function DetailsCommande() {
               </Box>
 
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: 'column',  marginBottom:2, marginTop:2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', marginBottom: 2, marginTop: 2 }}>
                 <Typography variant="h6">Paiement</Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Contact: </Typography>
                   <Typography variant="caption">+243 00000000</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", }}>
                   <Typography variant="caption">Mode de payment: </Typography>
                   <Typography variant="caption">COD</Typography>
                 </Box>
