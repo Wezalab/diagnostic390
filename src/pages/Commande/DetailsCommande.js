@@ -13,12 +13,17 @@ import Iconify from '../../components/iconify';
 
 export default function DetailsCommande() {
   const location = useLocation();
-  const { commandeObject } = location.state || {};
+  const { commandeObject, customers } = location.state || {};
 
   // eslint-disable-next-line no-unused-vars
   const [commande, setCommande] = useState(commandeObject && JSON.parse(commandeObject));
+  
+  // eslint-disable-next-line no-unused-vars
+  // const [customer, setCustomer] = useState(customers && JSON.parse(customers));
+  const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
   console.log(commande);
+  console.log(selectedUser);
 
 
   return (
@@ -88,16 +93,16 @@ export default function DetailsCommande() {
             <Card  sx={{ padding: 4 }}>
               <Typography variant="h6">Information du client</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2 }}>
-                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }}  alt="" src={commande?.image?.src} />
+                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }}  alt={selectedUser.avatar_url} src={selectedUser.avatar_url} />
                 <Box sx={{display:'flex', flexDirection:"column"}}>
-                  <Typography variant="subtitle2">Nomm</Typography>
-                  <Typography variant="caption">email@com.com</Typography>
-                  <Typography variant="caption">Adresse IP: </Typography>
+                  <Typography variant="subtitle2">{selectedUser.username} {selectedUser?.first_name}</Typography> 
+                  <Typography variant="caption">{selectedUser?.email}</Typography>
+                  <Typography variant="caption">{commande.customer_ip_address}</Typography>
                 </Box>
               </Box>
               <Divider />
               <Box sx={{ display: 'flex', flexDirection: "column", marginBottom:2, marginTop:2 }}>
-                <Typography variant="h6">Livraison</Typography>
+                <Typography variant="h6">Expédition</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
                   <Typography variant="caption">Expédier par : </Typography>
                   <Typography variant="caption">DHL</Typography>
@@ -116,15 +121,33 @@ export default function DetailsCommande() {
               </Box>
 
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2, marginTop:2 }}>
-                <Typography variant="h6">Expédition</Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', marginBottom:2, marginTop:2 }}>
+                <Typography variant="h6">Livraison</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                  <Typography sx={{marginRight: 1}} variant="caption">Addresse: </Typography>
+                  <Typography variant="caption">{commande.shipping.address_1}, {commande.shipping.address_2}
+                  {commande.shipping.city}, {commande.shipping.country}</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Contact: </Typography>
+                  <Typography variant="caption">+243 00000000</Typography>
+                </Box>
 
               </Box>
 
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom:2, marginTop:2 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column',  marginBottom:2, marginTop:2 }}>
                 <Typography variant="h6">Paiement</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Contact: </Typography>
+                  <Typography variant="caption">+243 00000000</Typography>
+                </Box>
 
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"space-between", }}>
+                  <Typography variant="caption">Mode de payment: </Typography>
+                  <Typography variant="caption">COD</Typography>
+                </Box>
               </Box>
             </Card>
           </Grid>

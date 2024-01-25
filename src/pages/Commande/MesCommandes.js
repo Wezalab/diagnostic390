@@ -309,7 +309,7 @@ export default function MesCommandes() {
       >
         <MenuItem  onClick={()=> {
           // console.log(currentCommamnde);
-          const params = { commandeObject: currentCommamnde };
+          const params = { commandeObject: currentCommamnde, customers };
           navigate('/dashboard/view-commande',  { state: params });
         }}>
           <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
