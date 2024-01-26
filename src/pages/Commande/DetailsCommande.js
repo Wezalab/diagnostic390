@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 // @mui
 import {
@@ -14,6 +14,9 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import { useReactToPrint } from 'react-to-print';
+import { LoadingButton } from '@mui/lab';
+
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
@@ -37,7 +40,7 @@ export default function DetailsCommande() {
   // eslint-disable-next-line no-unused-vars
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
-  console.log(commande);
+  // console.log(commande);
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
@@ -59,6 +62,56 @@ export default function DetailsCommande() {
 
     setOpen(false);
   };
+
+  const componentRef = useRef(null);
+
+  const onBeforeGetContentResolve = useRef(null);
+
+  const [loading, setLoading] = useState(false);
+
+  const handleAfterPrint = useCallback(() => {
+    console.log("`onAfterPrint` called"); // tslint:disable-line no-console
+  }, []);
+
+  const handleBeforePrint = useCallback(() => {
+    console.log("`onBeforePrint` called"); // tslint:disable-line no-console
+  }, []);
+
+  const handleOnBeforeGetContent = useCallback(() => {
+    console.log("`onBeforeGetContent` called"); // tslint:disable-line no-console
+    setLoading(true);
+
+    return new Promise((resolve) => {
+      onBeforeGetContentResolve.current = resolve;
+
+      setTimeout(() => {
+        setLoading(false);
+        resolve();
+      }, 2000);
+    });
+  }, [setLoading]);
+
+  const reactToPrintContent = useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+
+  const handlePrint = useReactToPrint({
+    content: reactToPrintContent,
+    documentTitle: "AwesomeFileName",
+    onBeforeGetContent: handleOnBeforeGetContent,
+    onBeforePrint: handleBeforePrint,
+    onAfterPrint: handleAfterPrint,
+    removeAfterPrint: true
+  });
+
+  useEffect(() => {
+    if (
+      typeof onBeforeGetContentResolve.current === "function"
+    ) {
+      onBeforeGetContentResolve.current();
+    }
+  }, [onBeforeGetContentResolve.current]);
+
 
   return (
     <>
@@ -137,14 +190,13 @@ export default function DetailsCommande() {
               </Popper>
             </>
 
-            <Button sx={{ marginLeft: 1 }} color="info" variant="contained" startIcon={<LocalPrintshopIcon />} size="small">Bon de commande</Button>
+            <LoadingButton loading={loading} disabled={loading} sx={{ marginLeft: 1 }} onClick={handlePrint} color="info" variant="contained" startIcon={<LocalPrintshopIcon />} size="small">Bon de commande</LoadingButton>
           </Box>
         </Box>
 
         <Grid container spacing={4}>
           <Grid item xs={8}>
-            <BonCommande commande={commande} />
-
+            <BonCommande commande={commande} ref={componentRef}/>
           </Grid>
           <Grid item xs={4}>
             <Card sx={{ padding: 4 }}>
@@ -210,6 +262,12 @@ export default function DetailsCommande() {
           </Grid>
         </Grid>
 
+
+        {/* <div>
+      {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
+     
+    </div> */}
+       
       </Container>
     </>
   );
