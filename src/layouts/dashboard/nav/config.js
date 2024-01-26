@@ -32,8 +32,8 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Mes clients',
-    path: '/dashboard/clients',
+    title: 'Mes factures',
+    path: '/dashboard/factures',
     icon: icon('ic_analytics'),
   },
   {

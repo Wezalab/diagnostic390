@@ -25,6 +25,8 @@ import Evaluation from './pages/Evaluation/Evaluation';
 import DetailsProduit from './pages/Produit/DetailsProduit';
 import AddProduct from './pages/Produit/AddProduct';
 import DetailsCommande from './pages/Commande/DetailsCommande';
+import MesFactures from './pages/Facture/MesFactures';
+import DetailsFacture from './pages/Facture/DetailsFacture';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -74,8 +76,10 @@ export default function Router() {
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'view-produit', element: <DetailsProduit /> },
+          { path: 'view-commande', element: <DetailsCommande /> },
           { path: 'add-produit', element: <AddProduct/> },
-          { path: 'view-commande', element: <DetailsCommande/> },
+          { path: 'factures', element: <MesFactures /> },
+          { path: 'view-facture', element: <DetailsFacture /> },
           
         ];
         case undefined:

@@ -22,7 +22,7 @@ const options = ["En attente", "Traitement", "Terminé", "En pause", "Annulé", 
 // const options2 = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed and trash'];
 
 
-export default function DetailsCommande() {
+export default function DetailsFacture() {
   const location = useLocation();
   const { commandeObject, customers } = location.state || {};
 
