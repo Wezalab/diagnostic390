@@ -40,7 +40,7 @@ export default function DetailsCommande() {
   // eslint-disable-next-line no-unused-vars
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
-  // console.log(commande);
+  console.log(commande);
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
@@ -202,11 +202,11 @@ export default function DetailsCommande() {
             <Card sx={{ padding: 4 }}>
               <Typography variant="h6">Information du client</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
-                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={selectedUser.avatar_url} src={selectedUser.avatar_url} />
+                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={selectedUser?.avatar_url} src={selectedUser?.avatar_url} />
                 <Box sx={{ display: 'flex', flexDirection: "column" }}>
-                  <Typography variant="subtitle2">{selectedUser.username} {selectedUser?.first_name}</Typography>
+                  <Typography variant="subtitle2">{selectedUser?.username} {selectedUser?.first_name}</Typography>
                   <Typography variant="caption">{selectedUser?.email}</Typography>
-                  <Typography variant="caption">{commande.customer_ip_address}</Typography>
+                  <Typography variant="caption">{commande?.customer_ip_address}</Typography>
                 </Box>
               </Box>
               <Divider />
@@ -234,8 +234,8 @@ export default function DetailsCommande() {
                 <Typography variant="h6">Livraison</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography sx={{ marginRight: 1 }} variant="caption">Addresse: </Typography>
-                  <Typography variant="caption">{commande.shipping.address_1}, {commande.shipping.address_2}
-                    {commande.shipping.city}, {commande.shipping.country}</Typography>
+                  <Typography variant="caption">{commande?.shipping.address_1}, {commande?.shipping.address_2}
+                    {commande?.shipping.city}, {commande?.shipping.country}</Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>

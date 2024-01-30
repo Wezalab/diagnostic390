@@ -35,7 +35,7 @@ export default function DetailsFacture() {
   const [commande, setCommande] = useState(commandeObject && JSON.parse(commandeObject));
 
   // eslint-disable-next-line no-unused-vars
-  const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
+  const selectedUser = customers.find((cus) => cus.id === commande?.customer_id);
 
   console.log(commande);
 
@@ -73,12 +73,12 @@ export default function DetailsFacture() {
                 <Iconify icon={'ion:arrow-back-sharp'} sx={{ mr: 2 }} />
               </Link>
               <div>
-                <Typography variant="h6">Facture # N°{commande.number}</Typography>
+                <Typography variant="h6">Facture # N°{commande?.number}</Typography>
               </div>
               <Button sx={{ marginLeft: 1 }} color="error" variant="outlined" size="small">{options[selectedIndex]}</Button>
 
             </Box>
-            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">{commande.date_created}</Typography>
+            <Typography sx={{ marginLeft: 5, color: "#aaa" }} variant="caption">{commande?.date_created}</Typography>
           </Box>
 
           <Box>
@@ -149,11 +149,11 @@ export default function DetailsFacture() {
             <Card sx={{ padding: 4 }}>
               <Typography variant="h6">Information du client</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
-                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={selectedUser.avatar_url} src={selectedUser.avatar_url} />
+                <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={selectedUser?.avatar_url} src={selectedUser?.avatar_url} />
                 <Box sx={{ display: 'flex', flexDirection: "column" }}>
-                  <Typography variant="subtitle2">{selectedUser.username} {selectedUser?.first_name}</Typography>
+                  <Typography variant="subtitle2">{selectedUser?.username} {selectedUser?.first_name}</Typography>
                   <Typography variant="caption">{selectedUser?.email}</Typography>
-                  <Typography variant="caption">{commande.customer_ip_address}</Typography>
+                  <Typography variant="caption">{commande?.customer_ip_address}</Typography>
                 </Box>
               </Box>
               <Divider />
@@ -181,8 +181,8 @@ export default function DetailsFacture() {
                 <Typography variant="h6">Livraison</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography sx={{ marginRight: 1 }} variant="caption">Addresse: </Typography>
-                  <Typography variant="caption">{commande.shipping.address_1}, {commande.shipping.address_2}
-                    {commande.shipping.city}, {commande.shipping.country}</Typography>
+                  <Typography variant="caption">{commande?.shipping.address_1}, {commande?.shipping.address_2}
+                    {commande?.shipping.city}, {commande?.shipping.country}</Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
