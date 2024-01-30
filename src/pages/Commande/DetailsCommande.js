@@ -97,7 +97,7 @@ export default function DetailsCommande() {
 
   const handlePrint = useReactToPrint({
     content: reactToPrintContent,
-    documentTitle: "AwesomeFileName",
+    documentTitle: `Commande#${commande.number}`,
     onBeforeGetContent: handleOnBeforeGetContent,
     onBeforePrint: handleBeforePrint,
     onAfterPrint: handleAfterPrint,

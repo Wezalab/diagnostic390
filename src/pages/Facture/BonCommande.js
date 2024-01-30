@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 
 import { Box, Card, Divider, Typography } from '@mui/material';
+import BonCommandeHeader from "../../components/facture/BonCommandeHeader";
 
 
 const BonCommande = forwardRef((props, ref) => {
@@ -9,7 +10,8 @@ const BonCommande = forwardRef((props, ref) => {
      return <Card ref={ref} sx={{ padding: 4 }} >
     <Typography variant="h6">Details</Typography>
     <Box>
-      {
+        <BonCommandeHeader />
+        {
         props.commande.line_items.map((prod, key) =>
           <div key={key} >
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
