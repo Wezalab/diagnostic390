@@ -16,11 +16,14 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import { useReactToPrint } from 'react-to-print';
 import { LoadingButton } from '@mui/lab';
+import { useSelector } from 'react-redux';
 
 
 import { useLocation } from 'react-router-dom';
 import Iconify from '../../components/iconify';
 import BonCommande from '../Facture/BonCommande';
+import { fetchUsers } from '../../redux/listUserReducer';
+import { store } from '../../redux/Store';
 
 const options = ["En attente", "Traitement", "Terminé", "En pause", "Annulé", "Remboursé", "Echec et poubelle"];
 // const options2 = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed and trash'];
@@ -29,6 +32,8 @@ const options = ["En attente", "Traitement", "Terminé", "En pause", "Annulé", 
 export default function DetailsCommande() {
   const location = useLocation();
   const { commandeObject, customers } = location.state || {};
+
+  const { userList } = useSelector((state) => state.listUser);
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -115,6 +120,11 @@ export default function DetailsCommande() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onBeforeGetContentResolve.current]);
 
+  useEffect(() => {
+    store.dispatch(fetchUsers());
+  }, []);
+
+  console.log("userList", userList.find((val) => val.name === commande?.store?.name));
 
   return (
     <>
@@ -200,7 +210,7 @@ export default function DetailsCommande() {
         <Grid container spacing={4}>
           <Grid item xs={8}>
             <Card>
-              <BonCommande commande={commande} ref={componentRef} selectedUser={selectedUser} />
+              <BonCommande commande={commande} ref={componentRef} selectedUser={selectedUser} selectedPsd={ userList.find((val) => val.name === commande?.store?.name)}/>
             </Card>
           </Grid>
           <Grid item xs={4}>
@@ -260,7 +270,7 @@ export default function DetailsCommande() {
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", }}>
                   <Typography variant="caption">Mode de payment: </Typography>
-                  <Typography variant="caption">COD</Typography>
+                  <Typography variant="caption">{commande?.payment_method_title}</Typography>
                 </Box>
               </Box>
             </Card>

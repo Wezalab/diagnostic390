@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 
-const BonCommandeHeader = ({ selectedUser, commande}) =>
+const BonCommandeHeader = ({ selectedUser, commande, selectedPsd}) =>
 
   <Box sx={{marginBottom: 2, display:'none', displayPrint:'block'}} >
     <Typography variant="h4">Bon de commande</Typography>
@@ -24,9 +24,9 @@ const BonCommandeHeader = ({ selectedUser, commande}) =>
         <Typography variant="caption">{commande?.store?.shop_name} {commande?.store?.name}</Typography>
         <Typography variant="caption">{commande?.store?.address?.street_1}, {commande?.store?.address?.street_2},
         {commande?.store?.address?.city}, {commande?.store?.address?.country}</Typography>
-        <Typography variant="caption">email</Typography>
-        <Typography variant="caption">telephone</Typography>
-        <Typography variant="caption">site web</Typography>
+        <Typography variant="caption">{selectedPsd?.email}</Typography>
+        <Typography variant="caption">{selectedPsd?.mobile}</Typography>
+        {/* <Typography variant="caption">site web</Typography> */}
       </Grid>
     </Grid>
 
@@ -49,6 +49,7 @@ const BonCommandeHeader = ({ selectedUser, commande}) =>
 BonCommandeHeader.propTypes = {
   commande: PropTypes.object,
   selectedUser: PropTypes.object,
+  selectedPsd: PropTypes.object,
 };
 
 export default BonCommandeHeader;

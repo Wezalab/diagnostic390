@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Box, Divider, Typography } from '@mui/material';
 import BonCommandeHeader from "../../components/facture/BonCommandeHeader";
 
-const BonCommande = forwardRef(({commande, selectedUser }, ref) => 
+const BonCommande = forwardRef(({commande, selectedUser, selectedPsd }, ref) => 
 
   <Box ref={ref} sx={{ padding: 4}}  >
     <Typography  displayPrint="none" variant="h6">Details</Typography>
     <Box>
-      <BonCommandeHeader  commande={commande} selectedUser={selectedUser}  />
+      <BonCommandeHeader  commande={commande} selectedUser={selectedUser} selectedPsd={selectedPsd}  />
       {
         commande.line_items.map((prod, key) =>
           <div key={key} >
@@ -50,6 +50,7 @@ const BonCommande = forwardRef(({commande, selectedUser }, ref) =>
 BonCommande.propTypes = {
   commande: PropTypes.object,
   selectedUser: PropTypes.object,
+  selectedPsd: PropTypes.object,
 };
 
 export default BonCommande;
