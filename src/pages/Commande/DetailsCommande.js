@@ -196,7 +196,9 @@ export default function DetailsCommande() {
 
         <Grid container spacing={4}>
           <Grid item xs={8}>
-            <BonCommande commande={commande} ref={componentRef}/>
+            <Card>
+              <BonCommande commande={commande} ref={componentRef}/>
+            </Card>
           </Grid>
           <Grid item xs={4}>
             <Card sx={{ padding: 4 }}>

@@ -3,15 +3,13 @@ import React, { forwardRef } from "react";
 import { Box, Card, Divider, Typography } from '@mui/material';
 import BonCommandeHeader from "../../components/facture/BonCommandeHeader";
 
-
 const BonCommande = forwardRef((props, ref) => {
 
-
-     return <Card ref={ref} sx={{ padding: 4 }} >
-    <Typography variant="h6">Details</Typography>
+  return <Box ref={ref} sx={{ padding: 4}}  >
+    <Typography  displayPrint="none" variant="h6">Details</Typography>
     <Box>
-        <BonCommandeHeader />
-        {
+      <BonCommandeHeader />
+      {
         props.commande.line_items.map((prod, key) =>
           <div key={key} >
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
@@ -45,7 +43,7 @@ const BonCommande = forwardRef((props, ref) => {
         <Typography variant="subtitle1">{props.commande.total}</Typography>
       </Box>
     </Box>
-  </Card>
+  </Box>
 })
 
 
