@@ -40,6 +40,7 @@ export default function DetailsCommande() {
   // eslint-disable-next-line no-unused-vars
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
+  console.log(selectedUser);
   console.log(commande);
 
   const handleClick = () => {
@@ -91,9 +92,10 @@ export default function DetailsCommande() {
     });
   }, [setLoading]);
 
-  const reactToPrintContent = useCallback(() => {
-    return componentRef.current;
-  }, [componentRef.current]);
+  const reactToPrintContent = useCallback(() =>
+    componentRef.current
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , [componentRef.current]);
 
   const handlePrint = useReactToPrint({
     content: reactToPrintContent,
@@ -110,6 +112,7 @@ export default function DetailsCommande() {
     ) {
       onBeforeGetContentResolve.current();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onBeforeGetContentResolve.current]);
 
 
@@ -197,7 +200,7 @@ export default function DetailsCommande() {
         <Grid container spacing={4}>
           <Grid item xs={8}>
             <Card>
-              <BonCommande commande={commande} ref={componentRef}/>
+              <BonCommande commande={commande} ref={componentRef} selectedUser={selectedUser} />
             </Card>
           </Grid>
           <Grid item xs={4}>
@@ -269,7 +272,7 @@ export default function DetailsCommande() {
       {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
      
     </div> */}
-       
+
       </Container>
     </>
   );

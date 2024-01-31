@@ -1,23 +1,24 @@
 import React, { forwardRef } from "react";
+import PropTypes from 'prop-types';
 
-import { Box, Card, Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import BonCommandeHeader from "../../components/facture/BonCommandeHeader";
 
-const BonCommande = forwardRef((props, ref) => {
+const BonCommande = forwardRef(({commande, selectedUser }, ref) => 
 
-  return <Box ref={ref} sx={{ padding: 4}}  >
+  <Box ref={ref} sx={{ padding: 4}}  >
     <Typography  displayPrint="none" variant="h6">Details</Typography>
     <Box>
-      <BonCommandeHeader />
+      <BonCommandeHeader  commande={commande} selectedUser={selectedUser}  />
       {
-        props.commande.line_items.map((prod, key) =>
+        commande.line_items.map((prod, key) =>
           <div key={key} >
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <img style={{ width: 70, border: '1px solid #EEE', borderRadius: 5, cursor: 'pointer', margin: 8 }} alt={prod?.image?.id} src={prod?.image?.src} />
                 <Box>
                   <Typography variant="subtitle2">{prod.name}</Typography>
-                  <Typography variant="caption">{props.commande.date_created}</Typography>
+                  <Typography variant="caption">{commande.date_created}</Typography>
                 </Box>
               </Box>
               <Typography variant="body2">X{prod.quantity}</Typography>
@@ -30,7 +31,7 @@ const BonCommande = forwardRef((props, ref) => {
         )}
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginTop: 2 }} >
         <Typography variant="subtitle1" sx={{ marginLeft: '70%' }}>Sous total : </Typography>
-        <Typography variant="body1">{props.commande.total}$</Typography>
+        <Typography variant="body1">{commande.total}$</Typography>
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
@@ -40,11 +41,15 @@ const BonCommande = forwardRef((props, ref) => {
 
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
         <Typography sx={{ marginLeft: '70%' }} variant="subtitle1">TOTAL : </Typography>
-        <Typography variant="subtitle1">{props.commande.total}</Typography>
+        <Typography variant="subtitle1">{commande.total}</Typography>
       </Box>
     </Box>
   </Box>
-})
+)
 
+BonCommande.propTypes = {
+  commande: PropTypes.object,
+  selectedUser: PropTypes.object,
+};
 
 export default BonCommande;

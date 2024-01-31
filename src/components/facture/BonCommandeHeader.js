@@ -1,9 +1,12 @@
 import React from "react";
 
+import PropTypes from 'prop-types';
+
 import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
-const BonCommandeHeader = () =>
+
+const BonCommandeHeader = ({ selectedUser}) =>
 
   <Box sx={{marginBottom: 2, display:'none', displayPrint:'block'}} >
     <Typography variant="h4">Bon de commande</Typography>
@@ -12,7 +15,7 @@ const BonCommandeHeader = () =>
         <Typography variant="subtitle1">Emis par:</Typography>
         <Typography variant="caption">Nom</Typography>
         <Typography variant="caption">Address</Typography>
-        <Typography variant="caption">email</Typography>
+        <Typography variant="caption">{selectedUser.email}</Typography>
         <Typography variant="caption">telephone</Typography>
         <Typography variant="caption">site web</Typography>
       </Grid>
@@ -42,5 +45,9 @@ const BonCommandeHeader = () =>
     </Box>
   </Box>
 
+BonCommandeHeader.propTypes = {
+  // commande: PropTypes.object,
+  selectedUser: PropTypes.object,
+};
 
 export default BonCommandeHeader;
