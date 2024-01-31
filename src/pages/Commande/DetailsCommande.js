@@ -45,8 +45,17 @@ export default function DetailsCommande() {
   // eslint-disable-next-line no-unused-vars
   const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
 
+  console.log("userList", userList.find((val) => val.name === commande?.store?.name));
+  console.log("selectedUser2", userList.find((val) => val.email === selectedUser?.email));
+
+
   console.log(selectedUser);
   console.log(commande);
+
+  // eslint-disable-next-line no-unused-vars
+  const [selectedUser2, setSelectedUser2] = useState(userList.find((val) => val.email === selectedUser?.email));
+
+
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
@@ -124,7 +133,6 @@ export default function DetailsCommande() {
     store.dispatch(fetchUsers());
   }, []);
 
-  console.log("userList", userList.find((val) => val.name === commande?.store?.name));
 
   return (
     <>
@@ -210,7 +218,7 @@ export default function DetailsCommande() {
         <Grid container spacing={4}>
           <Grid item xs={8}>
             <Card>
-              <BonCommande commande={commande} ref={componentRef} selectedUser={selectedUser} selectedPsd={ userList.find((val) => val.name === commande?.store?.name)}/>
+              <BonCommande commande={commande} ref={componentRef} selectedUser={selectedUser} selectedUser2={selectedUser2} selectedPsd={ userList.find((val) => val.name === commande?.store?.name)}/>
             </Card>
           </Grid>
           <Grid item xs={4}>
@@ -255,7 +263,7 @@ export default function DetailsCommande() {
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Contact: </Typography>
-                  <Typography variant="caption">+243 00000000</Typography>
+                  <Typography variant="caption">+{selectedUser2?.mobile}</Typography>
                 </Box>
 
               </Box>
@@ -265,7 +273,7 @@ export default function DetailsCommande() {
                 <Typography variant="h6">Paiement</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Contact: </Typography>
-                  <Typography variant="caption">+243 00000000</Typography>
+                  <Typography variant="caption">+{selectedUser2?.mobile}</Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", }}>
