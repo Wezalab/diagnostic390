@@ -1566,6 +1566,9 @@ export default function MesCommandes() {
                                         const selectedOrder = selected.indexOf(number) !== -1;
                                         const selectedUser = customers.find((cus) => cus.id === customer_id);
 
+                                        const foundsParent = filteredCommandes.find((parent) => (parent.parent_id === id));
+                                        console.log("foundsParent", foundsParent);
+
                                         return (
 
                                             <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedOrder}>
@@ -1573,7 +1576,7 @@ export default function MesCommandes() {
                                                     <Checkbox checked={selectedOrder} onChange={(event) => handleClick(event, number)} />
                                                 </TableCell>
 
-                                                <TableCell align="left"># N°{number}</TableCell>
+                                                <TableCell align="left"># N°{parent_id===0 ? number:  `${number} sous ${parent_id}`}</TableCell>
 
 
                                                 <TableCell component="th" scope="row" padding="2">
@@ -1596,17 +1599,19 @@ export default function MesCommandes() {
                                                 <TableCell align="left">{total} {currency}</TableCell>
                                                 <TableCell align="left">{line_items?.length}</TableCell>
 
+                                                {!foundsParent ?
+                                                    <TableCell align="left"><Label color={(status === 'outofstock' && 'error') || 'success'}>{status}</Label> </TableCell>:
+                                                    <TableCell align="left"><Label variant="ghost" color="default" >Commande groupee</Label> </TableCell>
+                                                }
 
-                                                <TableCell align="left"><Label color={(status === 'outofstock' && 'error') || 'success'}>{status}</Label> </TableCell>
-
-
+                                                {!foundsParent && 
                                                 <TableCell align="right">
                                                     <IconButton size="large" color="inherit" onClick={(e) => {
                                                         handleOpenMenu(e, row);
                                                     }}>
                                                         <Iconify icon={'eva:more-vertical-fill'} />
                                                     </IconButton>
-                                                </TableCell>
+                                                </TableCell>}
                                             </TableRow>
 
 
