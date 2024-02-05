@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 const BonCommandeHeader = ({ selectedUser, commande, selectedPsd, selectedUser2}) =>
 
   <Box sx={{marginBottom: 2, display:'none', displayPrint:'block'}} >
-    <Typography variant="h4">Bon de commande</Typography>
+    <Typography variant="h4">Bon de commande N# {commande?.number}</Typography>
     <Grid container spacing={4} marginTop={3} marginBottom={2}>
       <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }} >
         <Typography variant="subtitle1">Emis par:</Typography>
