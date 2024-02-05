@@ -21,8 +21,18 @@ const BonCommande = forwardRef(({commande, selectedUser, selectedPsd, selectedUs
                   <Typography variant="caption">{commande.date_created}</Typography>
                 </Box>
               </Box>
-              <Typography variant="body2">X{prod.quantity}</Typography>
-              <Typography variant="subtitle1">{prod.price} $</Typography>
+              <Box>
+                  <Typography variant="subtitle2">P.U</Typography>
+                  <Typography variant="caption">{prod.price} {commande.currency}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="subtitle2">Qt</Typography>
+                  <Typography variant="caption">{prod.quantity}</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="subtitle2">P.T</Typography>
+                  <Typography variant="caption">{prod.total} {commande.currency}</Typography>
+                </Box>
             </Box>
 
             <Divider />
@@ -30,18 +40,18 @@ const BonCommande = forwardRef(({commande, selectedUser, selectedPsd, selectedUs
           </div>
         )}
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", marginTop: 2 }} >
-        <Typography variant="subtitle1" sx={{ marginLeft: '70%' }}>Sous total : </Typography>
-        <Typography variant="body1">{commande.total}$</Typography>
+        <Typography variant="subtitle1" sx={{ marginLeft: '60%' }}>Sous total : </Typography>
+        <Typography variant="body1">{commande.total} {commande.currency}</Typography>
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
-        <Typography sx={{ color: '#a21', marginLeft: '70%' }} variant="subtitle1">Taxe : </Typography>
+        <Typography sx={{ color: '#a21', marginLeft: '60%' }} variant="subtitle1">Taxe : </Typography>
         <Typography sx={{ color: '#a21' }} variant="body1">0</Typography>
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 }} >
-        <Typography sx={{ marginLeft: '70%' }} variant="subtitle1">TOTAL : </Typography>
-        <Typography variant="subtitle1">{commande.total}</Typography>
+        <Typography sx={{ marginLeft: '60%' }} variant="subtitle1">TOTAL : </Typography>
+        <Typography variant="subtitle1">{commande.total} {commande.currency}</Typography>
       </Box>
     </Box>
   </Box>

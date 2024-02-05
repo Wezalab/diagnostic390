@@ -33,7 +33,7 @@ const BonCommandeHeader = ({ selectedUser, commande, selectedPsd, selectedUser2}
 
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
       <Typography variant="subtitle2">Date de la commande: </Typography>
-      <Typography sx={{ marginLeft: 1 }} variant="caption"> le 25 janv 2024</Typography>
+      <Typography sx={{ marginLeft: 1 }} variant="caption"> {commande.date_created}</Typography>
     </Box>
 
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -43,7 +43,7 @@ const BonCommandeHeader = ({ selectedUser, commande, selectedPsd, selectedUser2}
 
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
       <Typography variant="subtitle2">Mode de paiement: </Typography>
-      <Typography sx={{ marginLeft: 1 }} variant="caption">Chèque</Typography>
+      <Typography sx={{ marginLeft: 1 }} variant="caption">{commande.payment_method_title?commande.payment_method_title:`Chèque` }</Typography>
     </Box>
   </Box>
 
