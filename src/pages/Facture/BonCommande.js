@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Box, Divider, Typography } from '@mui/material';
 import BonCommandeHeader from "../../components/facture/BonCommandeHeader";
 
-const BonCommande = forwardRef(({commande, selectedUser, selectedPsd, selectedUser2 }, ref) => 
+const BonCommande = forwardRef(({ commande, selectedUser, selectedPsd, selectedUser2 }, ref) =>
 
-  <Box ref={ref} sx={{ padding: 4}}  >
-    <Typography  displayPrint="none" variant="h6">Details</Typography>
+  <Box ref={ref} sx={{ padding: 4 }}  >
+    <Typography displayPrint="none" variant="h6">Details</Typography>
     <Box>
-      <BonCommandeHeader  commande={commande} selectedUser={selectedUser} selectedPsd={selectedPsd} selectedUser2={selectedUser2}  />
+      <BonCommandeHeader commande={commande} selectedUser={selectedUser} selectedPsd={selectedPsd} selectedUser2={selectedUser2} />
       {
         commande.line_items.map((prod, key) =>
           <div key={key} >
@@ -22,19 +22,19 @@ const BonCommande = forwardRef(({commande, selectedUser, selectedPsd, selectedUs
                 </Box>
               </Box>
               <Box>
-                  <Typography variant="subtitle2">P.U</Typography>
-                  <Typography variant="caption">{prod.price} {commande.currency}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle2">Qt</Typography>
-                  <Typography variant="caption">{prod.quantity}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle2">P.T</Typography>
-                  <Typography variant="caption">{prod.total} {commande.currency}</Typography>
-                </Box>
+                <Typography variant="subtitle2">P.U</Typography>
+                <Typography variant="caption">{prod.price} {commande.currency}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="subtitle2">Qt</Typography>
+                <Typography variant="caption">{prod.quantity}</Typography>
+              </Box>
+              <Box>
+                <Typography variant="subtitle2">P.T</Typography>
+                <Typography variant="caption">{prod.total} {commande.currency}</Typography>
+              </Box>
             </Box>
-
+            
             <Divider />
 
           </div>

@@ -173,7 +173,6 @@ export default function DetailsFacture() {
                   <Typography variant="caption">Numéro de suivis : </Typography>
                   <Typography variant="caption">XX91234NSD</Typography>
                 </Box>
-
               </Box>
 
               <Divider />
@@ -189,7 +188,6 @@ export default function DetailsFacture() {
                   <Typography variant="caption">Contact: </Typography>
                   <Typography variant="caption">+243 00000000</Typography>
                 </Box>
-
               </Box>
 
               <Divider />
