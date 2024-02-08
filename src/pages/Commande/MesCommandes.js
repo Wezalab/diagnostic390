@@ -4,7 +4,7 @@ import { filter } from 'lodash';
 
 // @mui
 import {
-    Container, Box, Typography, Card, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, Stack, IconButton, Paper, TablePagination, Avatar, CircularProgress, Popover, MenuItem, TableHead, Collapse,
+    Container, Box, Typography, Card, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, Stack, IconButton, Paper, TablePagination, Avatar, CircularProgress, TableHead, Collapse,
 } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
@@ -1867,7 +1867,6 @@ export default function MesCommandes() {
     }, []);
 
     console.log(commandes);
-    const [open, setOpen] = useState(null);
 
     const [page, setPage] = useState(0);
 
@@ -1880,8 +1879,6 @@ export default function MesCommandes() {
     const [filterNumber, setFilterNumber] = useState('');
 
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
-    const [currentCommamnde, setCurrentCommamnde] = useState(null);
 
 
     const TABLE_HEAD = [
@@ -1923,16 +1920,13 @@ export default function MesCommandes() {
         return stabilizedThis.map((el) => el[0]);
     }
 
-    const handleOpenMenu = (event, commandeObject) => {
-        setOpen(event.currentTarget);
-        setCurrentCommamnde(JSON.stringify(commandeObject));
+    const handleOpenMenu = (commandeObject) => {
+        const params = { commandeObject: JSON.stringify(commandeObject), customers };
+        navigate('/dashboard/view-commande', { state: params });
     };
 
-    const handleCloseMenu = () => {
-        setOpen(null);
-    };
 
-    const handleRequestSort = (event, property) => {
+    const handleRequestSort = ( property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -2041,7 +2035,7 @@ export default function MesCommandes() {
                             <IconButton size="large" color="inherit" onClick={(e) => {
                                 handleOpenMenu(e, row);
                             }}>
-                                <Iconify icon={'eva:more-vertical-fill'} />
+                                <Iconify icon={'mdi:eye'} />
                             </IconButton>
                         </TableCell> :
                         <TableCell align="right">
@@ -2072,16 +2066,15 @@ export default function MesCommandes() {
                                 <TableRow>
                                     <TableCell>Number</TableCell>
                                     <TableCell>customer_id</TableCell>
-                                    <TableCell align="right">date_created</TableCell>
-                                    <TableCell align="right">total</TableCell>
-                                    <TableCell align="right">line_items</TableCell>
-                                    <TableCell align="right">status</TableCell>
-                                    <TableCell align="right">''</TableCell>
+                                    <TableCell >date_created</TableCell>
+                                    <TableCell >total</TableCell>
+                                    <TableCell >line_items</TableCell>
+                                    <TableCell >status</TableCell>
+                                    <TableCell > </TableCell>
                                 </TableRow>
                             </TableHead>
 
                             {
-                                // currentCommamndeChild?.id === 42 ?
                                 commandes.filter((value) => value.parent_id === currentCommamndeChild?.id).map((row) => {
 
                                     /* eslint-disable camelcase */
@@ -2120,12 +2113,12 @@ export default function MesCommandes() {
                                             <IconButton size="large" color="inherit" onClick={(e) => {
                                                 handleOpenMenu(e, row);
                                             }}>
-                                                <Iconify icon={'eva:more-vertical-fill'} />
+                                                <Iconify icon={'mdi:eye'} />
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 }
-                                ) // : null
+                                ) 
                             }
 
                         </Table>
@@ -2183,9 +2176,8 @@ export default function MesCommandes() {
                                     const foundsParent = commandes.find((parent) => (parent.parent_id === id));
 
 
-                                    return <Row row={row} selectedOrder={selectedOrder} selectedUser={selectedUser} foundsParent={foundsParent} />
+                                    return <Row key={id} row={row} selectedOrder={selectedOrder} selectedUser={selectedUser} foundsParent={foundsParent} />
                                 })}
-
 
 
                                 {
@@ -2250,33 +2242,6 @@ export default function MesCommandes() {
                 </Card>
 
             </Container>
-            <Popover
-                open={Boolean(open)}
-                anchorEl={open}
-                onClose={handleCloseMenu}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                PaperProps={{
-                    sx: {
-                        p: 1,
-                        width: 140,
-                        '& .MuiMenuItem-root': {
-                            px: 1,
-                            typography: 'body2',
-                            borderRadius: 0.75,
-                        },
-                    },
-                }}
-            >
-                <MenuItem onClick={() => {
-                    // console.log(currentCommamnde);
-                    const params = { commandeObject: currentCommamnde, customers };
-                    navigate('/dashboard/view-commande', { state: params });
-                }}>
-                    <Iconify icon={'mdi:eye'} sx={{ mr: 2 }} />
-                    Voir Details
-                </MenuItem>
-            </Popover>
 
         </>
     );
