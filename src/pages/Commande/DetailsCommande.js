@@ -43,17 +43,17 @@ export default function DetailsCommande() {
   const [commande, setCommande] = useState(commandeObject && JSON.parse(commandeObject));
 
   // eslint-disable-next-line no-unused-vars
-  const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
-//   const [selectedUser, setselectedUser] = useState({
-//     "userId": "65af8fdd6045c2a868195d2",
-//     "name": "psd",
-//     "email": "psd@test.com",
-//     "mobile": "243 891 979 0097",
-//     "sex": "AUTRE",
-//     "role": "PSDE",
-//     "username": "psd",
-//     "profile_picture": "https://i.pravatar.cc/48?u=952946"
-// })
+  // const selectedUser = customers.find((cus) => cus.id === commande.customer_id);
+  const [selectedUser, setselectedUser] = useState({
+    "userId": "65af8fdd6045c2a868195d2",
+    "name": "psd",
+    "email": "psd@test.com",
+    "mobile": "243 891 979 0097",
+    "sex": "AUTRE",
+    "role": "PSDE",
+    "username": "psd",
+    "profile_picture": "https://i.pravatar.cc/48?u=952946"
+})
   
   console.log("userList", userList.find((val) => val.name === commande?.store?.name));
   console.log("selectedUser2", userList.find((val) => val?.email === selectedUser?.email));
