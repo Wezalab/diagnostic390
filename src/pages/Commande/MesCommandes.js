@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
 import { filter } from 'lodash';
 
 // @mui
@@ -17,6 +18,7 @@ import Label from '../../components/label/Label';
 
 export default function MesCommandes() {
     const navigate = useNavigate();
+    // eslint-disable-next-line
     const [commandes, setCommandes] = useState([
         {
             "id": 432,
@@ -1969,6 +1971,34 @@ export default function MesCommandes() {
         setPage(0);
         setFilterNumber(event.target.value);
     };
+
+    Row.propTypes = {
+        row: PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          parent_id: PropTypes.number.isRequired,
+          currency: PropTypes.string.isRequired,
+          number: PropTypes.number.isRequired,
+          total: PropTypes.number.isRequired,
+          line_items: PropTypes.object.isRequired,
+          date_created: PropTypes.string.isRequired,
+          status: PropTypes.string.isRequired,
+          
+          foundsParent: PropTypes.object.isRequired,
+          price: PropTypes.number.isRequired,
+          protein: PropTypes.number.isRequired,
+        }).isRequired,
+        selectedUser: PropTypes.objectOf(
+            PropTypes.shape({
+              avatar_url: PropTypes.number.isRequired,
+              username: PropTypes.string.isRequired,
+              email: PropTypes.string.isRequired,
+            }),
+          ).isRequired,
+          selectedOrder: PropTypes.object.isRequired,
+          foundsParent: PropTypes.number.isRequired,
+
+
+      };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commandes.filter((value) => value.parent_id === 0).length) : 0;
 
