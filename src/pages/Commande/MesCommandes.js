@@ -1922,13 +1922,15 @@ export default function MesCommandes() {
         return stabilizedThis.map((el) => el[0]);
     }
 
-    const handleOpenMenu = (commandeObject) => {
-        const params = { commandeObject: JSON.stringify(commandeObject), customers };
-        navigate('/dashboard/view-commande', { state: params });
+    const handleOpenMenu = (event, commandeObject) => {
+        const params = { commandeObject: JSON.stringify(commandeObject),customers };
+        console.log(params);
+
+        navigate('/dashboard/view-commande', { state: params, relative: true  });
     };
 
 
-    const handleRequestSort = ( property) => {
+    const handleRequestSort = (property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -1971,34 +1973,6 @@ export default function MesCommandes() {
         setPage(0);
         setFilterNumber(event.target.value);
     };
-
-    Row.propTypes = {
-        row: PropTypes.shape({
-          id: PropTypes.number.isRequired,
-          parent_id: PropTypes.number.isRequired,
-          currency: PropTypes.string.isRequired,
-          number: PropTypes.number.isRequired,
-          total: PropTypes.number.isRequired,
-          line_items: PropTypes.object.isRequired,
-          date_created: PropTypes.string.isRequired,
-          status: PropTypes.string.isRequired,
-          
-          foundsParent: PropTypes.object.isRequired,
-          price: PropTypes.number.isRequired,
-          protein: PropTypes.number.isRequired,
-        }).isRequired,
-        selectedUser: PropTypes.objectOf(
-            PropTypes.shape({
-              avatar_url: PropTypes.number.isRequired,
-              username: PropTypes.string.isRequired,
-              email: PropTypes.string.isRequired,
-            }),
-          ).isRequired,
-          selectedOrder: PropTypes.object.isRequired,
-          foundsParent: PropTypes.number.isRequired,
-
-
-      };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - commandes.filter((value) => value.parent_id === 0).length) : 0;
 
@@ -2148,7 +2122,7 @@ export default function MesCommandes() {
                                         </TableCell>
                                     </TableRow>
                                 }
-                                ) 
+                                )
                             }
 
                         </Table>
@@ -2163,8 +2137,34 @@ export default function MesCommandes() {
                 </TableRow>
             )}
         </TableBody>
-
     }
+
+    Row.propTypes = {
+        row: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            parent_id: PropTypes.number.isRequired,
+            currency: PropTypes.string.isRequired,
+            number: PropTypes.number.isRequired,
+            total: PropTypes.number.isRequired,
+            line_items: PropTypes.object.isRequired,
+            date_created: PropTypes.string.isRequired,
+            status: PropTypes.string.isRequired,
+
+            foundsParent: PropTypes.object.isRequired,
+            price: PropTypes.number.isRequired,
+            protein: PropTypes.number.isRequired,
+        }).isRequired,
+        selectedUser: PropTypes.objectOf(
+            PropTypes.shape({
+                avatar_url: PropTypes.number.isRequired,
+                username: PropTypes.string.isRequired,
+                email: PropTypes.string.isRequired,
+            }),
+        ).isRequired,
+        selectedOrder: PropTypes.object.isRequired,
+        foundsParent: PropTypes.number.isRequired,
+    };
+
 
     return (
         <>
