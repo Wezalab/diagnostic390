@@ -1,0 +1,805 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+  @import 'https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:300,400';
+
+  /* colors */
+  /* tab setting */
+  /* breakpoints */
+  /* selectors relative to radio inputs */
+  .nr-icon.grey {
+    color: #d1d1d1 !important
+  }
+
+  .nr-icon.gold {
+    color: #ffcd00;
+  }
+
+  .netreviews_review_stars span,
+  .netreviews_stats_stars span,
+  .netreviews_stats_stars_big span {
+    display: inline-block;
+  }
+
+  .netreviews_review_stars span,
+  .netreviews_stats_stars span,
+  .netreviews_stats_stars_big span {
+    display: inline-block;
+  }
+
+  .nr-icon {
+    font-family: nr-icons !important;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .titre {
+    color: #428BFF;
+    font-weight: 300;
+  }
+
+  .tabs {
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+    background: white;
+    padding: 15px;
+    padding-bottom: 80px;
+    width: 100%;
+    /* height: 250px; */
+    box-shadow: 0 14px 8px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    border-radius: 5px;
+    /* min-width: 240px; */
+  }
+
+  .tabs input[name=tab-control] {
+    display: none;
+  }
+
+  .tabs .content section h2,
+  .tabs ul li label {
+    font-family: "Montserrat";
+    font-weight: bold;
+    /* font-size: 18px; */
+    color: #428BFF;
+  }
+
+  .img {
+    width: 100%;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .img-logo {
+    margin-top: 40px;
+  }
+
+  .tabs ul {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .tabs ul li {
+    box-sizing: border-box;
+    flex: 1;
+    width: 20%;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .tabs ul li label {
+    transition: all 0.3s ease-in-out;
+    color: #929daf;
+    padding: 5px auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    white-space: nowrap;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .tabs ul li label br {
+    display: none;
+  }
+
+  .tabs ul li label svg {
+    fill: #929daf;
+    height: 1.2em;
+    vertical-align: bottom;
+    margin-right: 0.2em;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .tabs ul li label:hover,
+  .tabs ul li label:focus,
+  .tabs ul li label:active {
+    outline: 0;
+    color: #bec5cf;
+  }
+
+  .tabs ul li label:hover svg,
+  .tabs ul li label:focus svg,
+  .tabs ul li label:active svg {
+    fill: #bec5cf;
+  }
+
+  .tabs .slider {
+    position: relative;
+    width: 20%;
+    transition: all 0.33s cubic-bezier(0.38, 0.8, 0.32, 1.07);
+  }
+
+  .tabs .slider .indicator {
+    position: relative;
+    width: 50px;
+    /* max-width: 100%; */
+    margin: 0 auto;
+    height: 4px;
+    background: #428BFF;
+    border-radius: 1px;
+  }
+
+  .tabs .content {
+    margin-top: 30px;
+  }
+
+  .tabs .content section {
+    display: none;
+    -webkit-animation-name: content;
+    animation-name: content;
+    -webkit-animation-direction: normal;
+    animation-direction: normal;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+    line-height: 1.4;
+  }
+
+  .tabs .content section h2 {
+    color: #428BFF;
+    display: none;
+  }
+
+  .tabs .content section h2::after {
+    content: "";
+    position: relative;
+    display: block;
+    /* width: 30px; */
+    height: 3px;
+    background: #428BFF;
+    margin-top: 5px;
+    left: 1px;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(1):checked~ul>li:nth-child(1)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(1):checked~ul>li:nth-child(1)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(1):checked~ul>li:nth-child(1)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(1):checked~.slider {
+    transform: translateX(0%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(1):checked~.content>section:nth-child(1) {
+    display: block;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(2):checked~ul>li:nth-child(2)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(2):checked~ul>li:nth-child(2)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(2):checked~ul>li:nth-child(2)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(2):checked~.slider {
+    transform: translateX(100%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(2):checked~.content>section:nth-child(2) {
+    display: block;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(3):checked~ul>li:nth-child(3)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(3):checked~ul>li:nth-child(3)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(3):checked~ul>li:nth-child(3)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(3):checked~.slider {
+    transform: translateX(200%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(3):checked~.content>section:nth-child(3) {
+    display: block;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(4):checked~ul>li:nth-child(4)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(4):checked~ul>li:nth-child(4)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(4):checked~ul>li:nth-child(4)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(4):checked~.slider {
+    transform: translateX(300%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(4):checked~.content>section:nth-child(4) {
+    display: block;
+  }
+
+
+
+
+
+
+
+  .tabs input[name=tab-control]:nth-of-type(5):checked~ul>li:nth-child(5)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(5):checked~ul>li:nth-child(5)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(5):checked~ul>li:nth-child(5)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(5):checked~.slider {
+    transform: translateX(200%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(5):checked~.content>section:nth-child(5) {
+    display: block;
+  }
+
+
+
+
+
+
+
+  .tabs input[name=tab-control]:nth-of-type(6):checked~ul>li:nth-child(6)>label {
+    cursor: default;
+    color: #428BFF;
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(6):checked~ul>li:nth-child(6)>label svg {
+    fill: #428BFF;
+  }
+
+  @media (max-width: 600px) {
+    .tabs input[name=tab-control]:nth-of-type(6):checked~ul>li:nth-child(6)>label {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .tabs ul li {
+      box-sizing: border-box;
+      /* flex: 1; */
+      width: 100%;
+      padding: 0 10px;
+      display: block;
+    }
+
+    .tabs ul {
+      flex-direction: column;
+    }
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(6):checked~.slider {
+    transform: translateX(200%);
+  }
+
+  .tabs input[name=tab-control]:nth-of-type(6):checked~.content>section:nth-child(6) {
+    display: block;
+  }
+
+
+  @-webkit-keyframes content {
+    from {
+      opacity: 0;
+      transform: translateY(5%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+
+  @keyframes content {
+    from {
+      opacity: 0;
+      transform: translateY(5%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .tabs ul li label {
+      white-space: initial;
+    }
+
+    .tabs ul li label br {
+      display: initial;
+    }
+
+    .tabs ul li label svg {
+      height: 1.5em;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tabs ul li label {
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .tabs ul li label span {
+      display: block;
+      box-sizing: border-box;
+      /* flex: 1; */
+
+
+      width: 100%;
+      padding: 0 10px;
+      text-align: center;
+    }
+
+    .tabs .slider {
+      display: none;
+    }
+
+    .tabs .content {
+      margin-top: 20px;
+    }
+
+    .tabs .content section h2 {
+      display: block;
+    }
+  }
+</style>
+<div class="container">
+
+
+  <div class="head">
+    <h3 class="titre">ISO 45001 Lead Auditor : santé et sécurité au travail</h3>
+    <p class="text-light bg-success">FORMATION AVEC CERTIFICATION</p>
+    <div class="col"> <span class="nr-icon nr-star gold"></span> <span class="nr-icon nr-star gold"></span> <span
+        class="nr-icon nr-star gold"></span> <span class="nr-icon nr-star gold"></span> <span
+        class="nr-icon nr-star grey"></span> </div>
+    <h5><b>ISO 45001 : </b> : <span class="titre">MANAGEMENT DE LA SANTE ET DE LA SECURITE AU TRAVAIL</span></h5>
+
+    <p>La réalisation d’un audit interne ou externe est une des exigences de la norme <strong>ISO 45001</strong>. Elle
+      permet d’évaluer la performance et l’efficience du système de management mis en place et contribue à engager la
+      société dans une démarche d’amélioration continue.</p>
+
+    <p>
+      Par son expérience et sa connaissance du contexte de la société, l’auditeur interne pourra apporter les
+      recommandations nécessaires pour faire du système de management SST un outil stratégique de gestion pour répondre
+      aux enjeux SST et de développement établis.
+    </p>
+    <p>
+      <strong>La formation Lead Auditor</strong> vous permet de bien comprendre les subtilités des exigences de la
+      norme, d’appréhender la démarche d’audit et d’acquérir les outils nécessaires à la conduite d’un audit interne ou
+      externe.
+    </p>
+
+    <p>
+      Par cette certification et les connaissances acquises, vous pouvez assoir votre position en tant qu’auditeur,
+      mieux faire face aux éventuels blocages des managers et des collaborateurs audités et apporter votre recul et
+      votre expertise dans la mise en place d’actions correctives pour viser la conformité et l’efficience.
+    </p>
+
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-8">
+
+      <div class="tabs">
+        <input type="radio" id="tab1" name="tab-control" checked>
+        <input type="radio" id="tab2" name="tab-control">
+        <!-- <input type="radio" id="tab3" name="tab-control"> -->
+        <input type="radio" id="tab3" name="tab-control">
+        <input type="radio" id="tab4" name="tab-control">
+        <input type="radio" id="tab5" name="tab-control">
+        <ul>
+          <li title="OBJECTIFS"><label for="tab1" role="button">
+
+              <span>OBJECTIFS</span></label></li>
+          <li title="PROGRAMME"><label for="tab2" role="button">
+
+              <span>PROGRAMME</span></label></li>
+          <!-- <li title="PRÉ-REQUIS"><label for="tab3" role="button">
+            
+              <span>PRÉ-REQUIS</span></label></li> -->
+          <li title="PUBLIC"><label for="tab3" role="button">
+              <span>PUBLIC</span></label></li>
+          <li title="POINTS FORTS"><label for="tab4" role="button">
+              <span>POINTS FORTS</span></label></li>
+          <li title="CERTIFICATIONS"><label for="tab5" role="button">
+              <span>CERTIFICATIONS</span></label></li>
+        </ul>
+
+        <div class="slider">
+          <div class="indicator"></div>
+        </div>
+        <div class="content">
+          <section>
+            <h2>OBJECTIFS</h2>
+            <p>
+              Cette formation fournit les compétences et le savoir nécessaires pour auditer les systèmes de gestion de
+              la santé et la sécurité au travail. Vous y apprendrez à évaluer la conception, la mise en œuvre et
+              l'amélioration des bonnes pratiques d’un <strong>SMSST</strong> d'une organisation selon les exigences de la norme <strong>ISO
+              45001.</strong>
+            </p>
+            <p>À l'issue de la formation, vous pourrez :</p>
+            <ol>
+              <li>Comprendre et mettre en place votre propre système de gestion de la sécurité </li>
+              <li>Prouver la conformité de votre organisation à toutes les obligations juridiques</li>
+              <li>Comprendre l'importance des politiques de sécurité et comment les mettre en place en identifiant les risques propres à l'organisation</li>
+              <li>Comprendre et prouver l'amélioration permanente de la performance en gestion de la santé et la sécurité au travail.</li>
+              <li>Appliquer une connaissance approfondie du processus d'audit et de certification ISO 45001</li>
+              <li>Avoir les compétences et connaissances requises pour planifier et réaliser des audits par un tiers selon les exigences de la norme ISO 45001 et rendre compte des résultats</li>
+              <li>Comprendre l'importance des résultats d'audit, de la mise en place de mesures correctives et du contrôle des performances</li>
+            </ol>
+
+
+          </section>
+          <section>
+            <h2>PROGRAMME</h2>
+
+
+
+            <i>Introduction au concept (SMSST) tel que défini par l'ISO 45001</i>
+            <ol>
+              <li>Cadre normatif, légal et réglementaire lié à la Santé et Sécurité au Travail.</li>
+              <li>Santé et Sécurité au Travail : principes essentiels.</li>
+              <li>Processus de certification ISO 45001.</li>
+              <li>Système de Management de la Santé et Sécurité au Travail (SMSST).</li>
+              <li>Présentation détaillée de la norme ISO 45001.</li>
+            </ol>
+
+            <i>Planifier et initialiser d'un audit ISO 45001</i>
+            <ol>
+              <li>Principes et concepts fondamentaux d'audit.</li>
+              <li>Approche d'audit basée sur les preuves et sur le risque.</li>
+              <li>Préparation d'un audit de certification ISO 45001</li>
+              <li>Audit documentaire d'un SMSST.</li>
+
+            </ol>
+
+            <i>Conduire un audit ISO 45001</i>
+            <ol>
+              
+            <li>Communication pendant l'audit.</li>
+            <li>Procédures d'audit : observation, revue documentaire, entretiens, échantillonnage, vérification technique et évaluation.</li>
+            <li>Rédaction des plans de tests d'audit.</li>
+            <li>Formulation des constats d'audit.</li>
+            </ol>
+
+            <i>Clôturer et assurer le suivi d'un audit ISO 45001:</i>
+            <ol>
+              
+            <li>Documentation d'audit.</li>
+            <li>Revue qualité.</li>
+            <li>Mener une réunion de clôture et fin d'un audit ISO 45001</li>
+            <li>Évaluation des plans d'action correctifs.</li>
+            <li>Audit de surveillance ISO 45001.</li>
+            </ol>
+            <i>Examen de certification
+            </i>
+          </section>
+
+          <section>
+            <h2>PUBLIC</h2>
+
+            <h3>PRÉ-REQUIS </h3>
+            <p>
+              Une bonne connaissance de la norme ISO 45001 et des connaissances approfondies sur les principes de l’audit.
+            </p>
+            <strong>Avoir des connaissances de base sur les concepts, les méthodologies et les pratiques en management
+              de projet.
+            </strong>
+            <p></p>
+
+            <strong>Cette formation s'adresse aux publics suivants  :</strong>
+            <ol>
+              <li>Auditeurs souhaitant diriger des audits de certification du Système de management de la santé et la sécurité au travail</li>
+              <li>Les auditeurs souhaitant réaliser et diriger des audits de certification du SMSST</li>
+              <li>Les responsables de projets ou consultants souhaitant maîtriser le processus d'audit d'un SMSST</li>
+              <li>Les personnes responsables de la santé et de la sécurité au travail ou de la conformité dans une organisation</li>
+              <li>Les membres d'une équipe chargée de la santé et de la sécurité au travail</li>
+              <li>Les conseillers spécialisés en santé & sécurité</li>
+              <li>Les experts souhaitant se préparer à occuper une fonction d'auditeur de la santé et de la sécurité au travail</li>
+            </ol>
+
+            <p></p>
+
+            <strong>Cette formation s'adresse aux profils suivants</strong>
+            <ol>
+              <li>Chef d’équipe / Superviseur</li>
+              <li>Chef d’entreprise / Dirigeant</li>
+            </ol>
+
+
+          </section>
+          <section>
+            <h2>POINTS FORTS</h2>
+            <p>
+              Le passage de l'examen de certification est compris dans le prix de la formation. En cas d’échec à l’examen, vous pouvez le repasser dans les 12 mois sans frais supplémentaires.
+            </p>
+          </section>
+          <section>
+            <h2>CERTIFICATIONS</h2>
+            <p>Durée : <strong>3 Heures</strong></p>
+            <p>
+              L’examen « PECB Certified ISO 45001 Lead Auditor » remplit les exigences relatives au programme d’examen et de certification de PECB. 
+            </p>
+            <i>L’examen couvre les domaines de compétences suivants :</i>
+
+            <ol>
+              <li>Principes et concepts fondamentaux du Système de management de la santé et de la sécurité au travail</li>
+              <li>Système de management de la santé et de la sécurité au travail (SMSST)</li>
+              <li>Principes et concepts fondamentaux de l’audit</li>
+              <li>Préparation d’un audit ISO 45001</li>
+              <li>Réalisation d’un audit ISO 45001</li>
+              <li>Clôturer un audit ISO 45001</li>
+              <li>Gérer un programme d’audit ISO 45001</li>
+
+            </ol>
+
+            <strong>Le passage de l'examen de certification est compris dans le prix de la formation. En cas d’échec à l’examen, vous pouvez le repasser dans les 12 mois sans frais supplémentaires.</strong>
+
+            <!-- <p>Après avoir réussi cet examen de 3 heures et selon votre expérience, vous pourrez demander l'une des 4
+              certifications suivantes :</p>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Qualifications</th>
+                  <th>Examens</th>
+                  <th>Expérience professionnelle</th>
+                  <th>Expérience en gestion de projets</th>
+                  <th>Autres exigences</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>PECB Certified ISO 21502 Provisional Project Manager</strong></td>
+                  <td>Examen « PECB Certified ISO 21502 Project Manager » ou équivalent</td>
+                  <td>Aucune</td>
+                  <td>Aucune</td>
+                  <td>Signer le Code de déontologie de PECB</td>
+                </tr>
+                <tr>
+                  <td><strong>PECB Certified ISO 21502 Project Manager</strong></td>
+                  <td>Examen « PECB Certified ISO 21502 Project Manager » ou équivalent</td>
+                  <td>2 ans dont 1 an d’expérience en management de projet</td>
+                  <td>Activités en management de projets totalisant 200 heures</td>
+                  <td>Signer le Code de déontologie de PECB</td>
+                </tr>
+                <tr>
+                  <td><strong>PECB Certified ISO 21502 Lead Project Manager</strong></td>
+                  <td>Examen « PECB Certified ISO 21502 Project Manager » ou équivalent</td>
+                  <td>3 ans dont 2 ans d’expérience en management de projet</td>
+                  <td>Activités en management de projets totalisant 300 heures</td>
+                  <td>Signer le Code de déontologie de PECB</td>
+                </tr>
+                <tr>
+                  <td><strong>PECB Certified ISO 21502 Senior Lead Project Manager</strong></td>
+                  <td>Examen « PECB Certified ISO 21502 Project Manager » ou équivalent</td>
+                  <td>10 ans dont 7 ans d’expérience en management de projet</td>
+                  <td>Activités en management de projets totalisant 1000 heures</td>
+                  <td>Signer le Code de déontologie de PECB</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p>
+              Pour en savoir plus sur les modalités, consultez <a
+                href="https://pecb.com/fr/examination-rules-and-policies">le règlement d'examen PECB</a> ainsi que <a
+                href="https://pecb.com/fr/certification-rules-and-policies">le règlement de certification PECB</a>.
+            </p> -->
+
+
+          </section>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+      <div class="card bg-warning">
+        <div class="col">
+          <strong>
+            Code formation :
+          </strong>
+          <span>
+            ISO45001LA
+          </span>
+        </div>
+
+        <div class="col">
+          <strong>
+            Prix net :
+          </strong>
+          <span>
+            2 240,00 $
+          </span>
+        </div>
+
+        <div class="col">
+          <strong>
+            Lieu :
+          </strong>
+          <span>
+            SERENA HOTEL, Goma
+          </span>
+        </div>
+
+        <div class="col">
+          <strong>
+            Date :
+          </strong>
+          <span>
+            4 juin 2024
+          </span>
+        </div>
+
+        <div class="col">
+          <strong>
+            Durée :
+          </strong>
+          <span>
+            4,5 jours (35 heures)
+          </span>
+        </div>
+      </div>
+
+      <img class="img" src="https://edu-pedia.org/wp-content/uploads/2024/02/pecb1.jpeg" />
+
+      <p>
+        <a href="https://edu-pedia.org/wp-content/uploads/2024/02/ISO-21502-LPM-4p-FR-Partner.pdf"
+          class="btn btn-primary btn-block img-logo">Téléchargez le guide ISO 21502</a>
+      </p>
+      <p><i>Le délai d’inscription dépend de la formation et vous sera notifié par ALPHA-NEW SARL
+        </i></p>
+
+
+    </div>
+    <div class="col img-logo">
+      <img src="https://edu-pedia.org/wp-content/uploads/2024/02/logo-1.png" />
+      <p><i>Contenu de formation proposé par PECB</i>
+      </p>
+
+    </div>
+
+  </div>
+</div>
