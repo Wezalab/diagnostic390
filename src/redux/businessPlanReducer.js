@@ -399,7 +399,7 @@ const businessPlanSlice = createSlice({
         state.isLoadingBusinessPlan = true;
         state.errorBusinessPlan = null;
       })
-      .addCase(fetchBusinessPlans.fulfilled, (state, action) => {
+      .addCase(fetchBusinessPlans.fulfilled, (state) => { // action
         state.isLoadingBusinessPlan = false;
         state.businessPlanList = []; // action.payload;
         state.errorBusinessPlan = null;

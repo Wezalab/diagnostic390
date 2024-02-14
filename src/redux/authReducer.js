@@ -13,7 +13,7 @@ const u = {
           "email": "wezalab@gmail.com",
           "mobile": "+243 973111192",
           "sex": "F",
-          "role": 'USER',
+          "role": 'PSDE',
           "username": "WEZA LAB",
           "profile_picture": "https://i.pravatar.cc/48?u=169165"
           

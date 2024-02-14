@@ -61,7 +61,7 @@ export default function MesCommandes(props) {
 
     const TABLE_HEAD = [
         { id: 'number', label: 'number', alignRight: false },
-        { id: 'customer_id', label: 'customer_id', alignRight: false },
+        { id: 'customer_id', label: role === "USER" ? 'Fournisseur':'Beneficiaire', alignRight: false },
         { id: 'date_created', label: 'date_created', alignRight: false },
         { id: 'total', label: 'total', alignRight: false },
         { id: 'line_items', label: 'line_items', alignRight: false },
@@ -159,7 +159,7 @@ export default function MesCommandes(props) {
     const Row = (props) => {
         const { row, selectedOrder, selectedUser, foundsParent } = props;
         /* eslint-disable camelcase */
-        const { id, number, date_created, total, line_items, status, parent_id, currency } = row;
+        const { id, number, date_created, total, line_items, status, parent_id, currency, store } = row;
 
         const [currentCommamndeChild, setCurrentCommamndeChild] = useState(null);
 
@@ -186,16 +186,30 @@ export default function MesCommandes(props) {
 
                 <TableCell component="th" scope="row" padding="2">
                     <Stack direction="row" alignItems="center" spacing={2}>
-
-                        <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
-                        <Box>
-                            <Typography variant="subtitle2" noWrap>
-                                {selectedUser?.username ? selectedUser?.username : "Visiteur"}
-                            </Typography>
-                            <Typography variant="caption" noWrap>
-                                {selectedUser?.email ? selectedUser?.email : ""}
-                            </Typography>
-                        </Box>
+                        {role === "USER" ?
+                            <>
+                                <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
+                                <Box>
+                                    <Typography variant="subtitle2" noWrap>
+                                        {store?.name ? store?.shop_name : "Fournisseur"}
+                                    </Typography>
+                                    <Typography variant="caption" noWrap>
+                                        {store?.address?.city}
+                                    </Typography>
+                                </Box>
+                            </> :
+                            <>
+                                <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
+                                <Box>
+                                    <Typography variant="subtitle2" noWrap>
+                                        {selectedUser?.username ? selectedUser?.username : "Visiteur"}
+                                    </Typography>
+                                    <Typography variant="caption" noWrap>
+                                        {selectedUser?.email ? selectedUser?.email : ""}
+                                    </Typography>
+                                </Box>
+                            </>
+                        }
                     </Stack>
                 </TableCell>
 
@@ -245,7 +259,7 @@ export default function MesCommandes(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Number</TableCell>
-                                    <TableCell>customer_id</TableCell>
+                                    <TableCell>{role === "USER" ? 'Fournisseur':'Beneficiaire'}</TableCell>
                                     <TableCell >date_created</TableCell>
                                     <TableCell >total</TableCell>
                                     <TableCell >line_items</TableCell>
@@ -258,27 +272,44 @@ export default function MesCommandes(props) {
                                 commandesUser.filter((value) => value.parent_id === currentCommamndeChild?.id).map((row) => {
 
                                     /* eslint-disable camelcase */
-                                    const { id, number, date_created, total, line_items, status, parent_id, currency } = row;
+                                    const { id, number, date_created, total, line_items, status, currency, store } = row;
 
                                     return <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedOrder}>
                                         {/* <TableCell padding="checkbox">
                                             <Checkbox checked={selectedOrder} onChange={(event) => handleClick(event, number)} />
                                         </TableCell> */}
 
-                                        <TableCell align="left"># N°{parent_id === 0 ? number : `${number} sous ${parent_id}`}</TableCell>
+                                        <TableCell align="left"># N°{number}</TableCell>
 
                                         <TableCell component="th" scope="row" padding="2">
+
+
                                             <Stack direction="row" alignItems="center" spacing={2}>
 
-                                                <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
-                                                <Box>
-                                                    <Typography variant="subtitle2" noWrap>
-                                                        {selectedUser?.username ? selectedUser?.username : "Visiteur"}
-                                                    </Typography>
-                                                    <Typography variant="caption" noWrap>
-                                                        {selectedUser?.email ? selectedUser?.email : ""}
-                                                    </Typography>
-                                                </Box>
+                                                {role === "USER" ?
+                                                    <>
+                                                        <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
+                                                        <Box>
+                                                            <Typography variant="subtitle2" noWrap>
+                                                                {store?.name ? store?.shop_name : "Fournisseur"}
+                                                            </Typography>
+                                                            <Typography variant="caption" noWrap>
+                                                                {store?.address?.city}
+                                                            </Typography>
+                                                        </Box>
+                                                    </> :
+                                                    <>
+                                                        <Avatar src={selectedUser?.avatar_url} variant="circular" alt="photo URL" />
+                                                        <Box>
+                                                            <Typography variant="subtitle2" noWrap>
+                                                                {selectedUser?.username ? selectedUser?.username : "Visiteur"}
+                                                            </Typography>
+                                                            <Typography variant="caption" noWrap>
+                                                                {selectedUser?.email ? selectedUser?.email : ""}
+                                                            </Typography>
+                                                        </Box>
+                                                    </>
+                                                }
                                             </Stack>
                                         </TableCell>
 
@@ -325,10 +356,19 @@ export default function MesCommandes(props) {
             line_items: PropTypes.object.isRequired,
             date_created: PropTypes.string.isRequired,
             status: PropTypes.string.isRequired,
+            store: PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                name: PropTypes.string.isRequired,
+                shop_name: PropTypes.string.isRequired,
+                address: PropTypes.shape({
+                    city: PropTypes.string.isRequired,
+                    country: PropTypes.string.isRequired,
+                }).isRequired,
+            }).isRequired,
 
-            foundsParent: PropTypes.object.isRequired,
-            price: PropTypes.number.isRequired,
-            protein: PropTypes.number.isRequired,
+            // foundsParent: PropTypes.object.isRequired,
+            // price: PropTypes.number.isRequired,
+            // protein: PropTypes.number.isRequired,
         }).isRequired,
         selectedUser: PropTypes.objectOf(
             PropTypes.shape({
@@ -374,15 +414,14 @@ export default function MesCommandes(props) {
                                 {filteredCommandes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     /* eslint-disable camelcase */
                                     // eslint-disable-next-line 
-                                    const { id, number, customer_id, } = row;
+                                    const { id, number, customer_id, store } = row;
 
                                     const selectedOrder = selected.indexOf(number) !== -1;
                                     const selectedUser = customers.find((cus) => cus.id === customer_id);
 
                                     const foundsParent = commandesUser.find((parent) => (parent.parent_id === id));
 
-
-                                    return <Row key={id} row={row} selectedOrder={selectedOrder} selectedUser={selectedUser} foundsParent={foundsParent} />
+                                    return <Row key={id} row={row} store={store} selectedOrder={selectedOrder} selectedUser={selectedUser} foundsParent={foundsParent} />
                                 })}
 
                                 {
@@ -400,7 +439,7 @@ export default function MesCommandes(props) {
                                                         </Typography>
 
                                                         <Typography variant="body2">
-                                                            Aucun résultat trouvé 
+                                                            Aucun résultat trouvé
                                                             <br /> Essayez de passer des commandes des produits disponibles dans notre central d'achat.
                                                         </Typography>
                                                     </Paper>
