@@ -42,11 +42,9 @@ export default function MesCommandes(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // console.log();
-    const [commandesUser, setCommandeUser] = useState(role==='USER'? commandes.filter((val)=> val.customer_id === customers.find((val)=> val.email === user?.user?.user?.email)?.id ): commandes)
+    // eslint-disable-next-line no-unused-vars
+    const [commandesUser, setCommandeUser] = useState(role === 'USER' ? commandes.filter((val) => val.customer_id === customers.find((val) => val.email === user?.user?.user?.email)?.id) : commandes)
     console.log("role", role);
-    // console.log("user", customers.find((val)=> val.email === user?.user?.user?.email));
-    // const [idCustomer, setIdCustomer] = useState();
 
     const [page, setPage] = useState(0);
 
@@ -101,10 +99,10 @@ export default function MesCommandes(props) {
     }
 
     const handleOpenMenu = (event, commandeObject) => {
-        const params = { commandeObject: JSON.stringify(commandeObject),customers };
+        const params = { commandeObject: JSON.stringify(commandeObject), customers };
         console.log(params);
 
-        navigate('/dashboard/view-commande', { state: params, relative: true  });
+        navigate('/dashboard/view-commande', { state: params, relative: true });
     };
 
 
@@ -376,7 +374,7 @@ export default function MesCommandes(props) {
                                 {filteredCommandes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     /* eslint-disable camelcase */
                                     // eslint-disable-next-line 
-                                    const { id, number, customer_id } = row;
+                                    const { id, number, customer_id, } = row;
 
                                     const selectedOrder = selected.indexOf(number) !== -1;
                                     const selectedUser = customers.find((cus) => cus.id === customer_id);
@@ -386,6 +384,31 @@ export default function MesCommandes(props) {
 
                                     return <Row key={id} row={row} selectedOrder={selectedOrder} selectedUser={selectedUser} foundsParent={foundsParent} />
                                 })}
+
+                                {
+                                    commandesUser.length === 0 && !isNotFound && (
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                                                    <Paper
+                                                        sx={{
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        <Typography variant="h6" paragraph>
+                                                            Vous n'avez aucune commande
+                                                        </Typography>
+
+                                                        <Typography variant="body2">
+                                                            Aucun résultat trouvé 
+                                                            <br /> Essayez de passer des commandes des produits disponibles dans notre central d'achat.
+                                                        </Typography>
+                                                    </Paper>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )
+                                }
 
 
                                 {
