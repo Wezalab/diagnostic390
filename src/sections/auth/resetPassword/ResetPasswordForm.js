@@ -13,7 +13,7 @@ import { login } from '../../../redux/loginAction';
 import Iconify from '../../../components/iconify';
 import { GenerateOTPCode } from '../../../constants/GenerateOTPCode';
 
-// import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
+import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
 
 const useStyles = makeStyles(() => ({
   codeInput: {
@@ -40,11 +40,12 @@ export default function ResetPasswordForm() {
   const {userList, errorOTP, isLoadingSendOTP, isLoadingSendChangePassword, errorChangePassword } = useSelector((state) => state.listUser);
   const { isLoading } = useSelector((state) => state.auth);
   
-  // const {
-  //   customers,
-  //   // loading,
-  //   // error,
-  // } = useWooCommerceAPI();
+  const {
+    updateCustomer,
+    customers
+    // loading,
+    // error,
+  } = useWooCommerceAPI();
 
   const [emailError, setEmailError] = useState("");
   const [email, setEmail] = useState('');
@@ -100,37 +101,16 @@ export default function ResetPasswordForm() {
         .then(async (data) => {
           console.log("data000", data);
           if (data?.payload?.message === "Mot de passe réinitialisé avec succès") {
-            // setEmailSent(true);
+           
+            const selectedCustomer = customers.find((cus) => cus.email === email);
+
+            await updateCustomer({password}, selectedCustomer.id);
             await dispatch(login(email, password));
           }
         })
         .catch((error) => {
           console.error('Send code:', error);
         });
-
-
-
-
-        //   postCustomer({ "first_name": name, name, email, password })
-        //   .then((data) => {
-
-        //     // If successfully create a user to woocommerce
-        //     if (data === "Création réussie") {
-        //       setErrorWooCommerce('');
-        //       seErrorSaveUser('')
-        //     }
-        //     else {
-        //       setErrorWooCommerce(data)
-        //     }
-
-        //   })
-        //   .catch((e) => {
-        //     seErrorSaveUser(`Erreur ${e?.message}`);
-
-        //     console.error('Error creating customer:', e.message);
-        //   });
-
-        console.log();
       }
     } catch (e) {
       console.log("errorRegister", e);
