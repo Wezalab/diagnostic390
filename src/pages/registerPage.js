@@ -15,13 +15,13 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
-  maxWidth: 480,
+  maxWidth: 590,
   margin: 'auto',
   minHeight: '50vh',
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(12, 0),
+  padding: theme.spacing(12, 6),
 }));
 
 export default function RegisterPage() {
@@ -50,7 +50,7 @@ export default function RegisterPage() {
               src="/assets/logo.png"
               sx={{ 
                 mx: 'auto',
-                borderRadius: 5 
+                borderRadius: 5
               }}
             />
             <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>

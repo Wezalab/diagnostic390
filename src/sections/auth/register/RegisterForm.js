@@ -165,17 +165,8 @@ export default function RegisterForm() {
     );
   };
 
-
   // Stepper
   const handleNext = () => {
-
-    // if(catSelector===3 || catSelector===4){
-    //   setSteps([...steps.filter((val, key)=> val !== 'Entreprise')])
-    //   setCatError("");
-    //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-
-    // }
-    // else 
     if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
     } else {
@@ -663,15 +654,6 @@ export default function RegisterForm() {
                         <LoadingButton loading={isLoadingRegister || loading} disabled={isLoadingRegister || loading} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                           S'enregistrer
                         </LoadingButton>
-                        {/* {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>} */}
-
-
-                        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                          <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
-                          <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-                            Se connecter
-                          </Link>
-                        </Stack> */}
 
                       </Box>}
                   </Box>
