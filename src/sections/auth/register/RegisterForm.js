@@ -1,6 +1,6 @@
 /* eslint no-unneeded-ternary: "error" */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 
@@ -87,13 +87,18 @@ export default function RegisterForm() {
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
 
   const {
-    // customers,
-    // products,
+    customers,
+    fetchCustomers,
     loading,
     // error,
-    // fetchProductById,
     postCustomer,
   } = useWooCommerceAPI();
+
+  //  react-hooks/exhaustive-deps
+  useEffect(() => {
+    fetchCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [errorWooCommerce, setErrorWooCommerce] = useState('');
 
@@ -238,6 +243,13 @@ export default function RegisterForm() {
         console.log("registeredUser", await registeredUser);
         console.log(name, password, phone, confirmPassword, sex, email);
         const role = catSelector === 1 ? 'USER' : catSelector === 2 ? 'PME' : catSelector === 3 ? 'FEMME' : 'PSDE';
+
+        // check if customer exists in wc
+        const ckeck = customers.find((cus) => cus.email === email );
+
+        // check if user exists in b360
+        
+
 
         // Call WooCommerceAPI
         postCustomer({ "first_name": name, name, email, password })

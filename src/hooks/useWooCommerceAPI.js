@@ -100,10 +100,10 @@ const useWooCommerceAPI = () => {
 
     } catch (error) {
       console.log("error", error);
-      setError(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" );
+      setError(error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" );
       setLoading(false);
 
-      return `${error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" }`;
+      return `${error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" }`;
     }
     setLoading(false);
 
@@ -121,10 +121,10 @@ const useWooCommerceAPI = () => {
       setLoading(false);
 
     } catch (error) {
-      setError(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" );
+      setError(error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" );
       setLoading(false);
 
-      return `${error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" }`;
+      return `${error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" }`;
     }
     setLoading(false);
 
@@ -142,10 +142,10 @@ const useWooCommerceAPI = () => {
       setLoading(false);
 
     } catch (error) {
-      setError(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" );
+      setError(error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" );
       setLoading(false);
 
-      return `${error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" }`;
+      return `${error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" }`;
     }
     setLoading(false);
 
