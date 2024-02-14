@@ -257,25 +257,42 @@ export default function RegisterForm() {
 
         if (!ckeckCustomer) {
           // Call WooCommerceAPI
-          postCustomer({ "first_name": name, name, email, password })
-            .then((data) => {
 
-              // If successfully create a user to woocommerce
-              if (data === "Création réussie") {
-                setErrorWooCommerce('');
-                seErrorSaveUser('')
-              }
-              else {
-                setErrorWooCommerce(data)
-              }
+          postCustomer({
+            "first_name": name,
+            name,
+            email,
+            password,
+            "billing": {
+              "first_name": name,
+              "last_name": name,
+              "country": "CD",
+              "email": email,
+              "phone": phone
+            },
+            "shipping": {
+              "first_name": name,
+              "last_name": name,
+              "country": "CD"
+            }
+          }).then((data) => {
 
-            })
+            // If successfully create a user to woocommerce
+            if (data === "Création réussie") {
+              setErrorWooCommerce('');
+              seErrorSaveUser('')
+            }
+            else {
+              setErrorWooCommerce(data)
+            }
+
+          })
             .catch((e) => {
               seErrorSaveUser(`Erreur ${e?.message}`);
 
               console.error('Error creating customer:', e.message);
             });
-        }else if (!checkUser) {
+        } else if (!checkUser) {
           dispatch(register(name, email, phone, sex, password, role))
             .then((data) => {
               console.log("data", data);
@@ -287,7 +304,7 @@ export default function RegisterForm() {
 
               console.error('Registration error:', error);
             });
-        }else {
+        } else {
           seErrorSaveUser("L'utilisateur existe, veillez vous connecter")
         }
 
@@ -673,7 +690,7 @@ export default function RegisterForm() {
                           {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
                           {errorWooCommerce && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorWooCommerce.split('<a ')[0]}</Typography>}
                           {errorSaveUser && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorSaveUser}</Typography>}
-                          
+
                         </Stack>
 
 

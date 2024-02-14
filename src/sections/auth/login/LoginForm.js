@@ -87,7 +87,7 @@ export default function LoginForm() {
       </LoadingButton>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Typography variant="body" sx={{}}>Voulez-vous Créer un compte?</Typography>
+        <Typography variant="body" sx={{}}>Voulez-vous créer un compte?</Typography>
 
         <Link href="/register" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
           Créer un compte
