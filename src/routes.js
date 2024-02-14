@@ -27,6 +27,7 @@ import AddProduct from './pages/Produit/AddProduct';
 import DetailsCommande from './pages/Commande/DetailsCommande';
 import MesFactures from './pages/Facture/MesFactures';
 import DetailsFacture from './pages/Facture/DetailsFacture';
+import ResetPassowrdPage from './pages/ResetPassowrdPage';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -107,6 +108,11 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      // 
+      path: 'resetPassword',
+      element: <ResetPassowrdPage /> 
     },
     {
       path: 'register',
