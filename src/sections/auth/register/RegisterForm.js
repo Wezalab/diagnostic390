@@ -672,7 +672,8 @@ export default function RegisterForm() {
                           />
                           {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
                           {errorWooCommerce && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorWooCommerce.split('<a ')[0]}</Typography>}
-
+                          {errorSaveUser && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorSaveUser}</Typography>}
+                          
                         </Stack>
 
 
