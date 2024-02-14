@@ -22,6 +22,11 @@ import MesCommandes from './pages/Commande/MesCommandes';
 import MesClients from './pages/Client/MesClients';
 import Rapport from './pages/Rapport/Rappor';
 import Evaluation from './pages/Evaluation/Evaluation';
+import DetailsProduit from './pages/Produit/DetailsProduit';
+import AddProduct from './pages/Produit/AddProduct';
+import DetailsCommande from './pages/Commande/DetailsCommande';
+import MesFactures from './pages/Facture/MesFactures';
+import DetailsFacture from './pages/Facture/DetailsFacture';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -70,6 +75,12 @@ export default function Router() {
           { path: 'view-plan', element: <ViewPlan /> },
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
+          { path: 'view-produit', element: <DetailsProduit /> },
+          { path: 'view-commande', element: <DetailsCommande /> },
+          { path: 'add-produit', element: <AddProduct/> },
+          { path: 'factures', element: <MesFactures /> },
+          { path: 'view-facture', element: <DetailsFacture /> },
+          
         ];
         case undefined:
         return [

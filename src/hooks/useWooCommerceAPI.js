@@ -4,6 +4,8 @@ import axios from 'axios';
 const useWooCommerceAPI = () => {
   const [customers, setCustomers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [commandes, setCommandes]= useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -21,24 +23,58 @@ const useWooCommerceAPI = () => {
     },
   });
 
-  // Function to fetch customers
-  const fetchCustomers = async () => {
-    try {
-      const response = await api.get('/customers');
-      setCustomers(response.data);
-    } catch (error) {
-      setError(error);
-    }
-  };
+    // Function to fetch customers
+    const fetchCustomers = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get('/customers?per_page=100');
+        setCustomers(response.data);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+      setLoading(false);
+    };
 
   // Function to fetch products
   const fetchProducts = async () => {
+    setLoading(true);
     try {
-      const response = await api.get('/products');
+      const response = await api.get('/products?per_page=100');
       setProducts(response.data);
     } catch (error) {
       setError(error);
+      setLoading(false);
     }
+    setLoading(false);
+  };
+
+   // Function to fetch products
+   const fetchCommandes = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/orders?per_page=100');
+      setCommandes(response.data);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  // Function to fetch products
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/products/categories?per_page=100');
+
+      setCategories(response.data);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+    setLoading(false);
+
   };
 
   // Function to fetch a specific product by ID
@@ -73,12 +109,55 @@ const useWooCommerceAPI = () => {
     return 'Création réussie';
   };
 
+  // Function to post a new customer
+  const postProduct= async (productData) => {
+    setLoading(true);
+
+    try {
+      await api.post('/products', productData);
+      // Refresh product after posting
+      await fetchProducts();
+      setLoading(false);
+
+    } catch (error) {
+      setError(error?.response?.data?.message);
+      setLoading(false);
+
+      return `${error?.response?.data?.message}`;
+    }
+    setLoading(false);
+
+    return 'Création réussie';
+  };
+
+   // Function to post a new customer
+   const editProduct= async (productData, id) => {
+    setLoading(true);
+
+    try {
+      await api.put(`/products/${id}`, productData);
+      // Refresh product after posting
+      await fetchProducts();
+      setLoading(false);
+
+    } catch (error) {
+      setError(error?.response?.data?.message);
+      setLoading(false);
+
+      return `${error?.response?.data?.message}`;
+    }
+    setLoading(false);
+
+    return 'Modification réussie';
+  };
+
   // Initial fetch of customers and products on component mount
   //  react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
       await fetchCustomers();
       await fetchProducts();
+      await fetchCategories();
       setLoading(false);
     };
 
@@ -88,12 +167,24 @@ const useWooCommerceAPI = () => {
   }, []);
 
   return {
-    customers,
     products,
+    postProduct,
+    fetchProducts,
+    editProduct,
+    fetchProductById,
+
+    categories,
+    fetchCategories,
+
+    customers,
+    fetchCustomers,
+    postCustomer,
+
+    commandes,
+    fetchCommandes,
+
     loading,
     error,
-    fetchProductById,
-    postCustomer,
   };
 };
 
