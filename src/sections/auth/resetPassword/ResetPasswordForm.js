@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid, Link, Stack, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { makeStyles } from "@material-ui/core/styles";
 
 import Iconify from '../../../components/iconify';
+import { sendResetPasswordEmail } from '../../../redux/listUserReducer';
+import { GenerateOTPCode } from '../../../constants/GenerateOTPCode';
 
-import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
-
+// import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
 
 const useStyles = makeStyles(() => ({
   codeInput: {
@@ -21,25 +22,25 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
-// const { userId } = req.params;
-//     const { newPassword, confirmPassword } = req.body;
-
-//     /reset-password-no-token/:userId/
 export default function ResetPasswordForm() {
-
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { error, isLoading } = useSelector((state) => state.auth);
+  const { errorOTP, isLoadingSendOTP } = useSelector((state) => state.listUser);
 
-  const {
-    customers,
-    // loading,
-    // error,
-  } = useWooCommerceAPI();
 
-  const [localError, setLocalError] = useState("");
+  // const {
+  //   customers,
+  //   // loading,
+  //   // error,
+  // } = useWooCommerceAPI();
+
+  const [emailError, setEmailError] = useState("");
   const [email, setEmail] = useState('');
+
+  // OTP Features
+  const [emailSent, setEmailSent] = useState(false);
+  const [otpCode, setOtpCode] = useState(null);
 
 
   const [showPassword, setShowPassword] = useState(false);
@@ -112,23 +113,39 @@ export default function ResetPasswordForm() {
     }
   };
 
-  const handleClick = async (e) => {
+  const handleVerifyCode = async (e) => {
+
+  }
+
+  const handleSendCode = async (e) => {
     e.preventDefault();
 
     if (!email) {
       // Check if email is empty
       // Set an error message
-      setLocalError("L'e-mail  ne peut pas être vide");
+      setEmailError("L'e-mail ne peut pas être vide!");
 
       return;
     }
 
-    console.log("customers", customers);
+    setEmailError('')
 
-    setLocalError('')
-    // store.dispatch(fetchEntreprises());
+    console.log((email,{"code":otpCode}));
+    const code = GenerateOTPCode()
+    setOtpCode(code);
 
-    // dispatch(login(email, password));
+
+    await dispatch(sendResetPasswordEmail({email, code}))
+      .then(async (data) => {
+
+        if(data?.payload?.message === "E-mail de réinitialisation envoyé avec succès"){
+          setEmailSent(true);
+        }
+      })
+      .catch((error) => {
+        console.error('Send code:', error);
+      });
+
   };
 
   const otp = () =>
@@ -149,28 +166,28 @@ export default function ResetPasswordForm() {
         ))}
       </Grid>
 
-      <Grid item xs={12} textAlign="center" sx={{my: 3}}>
+      <Grid item xs={12} textAlign="center" sx={{ my: 3 }}>
         <Typography variant="body2">
           Vous n'avez pas eu de code ? <Link href="#">Renvoyer le code</Link>
 
         </Typography>
       </Grid>
 
-      <LoadingButton sx={{ textTransform: 'none' }} loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton sx={{ textTransform: 'none' }} fullWidth size="large" type="submit" variant="contained" onClick={handleVerifyCode}>
         Verifier
       </LoadingButton>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
 
-      <Link href="/resetPassword" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-        Retour
-      </Link>
-      <Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-        Annuler
-      </Link>
-    </Stack>
+        <Link href="/resetPassword" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+          Retour
+        </Link>
+        <Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+          Annuler
+        </Link>
+      </Stack>
     </>
 
-  const passwords = () =>  <Stack spacing={3}>
+  const passwords = () => <Stack spacing={3}>
     <TextField
       name="password"
       label="Mot de passe"
@@ -209,16 +226,14 @@ export default function ResetPasswordForm() {
       error={!!confirmPasswordError}
       helperText={confirmPasswordError}
     />
-    <LoadingButton sx={{ textTransform: 'none' }} loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleChangePassword}>
-     Changer le mots de passe
+    <LoadingButton sx={{ textTransform: 'none' }} fullWidth size="large" type="submit" variant="contained" onClick={handleChangePassword}>
+      Changer le mots de passe
     </LoadingButton>
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-
-
-<Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-  Annuler
-</Link>
-</Stack>
+      <Link href="/dashboard/app" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+        Annuler
+      </Link>
+    </Stack>
   </Stack>
 
   const resetPassword = () => <Stack spacing={3}>
@@ -228,13 +243,14 @@ export default function ResetPasswordForm() {
       </Typography>
     </Stack>
     <Stack spacing={3} mb={2}>
-      <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <TextField name="email" error={!!emailError} label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
     </Stack>
 
-    {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
-    {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
+    {/* {otpStatus && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{otpStatus.message}</Typography>} */}
+    {errorOTP && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorOTP}</Typography>}
+    {emailError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{emailError}</Typography>}
 
-    <LoadingButton sx={{ textTransform: 'none' }} loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+    <LoadingButton sx={{ textTransform: 'none' }} loading={isLoadingSendOTP} disabled={isLoadingSendOTP} fullWidth size="large" type="submit" variant="contained" onClick={handleSendCode}>
       Envoyer le code
     </LoadingButton>
 
@@ -248,19 +264,17 @@ export default function ResetPasswordForm() {
       </Link>
     </Stack></Stack>
 
-
   return (
     <>
 
       {
-        resetPassword()
+        !emailSent ?
+          resetPassword() :
+          
+            otpCode?otp(): passwords()
+          
       }
-      {
-        otp()
-      }
-      {
-        passwords()
-      }
+
 
     </>
   );

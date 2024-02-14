@@ -16,12 +16,46 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
+// export const sendResetPasswordEmail = createAsyncThunk(
+//   "user/sendOTP",
+//   async (userId, password, confirmPassword) => {
+//     console.log("==>>>>>$$$%%%",  `https://diagnostic-swyu.onrender.com/auth/reset-password-code/${userId}`, {password, confirmPassword});
+//     const response = await axios.post(
+//       `https://diagnostic-swyu.onrender.com/auth/reset-password-code/${userId}`, {password, confirmPassword}
+//     );
+//     return response.data;
+//   }
+// );
+
+export const sendResetPasswordEmail = createAsyncThunk(
+  "user/sendOTP",
+  async ({ email, code }) => {
+    try {
+
+      const response = await axios.post(
+        `https://diagnostic-swyu.onrender.com/auth/reset-password-code/`, { email, code }
+      );
+      // console.log("response.data", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log("Error =========??????", error);
+
+      throw error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!";
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState: {
-    userList:[],
+    userList: [],
     isLoadingUser: false,
     errorUser: null,
+
+    otpStatus: null,
+    isLoadingSendOTP: false,
+    errorOTP: null,
 
   },
   reducers: {},
@@ -42,7 +76,23 @@ const usersSlice = createSlice({
         state.isLoadingUser = false;
         state.errorUser = action.error.message;
       });
+
+    builder
+      .addCase(sendResetPasswordEmail.pending, (state) => {
+        state.isLoadingSendOTP = true;
+        state.errorOTP = null;
+      })
+      .addCase(sendResetPasswordEmail.fulfilled, (state, action) => {
+        state.isLoadingSendOTP = false;
+        state.otpStatus = action.payload;
+        state.errorOTP = null;
+      })
+      .addCase(sendResetPasswordEmail.rejected, (state, action) => {
+        state.isLoadingSendOTP = false;
+        state.errorOTP = action.error.message;
+      });
   },
+
 });
 
 export default usersSlice.reducer;
