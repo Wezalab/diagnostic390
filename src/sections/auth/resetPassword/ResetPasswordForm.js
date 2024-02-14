@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid, Link, Stack, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { makeStyles } from "@material-ui/core/styles";
+import { store } from '../../../redux/Store';
+
+import { fetchUsers, sendResetPassword, sendResetPasswordEmail } from '../../../redux/listUserReducer';
+import { login } from '../../../redux/loginAction';
+
 
 import Iconify from '../../../components/iconify';
-import { sendResetPasswordEmail } from '../../../redux/listUserReducer';
 import { GenerateOTPCode } from '../../../constants/GenerateOTPCode';
 
 // import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
@@ -26,9 +30,16 @@ export default function ResetPasswordForm() {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { errorOTP, isLoadingSendOTP } = useSelector((state) => state.listUser);
+    //  react-hooks/exhaustive-deps
+    useEffect(() => {
+      store.dispatch(fetchUsers());
+  
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-
+  const {userList, errorOTP, isLoadingSendOTP, isLoadingSendChangePassword, errorChangePassword } = useSelector((state) => state.listUser);
+  const { isLoading } = useSelector((state) => state.auth);
+  
   // const {
   //   customers,
   //   // loading,
@@ -39,9 +50,8 @@ export default function ResetPasswordForm() {
   const [email, setEmail] = useState('');
 
   // OTP Features
-  const [emailSent, setEmailSent] = useState(true);
-  const [otpCode, setOtpCode] = useState('123456');
-
+  const [emailSent, setEmailSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -83,18 +93,23 @@ export default function ResetPasswordForm() {
         // Dispatch registration action here
         console.log(password, confirmPassword);
 
+        const user = userList.find((val)=> val.email === email);
+        console.log("user", user._id);
 
-        // dispatch(register(name, email, phone, sex, password, role))
-        //   .then((data) => {
-        //     console.log("data", data);
-        //     setLatestCreatedUser(data.userId);
-        //     seErrorSaveUser('')
-        //   })
-        //   .catch((error) => {
-        //     seErrorSaveUser(`Erreur: ${error}`);
+        await dispatch(sendResetPassword({"userId":user._id, newPassword: password, confirmPassword }))
+        .then(async (data) => {
+          console.log("data000", data);
+          if (data?.payload?.message === "Mot de passe réinitialisé avec succès") {
+            // setEmailSent(true);
+            await dispatch(login(email, password));
+          }
+        })
+        .catch((error) => {
+          console.error('Send code:', error);
+        });
 
-        //     console.error('Registration error:', error);
-        //   });
+
+
 
         //   postCustomer({ "first_name": name, name, email, password })
         //   .then((data) => {
@@ -136,7 +151,6 @@ export default function ResetPasswordForm() {
       setVerificationError('');
       setOtpCode('');
     }
-
   }
 
   const handleSendCode = async (e) => {
@@ -262,7 +276,9 @@ export default function ResetPasswordForm() {
       error={!!confirmPasswordError}
       helperText={confirmPasswordError}
     />
-    <LoadingButton sx={{ textTransform: 'none' }} fullWidth size="large" type="submit" variant="contained" onClick={handleChangePassword}>
+
+    {errorChangePassword && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorChangePassword}</Typography>}
+    <LoadingButton sx={{ textTransform: 'none' }} loading={isLoadingSendChangePassword || isLoading} disabled={isLoadingSendChangePassword || isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleChangePassword}>
       Changer le mots de passe
     </LoadingButton>
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>

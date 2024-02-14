@@ -16,16 +16,21 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-// export const sendResetPasswordEmail = createAsyncThunk(
-//   "user/sendOTP",
-//   async (userId, password, confirmPassword) => {
-//     console.log("==>>>>>$$$%%%",  `https://diagnostic-swyu.onrender.com/auth/reset-password-code/${userId}`, {password, confirmPassword});
-//     const response = await axios.post(
-//       `https://diagnostic-swyu.onrender.com/auth/reset-password-code/${userId}`, {password, confirmPassword}
-//     );
-//     return response.data;
-//   }
-// );
+export const sendResetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async ({ userId, newPassword, confirmPassword }) => {
+    try {
+      console.log("==>>>>>$$$%%%", `https://diagnostic-swyu.onrender.com/auth/reset-password-no-token/${userId}`, { newPassword, confirmPassword });
+      const response = await axios.post(
+        `https://diagnostic-swyu.onrender.com/auth/reset-password-no-token/${userId}`, { newPassword, confirmPassword }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("Error =========??????", error);
+
+      throw error?.response?.data?.message !== undefined ? error.response.data.message : "Verifiez votre internet!";
+    }
+  });
 
 export const sendResetPasswordEmail = createAsyncThunk(
   "user/sendOTP",
@@ -40,8 +45,7 @@ export const sendResetPasswordEmail = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error =========??????", error);
-
-      throw error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!";
+      throw error?.response?.data?.message !== undefined ? error.response.data.message : "Verifiez votre internet!";
     }
   }
 );
@@ -56,6 +60,10 @@ const usersSlice = createSlice({
     otpStatus: null,
     isLoadingSendOTP: false,
     errorOTP: null,
+
+    ChangePasswordStatus: null,
+    isLoadingSendChangePassword: false,
+    errorChangePassword: null,
 
   },
   reducers: {},
@@ -90,6 +98,21 @@ const usersSlice = createSlice({
       .addCase(sendResetPasswordEmail.rejected, (state, action) => {
         state.isLoadingSendOTP = false;
         state.errorOTP = action.error.message;
+      });
+
+      builder
+      .addCase(sendResetPassword.pending, (state) => {
+        state.isLoadingSendChangePassword = true;
+        state.errorChangePassword = null;
+      })
+      .addCase(sendResetPassword.fulfilled, (state, action) => {
+        state.isLoadingSendChangePassword = false;
+        state.ChangePasswordStatus = action.payload;
+        state.errorChangePassword = null;
+      })
+      .addCase(sendResetPassword.rejected, (state, action) => {
+        state.isLoadingSendChangePassword = false;
+        state.errorChangePassword = action.error.message;
       });
   },
 
