@@ -42,6 +42,8 @@ import { register } from '../../../redux/registerAction';
 
 import Iconify from '../../../components/iconify';
 import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
+import { store } from '../../../redux/Store';
+import { fetchUsers } from '../../../redux/listUserReducer';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -75,16 +77,24 @@ function getStyles(name, secteurName, theme) {
   };
 }
 
-
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
 
+  //  react-hooks/exhaustive-deps
+  useEffect(() => {
+    store.dispatch(fetchUsers());
+
+    fetchCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const defaultDate = '2000-01-01';
 
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
+  const { userList } = useSelector((state) => state.listUser);
 
   const {
     customers,
@@ -94,13 +104,8 @@ export default function RegisterForm() {
     postCustomer,
   } = useWooCommerceAPI();
 
-  //  react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchCustomers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const [errorWooCommerce, setErrorWooCommerce] = useState('');
+  const [errorSaveUser, seErrorSaveUser] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
@@ -245,38 +250,46 @@ export default function RegisterForm() {
         const role = catSelector === 1 ? 'USER' : catSelector === 2 ? 'PME' : catSelector === 3 ? 'FEMME' : 'PSDE';
 
         // check if customer exists in wc
-        const ckeck = customers.find((cus) => cus.email === email );
+        const ckeckCustomer = customers.find((cus) => cus.email === email);
 
         // check if user exists in b360
-        
+        const checkUser = userList.find((val) => val.email === email);
 
+        if (!ckeckCustomer) {
+          // Call WooCommerceAPI
+          postCustomer({ "first_name": name, name, email, password })
+            .then((data) => {
 
-        // Call WooCommerceAPI
-        postCustomer({ "first_name": name, name, email, password })
-          .then((data) => {
+              // If successfully create a user to woocommerce
+              if (data === "Création réussie") {
+                setErrorWooCommerce('');
+                seErrorSaveUser('')
+              }
+              else {
+                setErrorWooCommerce(data)
+              }
 
-            // If successfully create a user to woocommerce
-            if (data === "Création réussie") {
-              setErrorWooCommerce('');
-              dispatch(register(name, email, phone, sex, password, role))
-                .then((data) => {
-                  console.log("data", data);
-                  setLatestCreatedUser(data.userId)
-                })
-                .catch((error) => {
-                  console.error('Registration error:', error);
-                });
-            }
-            else {
-              setErrorWooCommerce(data)
-            }
+            })
+            .catch((e) => {
+              seErrorSaveUser(`Erreur ${e?.message}`);
 
-          })
-          .catch((e) => {
-            console.error('Error creating customer:', e.message);
-          });
+              console.error('Error creating customer:', e.message);
+            });
+        }else if (!checkUser) {
+          dispatch(register(name, email, phone, sex, password, role))
+            .then((data) => {
+              console.log("data", data);
+              setLatestCreatedUser(data.userId);
+              seErrorSaveUser('')
+            })
+            .catch((error) => {
+              seErrorSaveUser(`Erreur: ${error}`);
 
-
+              console.error('Registration error:', error);
+            });
+        }else {
+          seErrorSaveUser("L'utilisateur existe, veillez vous connecter")
+        }
 
         console.log();
         console.log("registeredUser2", await registeredUser);
@@ -346,7 +359,7 @@ export default function RegisterForm() {
             console.log("data", errorCreateEntreprise, data);
 
             if (!errorCreateEntreprise) {
-              
+
               // navigate('/dashboard', { replace: true });
               navigate('/login', { replace: true });
 
