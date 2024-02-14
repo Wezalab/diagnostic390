@@ -39,8 +39,8 @@ export default function ResetPasswordForm() {
   const [email, setEmail] = useState('');
 
   // OTP Features
-  const [emailSent, setEmailSent] = useState(false);
-  const [otpCode, setOtpCode] = useState(null);
+  const [emailSent, setEmailSent] = useState(true);
+  const [otpCode, setOtpCode] = useState('123456');
 
 
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +48,16 @@ export default function ResetPasswordForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const [verificationCode, setVerificationCode] = useState(Array(6).fill(''));
+  const [verificationCodeError, setVerificationError] = useState("");
+
+
+  const handleChange = (index, value) => {
+    const newVerificationCode = [...verificationCode];
+    newVerificationCode[index] = value;
+    setVerificationCode(newVerificationCode);
+  };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -114,6 +124,18 @@ export default function ResetPasswordForm() {
   };
 
   const handleVerifyCode = async (e) => {
+    e.preventDefault();
+
+    console.log(email);
+    console.log(otpCode);
+    const code = verificationCode.join('');
+    console.log(code); // Do whatever you want with the code
+    if (otpCode !== code) {
+      setVerificationError("Le code n'est pas valide")
+    }else{
+      setVerificationError('');
+      setOtpCode('');
+    }
 
   }
 
@@ -130,15 +152,15 @@ export default function ResetPasswordForm() {
 
     setEmailError('')
 
-    console.log((email,{"code":otpCode}));
+    console.log((email, { "code": otpCode }));
     const code = GenerateOTPCode()
     setOtpCode(code);
 
 
-    await dispatch(sendResetPasswordEmail({email, code}))
+    await dispatch(sendResetPasswordEmail({ email, code }))
       .then(async (data) => {
 
-        if(data?.payload?.message === "E-mail de réinitialisation envoyé avec succès"){
+        if (data?.payload?.message === "E-mail de réinitialisation envoyé avec succès") {
           setEmailSent(true);
         }
       })
@@ -150,6 +172,9 @@ export default function ResetPasswordForm() {
 
   const otp = () =>
     <>
+      <Typography variant="body2" sx={{ textAlign: 'center', paddingBottom: 2 }} >
+        Veuillez saisir le code reçu dans votre email.
+      </Typography>
       <Grid item container xs={12} spacing={3}>
         {[1, 2, 3, 4, 5, 6].map((index) => (
           <Grid item xs={2} key={index}>
@@ -161,6 +186,9 @@ export default function ResetPasswordForm() {
               placeholder="-"
               inputProps={{ maxLength: 1 }}
               className={classes.codeInput}
+              value={verificationCode[index]}
+              onChange={(e) => handleChange(index, e.target.value)}
+              error={!!verificationCodeError}
             />
           </Grid>
         ))}
@@ -168,14 +196,22 @@ export default function ResetPasswordForm() {
 
       <Grid item xs={12} textAlign="center" sx={{ my: 3 }}>
         <Typography variant="body2">
-          Vous n'avez pas eu de code ? <Link href="#">Renvoyer le code</Link>
+          Vous n'avez pas eu de code ? <Link sx={{cursor:"pointer"}} onClick={()=> {
+            setEmailSent(false);
+            setOtpCode('');
+            setVerificationError('')
+
+            } }>Renvoyer le code</Link>
 
         </Typography>
       </Grid>
 
+      {verificationCodeError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{verificationCodeError}</Typography>}
+
       <LoadingButton sx={{ textTransform: 'none' }} fullWidth size="large" type="submit" variant="contained" onClick={handleVerifyCode}>
         Verifier
       </LoadingButton>
+
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
 
         <Link href="/resetPassword" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
@@ -246,7 +282,6 @@ export default function ResetPasswordForm() {
       <TextField name="email" error={!!emailError} label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
     </Stack>
 
-    {/* {otpStatus && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{otpStatus.message}</Typography>} */}
     {errorOTP && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorOTP}</Typography>}
     {emailError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{emailError}</Typography>}
 
@@ -270,9 +305,9 @@ export default function ResetPasswordForm() {
       {
         !emailSent ?
           resetPassword() :
-          
-            otpCode?otp(): passwords()
-          
+
+          otpCode ? otp() : passwords()
+
       }
 
 
