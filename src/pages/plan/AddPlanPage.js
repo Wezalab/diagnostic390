@@ -125,7 +125,7 @@ export default function AddPlanPage() {
             console.log("data", errorCreateBusinessPlan, data);
             
             if(!errorCreateBusinessPlan){
-              navigate('/dashboard', { replace: true });
+              navigate('/dashboard/app', { replace: true });
             }
           })
           .catch((error) => {

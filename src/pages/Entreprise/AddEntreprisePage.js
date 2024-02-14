@@ -124,7 +124,7 @@ export default function AddEntreprisePage() {
             console.log("data", errorCreateEntreprise, data);
             
             if(!errorCreateEntreprise){
-              navigate('/dashboard', { replace: true });
+              navigate('/dashboard/app', { replace: true });
             }
           })
           .catch((error) => {

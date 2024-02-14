@@ -32,7 +32,7 @@ export default function LoginPage() {
   useEffect(() => {
     // Redirect the user to the dashboard page if they are already logged in
     if (user) {
-      navigate('/dashboard', { replace: true });
+      navigate('/dashboard/app', { replace: true });
     }
   }, [user, navigate]);
 
