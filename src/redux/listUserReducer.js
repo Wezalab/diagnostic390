@@ -20,13 +20,11 @@ export const sendResetPassword = createAsyncThunk(
   "user/resetPassword",
   async ({ userId, newPassword, confirmPassword }) => {
     try {
-      console.log("==>>>>>$$$%%%", `https://diagnostic-swyu.onrender.com/auth/reset-password-no-token/${userId}`, { newPassword, confirmPassword });
       const response = await axios.post(
         `https://diagnostic-swyu.onrender.com/auth/reset-password-no-token/${userId}`, { newPassword, confirmPassword }
       );
       return response.data;
     } catch (error) {
-      console.log("Error =========??????", error);
 
       throw error?.response?.data?.message !== undefined ? error.response.data.message : "Verifiez votre internet!";
     }
@@ -44,7 +42,6 @@ export const sendResetPasswordEmail = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.log("Error =========??????", error);
       throw error?.response?.data?.message !== undefined ? error.response.data.message : "Verifiez votre internet!";
     }
   }

@@ -39,10 +39,10 @@ export default function Router() {
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'profile', element: <UserProfile /> },
           { path: 'add-entreprise', element: <AddEntreprisePage /> },
-          { path: 'add-businessPlan', element: <AddPlanPage /> },
+          // { path: 'add-businessPlan', element: <AddPlanPage /> },
           { path: 'view-venture', element: <ViewVenture /> },
           { path: 'view-plan', element: <ViewPlan /> },
-          { path: 'plan', element: <PlanPage /> },
+          // { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'commandes', element: <MesCommandes role={role} user={user} /> },
           { path: 'view-commande', element: <DetailsCommande /> },
@@ -53,19 +53,19 @@ export default function Router() {
             { path: 'app', element: <DashboardAppPage /> },
             { path: 'profile', element: <UserProfile /> },
             { path: 'add-entreprise', element: <AddEntreprisePage /> },
-            { path: 'add-businessPlan', element: <AddPlanPage /> },
+            // { path: 'add-businessPlan', element: <AddPlanPage /> },
             { path: 'view-venture', element: <ViewVenture /> },
             { path: 'view-plan', element: <ViewPlan /> },
-            { path: 'plan', element: <PlanPage /> },
+            // { path: 'plan', element: <PlanPage /> },
             { path: 'entreprise', element: <Entreprise /> },
           ];
         case 'FEMME':
           return [
             { path: 'app', element: <DashboardAppPage /> },
             { path: 'profile', element: <UserProfile /> },
-            { path: 'add-businessPlan', element: <AddPlanPage /> },
-            { path: 'view-plan', element: <ViewPlan /> },
-            { path: 'plan', element: <PlanPage /> },
+            // { path: 'add-businessPlan', element: <AddPlanPage /> },
+            // { path: 'view-plan', element: <ViewPlan /> },
+            // { path: 'plan', element: <PlanPage /> },
           ];
       case 'PSDE':
         return [
@@ -77,7 +77,7 @@ export default function Router() {
           { path: 'rapport', element: <Rapport /> },
           { path: 'view-venture', element: <ViewVenture /> },
           { path: 'view-plan', element: <ViewPlan /> },
-          { path: 'plan', element: <PlanPage /> },
+          // { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'view-produit', element: <DetailsProduit /> },
           { path: 'view-commande', element: <DetailsCommande /> },
