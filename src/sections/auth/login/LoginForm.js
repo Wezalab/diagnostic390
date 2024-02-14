@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
 
@@ -52,8 +52,6 @@ export default function LoginForm() {
     <>
       <Stack spacing={3}>
         {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
-        {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
-        {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
        
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -81,6 +79,8 @@ export default function LoginForm() {
           Mot de passe oublié?
         </Link>
       </Stack>
+
+      {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
 
       <LoadingButton loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Se connecter
