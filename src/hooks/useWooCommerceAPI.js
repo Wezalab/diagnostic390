@@ -110,6 +110,27 @@ const useWooCommerceAPI = () => {
     return 'Création réussie';
   };
 
+   // Function to update an existing customer
+   const updateCustomer = async (customerData, id) => {
+    setLoading(true);
+
+    try {
+      await api.put(`/customers/${id}`, customerData);
+      // Refresh customers after posting
+      await fetchCustomers();
+      setLoading(false);
+
+    } catch (error) {
+      setError(error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" );
+      setLoading(false);
+
+      return `${error?.response?.data?.message !== undefined? error?.response?.data?.message : "Verifiez votre internet!" }`;
+    }
+    setLoading(false);
+
+    return 'Modification réussie';
+  };
+
   // Function to post a new customer
   const postProduct= async (productData) => {
     setLoading(true);
@@ -180,6 +201,7 @@ const useWooCommerceAPI = () => {
     customers,
     fetchCustomers,
     postCustomer,
+    updateCustomer,
 
     commandes,
     fetchCommandes,
