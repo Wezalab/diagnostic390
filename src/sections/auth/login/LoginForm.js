@@ -51,7 +51,6 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
        
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -80,6 +79,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
+      {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
       {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
 
       <LoadingButton loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>

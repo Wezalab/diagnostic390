@@ -19,6 +19,6 @@ export const login = (email, password) => async (dispatch) => {
 
   } catch (error) {
     console.log(error);
-    dispatch(loginFailure(error.response.data.message));
+    dispatch(loginFailure(error?.response?.data?.message !== undefined? error.response.data.message : "Verifiez votre internet!" ));
   }
 };
