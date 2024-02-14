@@ -353,7 +353,7 @@ const usersSlice = createSlice({
       },
       {
         "_id": "65af908a6045c2a868195d36",
-        "name": "Jean",
+        "name": "Jean Baptite Man",
         "email": "jean@test.com",
         "mobile": "243 9991 979001",
         "mobile_secondaire": "243 9991 979001",

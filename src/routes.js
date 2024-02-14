@@ -44,6 +44,9 @@ export default function Router() {
           { path: 'view-plan', element: <ViewPlan /> },
           { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
+          { path: 'commandes', element: <MesCommandes role={role} user={user} /> },
+          { path: 'view-commande', element: <DetailsCommande /> },
+
         ];
         case 'PME':
           return [
@@ -69,7 +72,7 @@ export default function Router() {
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'evaluation', element: <Evaluation /> },
           { path: 'produits', element: <MesProduits /> },
-          { path: 'commandes', element: <MesCommandes /> },
+          { path: 'commandes', element: <MesCommandes role={role} user={user} /> },
           { path: 'clients', element: <MesClients /> },
           { path: 'rapport', element: <Rapport /> },
           { path: 'view-venture', element: <ViewVenture /> },

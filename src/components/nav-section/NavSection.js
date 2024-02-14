@@ -19,7 +19,7 @@ export default function NavSection({ data = [], ...other }) {
   let data2 = data.filter((val) => val.title === "Accueil");
 
   if (user?.user?.user?.role === "USER") {
-    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
+    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise" || val.title ==="Mes commandes" );
   }else if (user?.user?.user?.role === "PME") {
     data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
   }else if (user?.user?.user?.role === "PSDE") {
