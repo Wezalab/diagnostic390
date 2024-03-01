@@ -70,7 +70,8 @@
     "react-to-print": "^2.14.15",
     "redux-thunk": "^2.4.2",
     "simplebar-react": "^3.2.1",
-    "web-vitals": "^3.1.1"
+    "web-vitals": "^3.1.1",
+    "wpapi": "^1.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
