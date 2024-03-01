@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography, CircularProgress, Box } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
 
@@ -51,9 +51,6 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
-        {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
-        {isLoading && <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><CircularProgress /></Box>}
        
         <TextField name="email" label="Adresse email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -77,17 +74,20 @@ export default function LoginForm() {
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
-        <Link href="#" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
+        <Link href="/resetPassword" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
           Mot de passe oublié?
         </Link>
       </Stack>
+
+      {error && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{error}</Typography>}
+      {localError && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{localError}</Typography>}
 
       <LoadingButton loading={isLoading} disabled={isLoading} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Se connecter
       </LoadingButton>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Typography variant="body" sx={{}}>Voulez-vous Créer un compte?</Typography>
+        <Typography variant="body" sx={{}}>Voulez-vous créer un compte?</Typography>
 
         <Link href="/register" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
           Créer un compte

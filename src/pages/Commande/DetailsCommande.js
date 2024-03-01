@@ -243,7 +243,7 @@ export default function DetailsCommande() {
                 </Box>
               </Box>
               <Divider />
-              <Box sx={{ display: 'flex', flexDirection: "column", marginBottom: 2, marginTop: 2 }}>
+              {/* <Box sx={{ display: 'flex', flexDirection: "column", marginBottom: 2, marginTop: 2 }}>
                 <Typography variant="h6">Expédition</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
                   <Typography variant="caption">Expédier par : </Typography>
@@ -260,7 +260,7 @@ export default function DetailsCommande() {
                   <Typography variant="caption">XX91234NSD</Typography>
                 </Box>
 
-              </Box>
+              </Box> */}
 
               <Divider />
               <Box sx={{ display: 'flex', flexDirection: 'column', marginBottom: 2, marginTop: 2 }}>
@@ -290,6 +290,26 @@ export default function DetailsCommande() {
                   <Typography variant="caption">Mode de payment: </Typography>
                   <Typography variant="caption">{commande?.payment_method_title}</Typography>
                 </Box>
+              </Box>
+              <Divider />
+
+              <Box sx={{ display: 'flex', flexDirection: "column", marginBottom: 2, marginTop: 2 }}>
+                <Typography variant="h6">Fournisseur</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
+                  <Typography variant="caption">Nom: </Typography>
+                  <Typography sx={{marginLeft: 2}} variant="caption">{commande?.store?.name}</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
+                  <Typography variant="caption">Shop : </Typography>
+                  <Typography sx={{marginLeft: 2}} variant="caption">{commande?.store?.shop_name}</Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between", }}>
+                  <Typography variant="caption">Addresse: </Typography>
+                  <Typography sx={{marginLeft: 2}} variant="caption">{commande?.store?.address?.city}, {commande?.store?.address?.street_1},{commande?.store?.address?.country}</Typography>
+                </Box>
+
               </Box>
             </Card>
           </Grid>

@@ -19,19 +19,20 @@ export default function NavSection({ data = [], ...other }) {
   let data2 = data.filter((val) => val.title === "Accueil");
 
   if (user?.user?.user?.role === "USER") {
-    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
+    data2 = data.filter((val) => val.title === "Accueil"  || val.title ==="Entreprise" || val.title ==="Mes commandes" );
   }else if (user?.user?.user?.role === "PME") {
-    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires" || val.title ==="Entreprise");
+    data2 = data.filter((val) => val.title === "Accueil"  || val.title ==="Entreprise");
   }else if (user?.user?.user?.role === "PSDE") {
     data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes produits/services" || val.title ==="Mes commandes"  || val.title ==="Mes factures"  || val.title ==="Rapports" || val.title ==="Evaluation");
   }else if (user?.user?.user?.role === "FEMME") {
-    data2 = data.filter((val) => val.title === "Accueil" || val.title === "Mes plans d’affaires");
+    data2 = data.filter((val) => val.title === "Accueil" );
   }else {
     data2 = data.filter((val) => val.title === "Accueil");
   }
 
   // console.log("data2", data2);
   // console.log("data", data);
+  // || val.title === "Mes plans d’affaires"
 
   return (
     <Box {...other}>

@@ -12,10 +12,10 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import RegisterPage from './pages/registerPage';
 import AddEntreprisePage from './pages/Entreprise/AddEntreprisePage';
 import ViewVenture from './pages/Entreprise/ViewVenture';
-import PlanPage from './pages/plan/PlanPage';
+// import PlanPage from './pages/plan/PlanPage';
 import Entreprise from './pages/Entreprise/Entreprise';
 import UserProfile from './pages/UserProfile';
-import AddPlanPage from './pages/plan/AddPlanPage';
+// import AddPlanPage from './pages/plan/AddPlanPage';
 import ViewPlan from './pages/plan/ViewPlan';
 import MesProduits from './pages/Produit/MesProduits';
 import MesCommandes from './pages/Commande/MesCommandes';
@@ -27,6 +27,7 @@ import AddProduct from './pages/Produit/AddProduct';
 import DetailsCommande from './pages/Commande/DetailsCommande';
 import MesFactures from './pages/Facture/MesFactures';
 import DetailsFacture from './pages/Facture/DetailsFacture';
+import ResetPassowrdPage from './pages/ResetPassowrdPage';
 
 export default function Router() {
   const { user } = useSelector((state) => state.auth);
@@ -38,42 +39,45 @@ export default function Router() {
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'profile', element: <UserProfile /> },
           { path: 'add-entreprise', element: <AddEntreprisePage /> },
-          { path: 'add-businessPlan', element: <AddPlanPage /> },
+          // { path: 'add-businessPlan', element: <AddPlanPage /> },
           { path: 'view-venture', element: <ViewVenture /> },
           { path: 'view-plan', element: <ViewPlan /> },
-          { path: 'plan', element: <PlanPage /> },
+          // { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
+          { path: 'commandes', element: <MesCommandes role={role} user={user} /> },
+          { path: 'view-commande', element: <DetailsCommande /> },
+
         ];
         case 'PME':
           return [
             { path: 'app', element: <DashboardAppPage /> },
             { path: 'profile', element: <UserProfile /> },
             { path: 'add-entreprise', element: <AddEntreprisePage /> },
-            { path: 'add-businessPlan', element: <AddPlanPage /> },
+            // { path: 'add-businessPlan', element: <AddPlanPage /> },
             { path: 'view-venture', element: <ViewVenture /> },
             { path: 'view-plan', element: <ViewPlan /> },
-            { path: 'plan', element: <PlanPage /> },
+            // { path: 'plan', element: <PlanPage /> },
             { path: 'entreprise', element: <Entreprise /> },
           ];
         case 'FEMME':
           return [
             { path: 'app', element: <DashboardAppPage /> },
             { path: 'profile', element: <UserProfile /> },
-            { path: 'add-businessPlan', element: <AddPlanPage /> },
-            { path: 'view-plan', element: <ViewPlan /> },
-            { path: 'plan', element: <PlanPage /> },
+            // { path: 'add-businessPlan', element: <AddPlanPage /> },
+            // { path: 'view-plan', element: <ViewPlan /> },
+            // { path: 'plan', element: <PlanPage /> },
           ];
       case 'PSDE':
         return [
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'evaluation', element: <Evaluation /> },
           { path: 'produits', element: <MesProduits /> },
-          { path: 'commandes', element: <MesCommandes /> },
+          { path: 'commandes', element: <MesCommandes role={role} user={user} /> },
           { path: 'clients', element: <MesClients /> },
           { path: 'rapport', element: <Rapport /> },
           { path: 'view-venture', element: <ViewVenture /> },
           { path: 'view-plan', element: <ViewPlan /> },
-          { path: 'plan', element: <PlanPage /> },
+          // { path: 'plan', element: <PlanPage /> },
           { path: 'entreprise', element: <Entreprise /> },
           { path: 'view-produit', element: <DetailsProduit /> },
           { path: 'view-commande', element: <DetailsCommande /> },
@@ -107,6 +111,11 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      // 
+      path: 'resetPassword',
+      element: <ResetPassowrdPage /> 
     },
     {
       path: 'register',

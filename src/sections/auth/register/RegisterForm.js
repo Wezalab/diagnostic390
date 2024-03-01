@@ -1,6 +1,6 @@
 /* eslint no-unneeded-ternary: "error" */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 
@@ -42,6 +42,8 @@ import { register } from '../../../redux/registerAction';
 
 import Iconify from '../../../components/iconify';
 import useWooCommerceAPI from '../../../hooks/useWooCommerceAPI';
+import { store } from '../../../redux/Store';
+import { fetchUsers } from '../../../redux/listUserReducer';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -75,27 +77,35 @@ function getStyles(name, secteurName, theme) {
   };
 }
 
-
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
 
+  //  react-hooks/exhaustive-deps
+  useEffect(() => {
+    store.dispatch(fetchUsers());
+
+    fetchCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const defaultDate = '2000-01-01';
 
   const { registeredUser, errorRegister, isLoadingRegister } = useSelector((state) => state.register);
   const { isLoadingCreateEntreprise, errorCreateEntreprise } = useSelector((state) => state.entreprise);
+  const { userList } = useSelector((state) => state.listUser);
 
   const {
-    // customers,
-    // products,
+    customers,
+    fetchCustomers,
     loading,
     // error,
-    // fetchProductById,
     postCustomer,
   } = useWooCommerceAPI();
 
   const [errorWooCommerce, setErrorWooCommerce] = useState('');
+  const [errorSaveUser, seErrorSaveUser] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
@@ -165,17 +175,8 @@ export default function RegisterForm() {
     );
   };
 
-
   // Stepper
   const handleNext = () => {
-
-    // if(catSelector===3 || catSelector===4){
-    //   setSteps([...steps.filter((val, key)=> val !== 'Entreprise')])
-    //   setCatError("");
-    //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-
-    // }
-    // else 
     if (catSelector === 0) {
       setCatError("Veillez selectionner une categorie");
     } else {
@@ -248,32 +249,64 @@ export default function RegisterForm() {
         console.log(name, password, phone, confirmPassword, sex, email);
         const role = catSelector === 1 ? 'USER' : catSelector === 2 ? 'PME' : catSelector === 3 ? 'FEMME' : 'PSDE';
 
-        // Call WooCommerceAPI
-        postCustomer({ "first_name": name, name, email, password })
-          .then((data) => {
+        // check if customer exists in wc
+        const ckeckCustomer = customers.find((cus) => cus.email === email);
+
+        // check if user exists in b360
+        const checkUser = userList.find((val) => val.email === email);
+
+        if (!ckeckCustomer) {
+          // Call WooCommerceAPI
+
+          postCustomer({
+            "first_name": name,
+            name,
+            email,
+            password,
+            "billing": {
+              "first_name": name,
+              "last_name": name,
+              "country": "CD",
+              "email": email,
+              "phone": phone
+            },
+            "shipping": {
+              "first_name": name,
+              "last_name": name,
+              "country": "CD"
+            }
+          }).then((data) => {
 
             // If successfully create a user to woocommerce
             if (data === "Création réussie") {
               setErrorWooCommerce('');
-              dispatch(register(name, email, phone, sex, password, role))
-                .then((data) => {
-                  console.log("data", data);
-                  setLatestCreatedUser(data.userId)
-                })
-                .catch((error) => {
-                  console.error('Registration error:', error);
-                });
+              seErrorSaveUser('')
             }
             else {
               setErrorWooCommerce(data)
             }
 
           })
-          .catch((e) => {
-            console.error('Error creating customer:', e.message);
-          });
+            .catch((e) => {
+              seErrorSaveUser(`Erreur ${e?.message}`);
 
+              console.error('Error creating customer:', e.message);
+            });
+        } else if (!checkUser) {
+          dispatch(register(name, email, phone, sex, password, role))
+            .then((data) => {
+              console.log("data", data);
+              setLatestCreatedUser(data.userId);
+              seErrorSaveUser('')
+            })
+            .catch((error) => {
+              seErrorSaveUser(`Erreur: ${error}`);
 
+              console.error('Registration error:', error);
+            });
+        } else {
+          seErrorSaveUser("L'utilisateur existe, veillez vous connecter")
+        }
 
         console.log();
         console.log("registeredUser2", await registeredUser);
@@ -343,7 +376,7 @@ export default function RegisterForm() {
             console.log("data", errorCreateEntreprise, data);
 
             if (!errorCreateEntreprise) {
-              
+
               // navigate('/dashboard', { replace: true });
               navigate('/login', { replace: true });
 
@@ -656,6 +689,7 @@ export default function RegisterForm() {
                           />
                           {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>}
                           {errorWooCommerce && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorWooCommerce.split('<a ')[0]}</Typography>}
+                          {errorSaveUser && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorSaveUser}</Typography>}
 
                         </Stack>
 
@@ -663,15 +697,6 @@ export default function RegisterForm() {
                         <LoadingButton loading={isLoadingRegister || loading} disabled={isLoadingRegister || loading} sx={{ my: 2 }} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
                           S'enregistrer
                         </LoadingButton>
-                        {/* {errorRegister && <Typography variant="body" sx={{ textAlign: 'center', color: 'red', mb: 3 }}>{errorRegister}</Typography>} */}
-
-
-                        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-                          <Typography variant="body" sx={{}}>Avez-vous un compte?</Typography>
-                          <Link href="/login" style={{ cursor: 'pointer' }} variant="subtitle2" underline="hover">
-                            Se connecter
-                          </Link>
-                        </Stack> */}
 
                       </Box>}
                   </Box>

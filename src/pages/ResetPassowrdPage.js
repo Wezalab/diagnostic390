@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+import { Box,Container, Typography } from '@mui/material';
 // sections
-import { LoginForm } from '../sections/auth/login';
+import ResetPasswordForm from '../sections/auth/resetPassword/ResetPasswordForm';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -24,7 +24,7 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-export default function LoginPage() {
+export default function ResetPassowrdPage() {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
@@ -39,7 +39,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Se connecter | Transforme </title>
+        <title> Mot de passe oublié | Transforme </title>
       </Helmet>
 
       <StyledRoot>
@@ -50,14 +50,15 @@ export default function LoginPage() {
               src="/assets/logo.png"
               sx={{ 
                 mx: 'auto',
-                borderRadius: 5 
+                borderRadius: 5
               }}
             />
+
             <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
-              Se connecter
+              Mot de passe oublié?
             </Typography>
 
-            <LoginForm />
+            <ResetPasswordForm />
           </StyledContent>
         </Container>
       </StyledRoot>

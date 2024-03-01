@@ -48,11 +48,11 @@ export default function AddProduct() {
   } = useWooCommerceAPI();
   // console.log("categories", categories);
 
-    //  react-hooks/exhaustive-deps
-    useEffect(() => {
-      fetchCategories();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  //  react-hooks/exhaustive-deps
+  useEffect(() => {
+    fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line no-unused-vars
   const [product, setProduct] = useState(productObject && JSON.parse(productObject));
@@ -68,7 +68,7 @@ export default function AddProduct() {
   const [loadPic, setLoadPic] = useState(false);
 
   // categories
-  const [categoryName, setCategoryName] = useState(product?product?.categories?.map(val => val.name):[]);
+  const [categoryName, setCategoryName] = useState(product ? product?.categories?.map(val => val.name) : []);
 
   const handleChangeCat = (event) => {
     const {
@@ -88,10 +88,10 @@ export default function AddProduct() {
         try {
           console.log("reader.result", reader.result);
 
-           // Call the onCloudinarySaveCb function to upload the image
-           const img = await onCloudinarySaveCover(reader.result);
-           console.log("Img uploaded to Cloudinary:", img);
- 
+          // Call the onCloudinarySaveCb function to upload the image
+          const img = await onCloudinarySaveCover(reader.result);
+          console.log("Img uploaded to Cloudinary:", img);
+
           // setImageCover( reader.result);
           setImages([...images, {
             name: "img",
@@ -147,38 +147,38 @@ export default function AddProduct() {
 
   const resultIds = categoryName?.map(searchName => {
     const resultObject = categories?.find(item => item.name === searchName);
-    return resultObject ? {id: resultObject.id} : null;
-});
+    return resultObject ? { id: resultObject.id } : null;
+  });
 
-  const onSaveProduct = async() => {
-  
+  const onSaveProduct = async () => {
+
     const prodObject = {
       name,
       type: "simple",
       short_description: desc,
-      description:fullDesc,
+      description: fullDesc,
       stock_quantity: qt,
-      regular_price:pricePromo,
-      sale_price:price,
-      tax_status:'none',
-      manage_stock:true,
+      regular_price: pricePromo,
+      sale_price: price,
+      tax_status: 'none',
+      manage_stock: true,
       images,
       categories: resultIds?.filter(id => id !== null)
     }
 
     // validate all values
-    if(name!== "" && desc !== "" && fullDesc !== "" && images.length !== 0){
-       // if new Objec the save else if update
+    if (name !== "" && desc !== "" && fullDesc !== "" && images.length !== 0) {
+      // if new Objec the save else if update
       if (product) {
         console.log("Edit");
 
-        const saveState = await editProduct(prodObject, product.id );
-          console.log(saveState);
-          if (saveState === 'Modification réussie') {
-            navigate('/dashboard/produits', { replace: true });
-          }
+        const saveState = await editProduct(prodObject, product.id);
+        console.log(saveState);
+        if (saveState === 'Modification réussie') {
+          navigate('/dashboard/produits', { replace: true });
+        }
       } else {
-        console.log("Add",resultIds?.filter(id => id !== null) )
+        console.log("Add", resultIds?.filter(id => id !== null))
         const saveState = await postProduct(prodObject);
         console.log(saveState);
         if (saveState === 'Création réussie') {
@@ -267,9 +267,10 @@ export default function AddProduct() {
                   </label>
                   <Box sx={{ display: 'flex', flexDirection: "row" }}>
                     {
-                      images && images.map((img, key) => 
+                      images && images.map((img, key) =>
                         <Card key={key} sx={{ marginRight: 1, position: "relative" }} onClick={() => onDeletePic(key)} >
-                          <Box sx={{ cursor:'pointer',
+                          <Box sx={{
+                            cursor: 'pointer',
                             position: 'absolute', backgroundColor: "#000", opacity: 0.7,
                             display: 'flex', justifyContent: 'center', alignItems: 'center',
                             borderRadius: 5, right: 0, width: 30, height: 30
@@ -292,69 +293,69 @@ export default function AddProduct() {
           </Grid>
 
           <Grid item xs={8}>
-            <Card  sx={{ flexGrow: 1, padding: 4, flexDirection:'row', display:'flex' }}>
+            <Card sx={{ flexGrow: 1, padding: 4, flexDirection: 'row', display: 'flex' }}>
               <Grid container spacing={2}>
-              <Grid xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="outlined-adornment-amount">Prix du produit ($)</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                    label="Prix du produit ($)"
-                    value={price} onChange={(e) => setPrice(e.target.value)}
-                  />
-                </FormControl>
+                <Grid xs={6}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="outlined-adornment-amount">Prix du produit ($)</InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                      label="Prix du produit ($)"
+                      value={price} onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid xs={6}>
+                  <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                    sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
+                </Grid>
+
+                <Grid xs={6}>
+                  <FormControl fullWidth >
+                    <InputLabel htmlFor="outlined-adornment-amount">Prix promo ($)</InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                      label="Prix promo ($)"
+                      value={pricePromo} onChange={(e) => setPricePromo(e.target.value)}
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid xs={6}>
+                  <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="m-checkbox-label">Catégories</InputLabel>
+                    <Select
+                      labelId="m-checkbox-label"
+                      id="m-checkbox"
+                      multiple
+                      value={categoryName}
+                      onChange={handleChangeCat}
+                      input={<OutlinedInput label="Catégories" />}
+                      renderValue={(selected) => selected.join(', ')}
+                      MenuProps={MenuProps}
+                    >
+                      {categories.map((cat) => (
+                        <MenuItem key={cat.id} value={cat.name}>
+                          <Checkbox checked={categoryName?.indexOf(cat.name) > -1} />
+                          <ListItemText primary={cat.name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                </Grid>
               </Grid>
 
-              <Grid xs={6}>
-                <TextField startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  sx={{ width: "100%", marginBottom: 2, }} name="qt" label="Quantite disponible" value={qt} onChange={(e) => setQt(e.target.value)} />
-              </Grid>
-
-              <Grid xs={6}>
-                <FormControl fullWidth >
-                  <InputLabel htmlFor="outlined-adornment-amount">Prix promo ($)</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                    label="Prix promo ($)"
-                    value={pricePromo} onChange={(e) => setPricePromo(e.target.value)}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid xs={6}>
-                <FormControl sx={{ width: '100%' }}>
-                  <InputLabel id="m-checkbox-label">Catégories</InputLabel>
-                  <Select
-                    labelId="m-checkbox-label"
-                    id="m-checkbox"
-                    multiple
-                    value={categoryName}
-                    onChange={handleChangeCat}
-                    input={<OutlinedInput label="Catégories" />}
-                    renderValue={(selected) => selected.join(', ')}
-                    MenuProps={MenuProps}
-                  >
-                    {categories.map((cat) => (
-                      <MenuItem key={cat.id} value={cat.name}>
-                        <Checkbox checked={categoryName?.indexOf(cat.name) > -1} />
-                        <ListItemText primary={cat.name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                
-              </Grid>
-              </Grid>
-             
             </Card>
-            <Box sx={{display:'flex', justifyContent:'flex-end',marginTop: 2}}>
-            <LoadingButton disabled={loading} loading={loading} sx={{display:'flex'}} size="large" variant="contained" onClick={()=>onSaveProduct()}>
-              Enregistrer
-            </LoadingButton>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+              <LoadingButton disabled={loading} loading={loading} sx={{ display: 'flex' }} size="large" variant="contained" onClick={() => onSaveProduct()}>
+                Enregistrer
+              </LoadingButton>
             </Box>
-          
+
 
           </Grid>
         </Grid>

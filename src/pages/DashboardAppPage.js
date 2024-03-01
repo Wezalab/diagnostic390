@@ -78,20 +78,22 @@ export default function DashboardAppPage() {
                   <img src='../../../assets/company.gif' alt="Success Gif" style={{ width: '30%', marginBottom: 2, alignSelf: 'center' }} />
 
                   <Typography variant="h5" gutterBottom>
-                    Vous n'avez enregistré aucun plan d’affaires !
+                   Aucun plan d’affaires trouvé!
                   </Typography>
                   {
                     user ? <>
-                      <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez
+                      {/* <Typography>Pour enregistrer votre plan d’affaires, cliquez sur le bouton en bas et commencez */}
+                     <Typography>La gestion des plans d'affaires est encours d'implementation...
                       </Typography>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         color="primary"
                         onClick={() => navigate('/dashboard/add-entreprise', { replace: true })}
                         sx={{ marginTop: 2 }}
                       >
                         Enregistrer votre plan d’affaires
-                      </Button></> :
+                      </Button> */}
+                      </> :
                       <>
                         <Typography>Pour enregistrer votre plan d’affaires, veuillez vous identifier
                         </Typography>
