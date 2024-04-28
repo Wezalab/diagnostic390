@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useWooCommerceAPI = () => {
-  const [customers, setCustomers] = useState([
+    const [customers, setCustomers] = useState([])
+  const [customers2, setCustomers2] = useState([
     {
         "id": 22,
         "date_created": "2024-01-24T21:36:12",
@@ -669,7 +670,8 @@ const useWooCommerceAPI = () => {
 ]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [commandes, setCommandes]= useState(
+  const [commandes, setCommandes]= useState([]);
+    const [commandes2, setCommandes2]= useState(
     [
     {
         "id": 432,

@@ -4,8 +4,8 @@ import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, ListItemIcon, ListItemText, IconButton } from '@mui/material';
 // components
 import MenuPopover from '../../components/MenuPopover';
-import iconFr from '../../assets/ic_flag_fr.svg';
-import iconEn from '../../assets/ic_flag_en.svg'
+import icon_fr from '../../assets/ic_flag_fr.svg';
+import icon_en from '../../assets/ic_flag_en.svg'
 
 // ----------------------------------------------------------------------
 
@@ -13,12 +13,12 @@ const LANGS = [
   {
     value: 'fr',
     label: 'Francais',
-    icon: iconFr
+    icon: icon_fr
   },
   {
     value: 'en',
     label: 'Anglais',
-    icon: iconEn
+    icon: icon_en
   },
 ];
 
@@ -50,7 +50,7 @@ export default function LanguagePopover() {
           })
         }}
       >
-        <img src={LANGS[1].icon} alt={LANGS[1].label} />
+        <img src={LANGS[0].icon} alt={LANGS[0].label} />
       </IconButton>
 
       <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current}>
@@ -58,7 +58,7 @@ export default function LanguagePopover() {
           {LANGS.map((option) => (
             <MenuItem
               key={option.value}
-              selected={option.value === LANGS[1].value}
+              selected={option.value === LANGS[0].value}
               onClick={handleClose}
               sx={{ py: 1, px: 2.5 }}
             >
