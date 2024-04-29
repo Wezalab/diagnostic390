@@ -31,7 +31,7 @@ export default function RegisterPage() {
 
   useEffect(() => {
     // Redirect the user to the dashboard page if they are already logged in
-    if (user) {
+    if (!user) {
       navigate('/dashboard/app', { replace: true });
     }
   }, [user, navigate]);
